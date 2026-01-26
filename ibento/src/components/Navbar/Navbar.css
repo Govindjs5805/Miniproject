@@ -1,0 +1,33 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  background-color: #062e14;
+}
+
+.navbar-logo {
+  font-size: 30px;
+  font-family: fantasy;              
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: rgb(150, 230, 112);
+}
+
+.navbar-links {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-links li {
+  display: inline-block;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: white;   /* 🔴 THIS IS THE KEY FIX */
+  font-size: 16px;
+}
