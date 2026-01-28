@@ -12,6 +12,9 @@ function Navbar() {
         <li><Link to="/clubs">Clubs</Link></li>
         <li><Link to="/login">Login</Link></li>
         <li><Link to="/register">Register</Link></li>
+        <li><Link to="/admin">Admin DashBoard</Link></li>
+        <li><Link to="/admin/registrations">Registrations</Link></li>
+        <li><Link to="/admin/report">AI Report</Link></li>
       </ul>
     </nav>
   );

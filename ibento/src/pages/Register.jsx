@@ -1,38 +1,52 @@
+import { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+
 function Register() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log("USER CREATED:", userCredential.user);
+      alert("Registration successful!");
+    } catch (error) {
+      console.error("ERROR:", error);
+      alert(error.message);
+    }
+  };
+
   return (
     <div style={{ padding: "60px", maxWidth: "400px", margin: "auto" }}>
       <h2>Register</h2>
-      <p>Create a new account</p>
 
-      <form style={{ marginTop: "20px" }}>
-        <div style={{ marginBottom: "15px" }}>
-          <label>Name</label><br />
-          <input
-            type="text"
-            placeholder="Enter name"
-            style={{ width: "100%", padding: "10px" }}
-          />
-        </div>
+      <form onSubmit={handleRegister}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+          required
+        />
 
-        <div style={{ marginBottom: "15px" }}>
-          <label>Email</label><br />
-          <input
-            type="email"
-            placeholder="Enter email"
-            style={{ width: "100%", padding: "10px" }}
-          />
-        </div>
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+          required
+        />
 
-        <div style={{ marginBottom: "15px" }}>
-          <label>Password</label><br />
-          <input
-            type="password"
-            placeholder="Create password"
-            style={{ width: "100%", padding: "10px" }}
-          />
-        </div>
-
-        <button style={{ width: "100%", padding: "10px" }}>
+        <button type="submit" style={{ width: "100%", padding: "10px" }}>
           Register
         </button>
       </form>
