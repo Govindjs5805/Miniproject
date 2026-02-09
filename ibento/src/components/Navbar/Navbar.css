@@ -2,32 +2,52 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 40px;
-  background-color: #062e14;
+  padding: 16px 40px;
+  background-color: #0f2d1f;
 }
 
 .navbar-logo {
-  font-size: 30px;
-  font-family: fantasy;              
+  font-size: 22px;
   font-weight: bold;
-  letter-spacing: 1px;
-  color: rgb(150, 230, 112);
+  color: white;
 }
 
 .navbar-links {
   list-style: none;
   display: flex;
-  gap: 25px;
+  gap: 20px;
   margin: 0;
   padding: 0;
 }
 
 .navbar-links li {
-  display: inline-block;
+  display: flex;
+  align-items: center;
 }
 
 .navbar-links a {
   text-decoration: none;
-  color: white;   /* 🔴 THIS IS THE KEY FIX */
+  color: white;
   font-size: 16px;
+  font-weight: 500;
+}
+
+.navbar-links a:hover {
+  color: #3ddc84;
+}
+
+/* Logout button */
+.logout-btn {
+  background-color: transparent;
+  border: 1px solid #3ddc84;
+  color: #3ddc84;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.logout-btn:hover {
+  background-color: #3ddc84;
+  color: #0f2d1f;
 }
