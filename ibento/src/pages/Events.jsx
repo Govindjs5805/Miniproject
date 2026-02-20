@@ -54,7 +54,7 @@ function Events() {
         eventTitle: event.title,
         userId: user.uid,
         userEmail: user.email,
-        userName: fullName,
+        userName: user.email,
         clubId: event.clubId,
         checkInStatus: false,
         checkInTime: null,
@@ -64,8 +64,8 @@ function Events() {
       alert("Registered successfully!");
 
     } catch (error) {
-      console.error(error);
-      alert("Error registering for event");
+      console.error("REGISTRATION ERROR:",error);
+      alert(error.message);
     }
   };
 

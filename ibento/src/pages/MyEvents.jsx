@@ -1,99 +1,88 @@
 import { useEffect, useState } from "react";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
-import { QRCodeCanvas } from "qrcode.react";
+import { useNavigate } from "react-router-dom";
 
 function MyEvents() {
-  const { user } = useAuth();
-  const [registrations, setRegistrations] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { user, fullName } = useAuth();
+  const [items, setItems] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchRegistrations = async () => {
+    const loadMyEvents = async () => {
       if (!user) return;
 
-      try {
-        const q = query(
-          collection(db, "registrations"),
-          where("userId", "==", user.uid)
-        );
+      const q = query(
+        collection(db, "registrations"),
+        where("userId", "==", user.uid)
+      );
 
-        const snapshot = await getDocs(q);
+      const regSnap = await getDocs(q);
+      const enriched = [];
 
-        const regList = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
+      for (const regDoc of regSnap.docs) {
+        const reg = regDoc.data();
+        const eventSnap = await getDoc(doc(db, "events", reg.eventId));
 
-        setRegistrations(regList);
-      } catch (error) {
-        console.error(error);
+        if (eventSnap.exists()) {
+          enriched.push({
+            id: regDoc.id,
+            ...reg,
+            event: eventSnap.data()
+          });
+        }
       }
 
-      setLoading(false);
+      setItems(enriched);
     };
 
-    fetchRegistrations();
+    loadMyEvents();
   }, [user]);
-
-  if (!user) {
-    return <h2 style={{ padding: "20px" }}>Please login first</h2>;
-  }
-
-  if (loading) {
-    return <h2 style={{ padding: "20px" }}>Loading your events...</h2>;
-  }
 
   return (
     <div style={{ padding: "30px" }}>
-      <h1 style={{ marginBottom: "20px" }}>My Registered Events</h1>
+      <h2>Welcome, {fullName}</h2>
+      <p>Here are your registered events</p>
 
-      {registrations.length === 0 ? (
-        <p>You have not registered for any events yet.</p>
-      ) : (
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
-          gap: "20px"
-        }}>
-          {registrations.map(reg => (
-            <div
-              key={reg.id}
-              style={{
-                border: "1px solid #ccc",
-                borderRadius: "10px",
-                padding: "20px",
-                background: "#fff"
-              }}
-            >
-              <h3>{reg.eventTitle}</h3>
+      <table width="100%" style={{ marginTop: "20px", borderCollapse: "collapse" }}>
+        <thead>
+          <tr>
+            <th align="left">Event</th>
+            <th align="left">Date</th>
+            <th align="left">Venue</th>
+            <th align="left">Status</th>
+            <th align="left">Ticket</th>
+          </tr>
+        </thead>
 
-              <p><strong>Registered As:</strong> {reg.userName}</p>
-
-              <p>
-                <strong>Status:</strong>{" "}
-                {reg.checkInStatus ? "Checked In ✅" : "Not Checked In"}
-              </p>
-
-              {reg.checkInTime && (
-                <p>
-                  <strong>Check-in Time:</strong>{" "}
-                  {new Date(reg.checkInTime.seconds * 1000).toLocaleString()}
-                </p>
-              )}
-
-              <div style={{ marginTop: "15px" }}>
-                <QRCodeCanvas value={reg.id} size={150} />
-              </div>
-
-              <p style={{ fontSize: "12px", marginTop: "10px" }}>
-                Show this QR at event entrance
-              </p>
-            </div>
+        <tbody>
+          {items.map(item => (
+            <tr key={item.id} style={{ borderTop: "1px solid #ccc" }}>
+              <td>{item.event.title}</td>
+              <td>{item.event.date}</td>
+              <td>{item.event.venue}</td>
+              <td>
+                {item.checkInStatus ? "Checked-in ✅" : "Not Checked-in"}
+              </td>
+              <td>
+                <button
+                  onClick={() => navigate(`/ticket/${item.id}`)}
+                >
+                  View Ticket
+                </button>
+              </td>
+            </tr>
           ))}
-        </div>
-      )}
+        </tbody>
+      </table>
     </div>
   );
 }

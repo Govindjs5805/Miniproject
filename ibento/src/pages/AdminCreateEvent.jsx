@@ -14,15 +14,38 @@ function AdminCreateEvent() {
   const [venue, setVenue] = useState("");
   const [description, setDescription] = useState("");
   const [poster, setPoster] = useState(null);
+  const [ticketTemplate, setTicketTemplate] = useState(null);
+
+  const [qrX, setQrX] = useState(100);
+  const [qrY, setQrY] = useState(100);
+  const [qrSize, setQrSize] = useState(100);
+
   const [loading, setLoading] = useState(false);
 
   if (role !== "clubLead") {
     return (
       <AdminLayout>
-        <h2 className="text-red-600 text-xl">Access Denied</h2>
+        <h2>Access Denied</h2>
       </AdminLayout>
     );
   }
+
+  const uploadToCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "ibento_unsigned");
+
+    const response = await fetch(
+      "https://api.cloudinary.com/v1_1/dzx6f9qjz/image/upload",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const data = await response.json();
+    return data.secure_url;
+  };
 
   const handleCreateEvent = async (e) => {
     e.preventDefault();
@@ -30,41 +53,30 @@ function AdminCreateEvent() {
 
     try {
       let posterURL = "";
+      let templateURL = "";
 
-      // 🔥 Upload to Cloudinary
       if (poster) {
-        const formData = new FormData();
-        formData.append("file", poster);
-        formData.append("upload_preset", "ibento_unsigned");
-
-        const response = await fetch(
-          "https://api.cloudinary.com/v1_1/dzx6f9qjz/image/upload",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-
-        const data = await response.json();
-
-        if (!data.secure_url) {
-          throw new Error("Image upload failed");
-        }
-
-        posterURL = data.secure_url;
+        posterURL = await uploadToCloudinary(poster);
       }
 
-      // 🔥 Save event to Firestore
+      if (ticketTemplate) {
+        templateURL = await uploadToCloudinary(ticketTemplate);
+      }
+
       await addDoc(collection(db, "events"), {
         title,
         date,
         venue,
         description,
         posterURL,
-        clubId: clubId,
+        ticketTemplateURL: templateURL,
+        qrPositionX: qrX,
+        qrPositionY: qrY,
+        qrSize: qrSize,
+        clubId,
         createdBy: user.uid,
         createdAt: serverTimestamp(),
-        status: "upcoming",
+        status: "upcoming"
       });
 
       alert("Event created successfully!");
@@ -72,7 +84,7 @@ function AdminCreateEvent() {
 
     } catch (error) {
       console.error(error);
-      alert(error.message);
+      alert("Error creating event");
     }
 
     setLoading(false);
@@ -80,62 +92,69 @@ function AdminCreateEvent() {
 
   return (
     <AdminLayout>
-      <div className="max-w-lg">
-        <h1 className="text-2xl font-bold mb-6">Create Event</h1>
+      <h2>Create Event</h2>
 
-        <form onSubmit={handleCreateEvent} className="space-y-4">
+      <form onSubmit={handleCreateEvent} style={{ maxWidth: "500px" }}>
 
-          <input
-            type="text"
-            placeholder="Event Title"
-            className="w-full p-2 border rounded"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
+        <input type="text" placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        /><br /><br />
 
-          <input
-            type="date"
-            className="w-full p-2 border rounded"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            required
-          />
+        <input type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          required
+        /><br /><br />
 
-          <input
-            type="text"
-            placeholder="Venue"
-            className="w-full p-2 border rounded"
-            value={venue}
-            onChange={(e) => setVenue(e.target.value)}
-            required
-          />
+        <input type="text" placeholder="Venue"
+          value={venue}
+          onChange={(e) => setVenue(e.target.value)}
+          required
+        /><br /><br />
 
-          <textarea
-            placeholder="Event Description"
-            rows="4"
-            className="w-full p-2 border rounded"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
+        <textarea placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        /><br /><br />
 
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setPoster(e.target.files[0])}
-          />
+        <label>Poster:</label><br />
+        <input type="file"
+          accept="image/*"
+          onChange={(e) => setPoster(e.target.files[0])}
+        /><br /><br />
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-accent px-4 py-2 rounded font-semibold"
-          >
-            {loading ? "Uploading..." : "Create Event"}
-          </button>
+        <label>Ticket Template:</label><br />
+        <input type="file"
+          accept="image/*"
+          onChange={(e) => setTicketTemplate(e.target.files[0])}
+        /><br /><br />
 
-        </form>
-      </div>
+        <label>QR X Position:</label>
+        <input type="number"
+          value={qrX}
+          onChange={(e) => setQrX(Number(e.target.value))}
+        /><br /><br />
+
+        <label>QR Y Position:</label>
+        <input type="number"
+          value={qrY}
+          onChange={(e) => setQrY(Number(e.target.value))}
+        /><br /><br />
+
+        <label>QR Size:</label>
+        <input type="number"
+          value={qrSize}
+          onChange={(e) => setQrSize(Number(e.target.value))}
+        /><br /><br />
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Creating..." : "Create Event"}
+        </button>
+
+      </form>
     </AdminLayout>
   );
 }
