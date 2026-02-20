@@ -1,138 +1,140 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs, addDoc, query, where } from "firebase/firestore";
+import { collection, getDocs, addDoc, query, where, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 
 function Events() {
+  const { user, role, fullName } = useAuth();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [registeringId, setRegisteringId] = useState(null);
 
-  const {user, fullName} = useAuth();
-
-  // 🔹 Fetch events from Firestore
+  // 🔥 Fetch all events
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         const snapshot = await getDocs(collection(db, "events"));
-        const eventsList = snapshot.docs.map((doc) => ({
+        const eventList = snapshot.docs.map(doc => ({
           id: doc.id,
-          ...doc.data(),
+          ...doc.data()
         }));
-        setEvents(eventsList);
+        setEvents(eventList);
       } catch (error) {
-        console.error("Error fetching events:", error);
-      } finally {
-        setLoading(false);
+        console.error(error);
       }
+      setLoading(false);
     };
 
     fetchEvents();
   }, []);
 
-  // 🔹 Register for event
+  // 🔥 Handle Registration
   const handleRegister = async (event) => {
     if (!user) {
-      alert("Please login to register for events");
+      alert("Please login to register");
       return;
     }
 
-    setRegisteringId(event.id);
-
     try {
-      // 🔍 Prevent duplicate registration
+      // Prevent duplicate registration
       const q = query(
         collection(db, "registrations"),
         where("eventId", "==", event.id),
         where("userId", "==", user.uid)
       );
 
-      const existing = await getDocs(q);
-      if (!existing.empty) {
-        alert("You have already registered for this event");
-        setRegisteringId(null);
+      const snapshot = await getDocs(q);
+
+      if (!snapshot.empty) {
+        alert("You have already registered for this event.");
         return;
       }
 
-      // ✅ Save registration
       await addDoc(collection(db, "registrations"), {
         eventId: event.id,
         eventTitle: event.title,
-        eventDate: event.date,
         userId: user.uid,
         userEmail: user.email,
-        userName : fullName,
-        userRole: "student",
-        status: "registered",
-        registeredAt: new Date(),
+        userName: fullName,
+        clubId: event.clubId,
         checkInStatus: false,
         checkInTime: null,
+        createdAt: serverTimestamp()
       });
 
-      alert("Successfully registered!");
+      alert("Registered successfully!");
+
     } catch (error) {
-      console.error("Registration error:", error);
-      alert(error.message);
-    } finally {
-      setRegisteringId(null);
+      console.error(error);
+      alert("Error registering for event");
     }
   };
 
   if (loading) {
-    return <p style={{ padding: "40px" }}>Loading events...</p>;
+    return <h2 style={{ padding: "20px" }}>Loading events...</h2>;
   }
 
   return (
-    <div style={{ padding: "40px" }}>
-      <h1>All Events</h1>
-      <p>Browse and register for upcoming campus events</p>
+    <div style={{ padding: "30px" }}>
+      <h1 style={{ marginBottom: "10px" }}>All Events</h1>
+      <p style={{ marginBottom: "30px" }}>
+        Browse and register for upcoming campus events
+      </p>
 
-      {events.length === 0 ? (
-        <p>No events available</p>
-      ) : (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-            gap: "20px",
-            marginTop: "30px",
-          }}
-        >
-          {events.map((event) => (
-            <div
-              key={event.id}
-              style={{
-                border: "1px solid #ccc",
-                borderRadius: "10px",
-                padding: "20px",
-              }}
-            >
-              <h3>{event.title}</h3>
-              <p>
-                <strong>Date:</strong> {event.date}
-              </p>
-              <p>
-                <strong>Category:</strong> {event.category}
-              </p>
-              <p>
-                <strong>Venue:</strong> {event.venue}
-              </p>
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+        gap: "20px"
+      }}>
+        {events.map(event => (
+          <div
+            key={event.id}
+            style={{
+              border: "1px solid #ccc",
+              borderRadius: "10px",
+              padding: "15px",
+              background: "#fff"
+            }}
+          >
+            {/* Poster */}
+            {event.posterURL && (
+              <img
+                src={event.posterURL}
+                alt={event.title}
+                style={{
+                  width: "100%",
+                  height: "200px",
+                  objectFit: "cover",
+                  borderRadius: "8px",
+                  marginBottom: "10px"
+                }}
+              />
+            )}
 
+            <h3>{event.title}</h3>
+
+            <p><strong>Date:</strong> {event.date}</p>
+            <p><strong>Venue:</strong> {event.venue}</p>
+            <p><strong>Description:</strong> {event.description}</p>
+
+            {role === "student" && (
               <button
+                onClick={() => handleRegister(event)}
                 style={{
                   marginTop: "10px",
-                  width: "100%",
-                  padding: "8px",
+                  padding: "8px 12px",
+                  background: "#0a7f3f",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer"
                 }}
-                onClick={() => handleRegister(event)}
-                disabled={registeringId === event.id}
               >
-                {registeringId === event.id ? "Registering..." : "Register"}
+                Register
               </button>
-            </div>
-          ))}
-        </div>
-      )}
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

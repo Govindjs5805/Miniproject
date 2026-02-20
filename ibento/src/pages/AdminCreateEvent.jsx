@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db, storage } from "../firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import AdminLayout from "../components/Admin/AdminLayout";
@@ -15,61 +14,74 @@ function AdminCreateEvent() {
   const [venue, setVenue] = useState("");
   const [description, setDescription] = useState("");
   const [poster, setPoster] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  // ❌ Prevent access if not clubLead
   if (role !== "clubLead") {
     return (
       <AdminLayout>
-        <h2 className="text-red-600 text-xl">
-          Access Denied
-        </h2>
+        <h2 className="text-red-600 text-xl">Access Denied</h2>
       </AdminLayout>
     );
   }
 
   const handleCreateEvent = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       let posterURL = "";
 
-      // Upload poster
+      // 🔥 Upload to Cloudinary
       if (poster) {
-        const posterRef = ref(
-          storage,
-          `eventFiles/${clubId}/${Date.now()}_${poster.name}`
+        const formData = new FormData();
+        formData.append("file", poster);
+        formData.append("upload_preset", "ibento_unsigned");
+
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/dzx6f9qjz/image/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
         );
-        await uploadBytes(posterRef, poster);
-        posterURL = await getDownloadURL(posterRef);
+
+        const data = await response.json();
+
+        if (!data.secure_url) {
+          throw new Error("Image upload failed");
+        }
+
+        posterURL = data.secure_url;
       }
 
-      // Save event
+      // 🔥 Save event to Firestore
       await addDoc(collection(db, "events"), {
         title,
         date,
         venue,
         description,
         posterURL,
-        clubId: clubId, // 🔥 IMPORTANT
+        clubId: clubId,
         createdBy: user.uid,
         createdAt: serverTimestamp(),
-        status: "upcoming"
+        status: "upcoming",
       });
 
       alert("Event created successfully!");
       navigate("/admin");
 
     } catch (error) {
+      console.error(error);
       alert(error.message);
     }
+
+    setLoading(false);
   };
 
   return (
     <AdminLayout>
       <div className="max-w-lg">
-        <h1 className="text-2xl font-bold mb-6">
-          Create Event
-        </h1>
+        <h1 className="text-2xl font-bold mb-6">Create Event</h1>
 
         <form onSubmit={handleCreateEvent} className="space-y-4">
 
@@ -116,9 +128,10 @@ function AdminCreateEvent() {
 
           <button
             type="submit"
+            disabled={loading}
             className="bg-accent px-4 py-2 rounded font-semibold"
           >
-            Create Event
+            {loading ? "Uploading..." : "Create Event"}
           </button>
 
         </form>
