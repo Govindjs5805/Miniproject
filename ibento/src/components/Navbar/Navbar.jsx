@@ -1,4 +1,5 @@
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import { useAuth } from "../../context/AuthContext";
@@ -7,6 +8,11 @@ import "./Navbar.css";
 function Navbar() {
   const { user, role } = useAuth();
   const navigate = useNavigate();
+  const [dark, setDark] = useState(false);
+
+  useEffect(() => {
+    document.body.classList.toggle("dark", dark);
+  }, [dark]);
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -15,66 +21,63 @@ function Navbar() {
 
   return (
     <nav className="navbar">
-      <div className="navbar-logo">
-        <Link to="/" style={{ textDecoration: "none", color: "white" }}>
-          IBENTO
-        </Link>
+      {/* Logo */}
+      <div className="nav-logo" onClick={() => navigate("/home")}>
+        IBENTO
       </div>
 
-      <ul className="navbar-links">
+      {/* Links */}
+      <div className="nav-links">
 
-        {/* GUEST */}
+        {/* Guest */}
         {!user && (
           <>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/events">Events</Link></li>
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/register">Register</Link></li>
+            <NavLink to="/home">Home</NavLink>
+            <NavLink to="/events">Events</NavLink>
+            <NavLink to="/login">Login</NavLink>
+            <NavLink to="/register">Register</NavLink>
           </>
         )}
-        {user && role === "superAdmin" && (
-  <>
-  <li><Link to="/">Home</Link></li>
-    <li><Link to="/superadmin">Super Dashboard</Link></li>
-  </>
-)}
 
-        {/* STUDENT */}
+        {/* Student */}
         {user && role === "student" && (
           <>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/events">Events</Link></li>
-            <li><Link to="/my-events">My Events</Link></li>
+            <NavLink to="/home">Home</NavLink>
+            <NavLink to="/events">Events</NavLink>
+            <NavLink to="/student">Dashboard</NavLink>
           </>
         )}
 
-        {/* CLUB LEAD */}
+        {/* Club Lead */}
         {user && role === "clubLead" && (
           <>
-                        <li><Link to="/">Home</Link></li>
-
-            <li><Link to="/admin">Dashboard</Link></li>
-            <li><Link to="/admin/create-event">Create Event</Link></li>
+            <NavLink to="/admin">Dashboard</NavLink>
           </>
         )}
 
-        {/* SUPER ADMIN */}
+        {/* Super Admin */}
         {user && role === "superAdmin" && (
           <>
-            <li><Link to="/admin">All Events</Link></li>
+            <NavLink to="/superadmin">Dashboard</NavLink>
           </>
         )}
 
-        {/* LOGOUT */}
+        {/* Logout */}
         {user && (
-          <li>
-            <button className="logout-btn" onClick={handleLogout}>
-              Logout
-            </button>
-          </li>
+          <button className="logout-btn" onClick={handleLogout}>
+            Logout
+          </button>
         )}
 
-      </ul>
+        {/* Dark Mode Toggle */}
+        <button
+          className="theme-toggle"
+          onClick={() => setDark(!dark)}
+        >
+          {dark ? "Light" : "Dark"}
+        </button>
+
+      </div>
     </nav>
   );
 }

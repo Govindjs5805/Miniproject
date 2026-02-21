@@ -1,0 +1,38 @@
+.splash {
+  height: 100vh;
+  background: linear-gradient(135deg, #0f5132, #198754);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.splash-inner {
+  text-align: center;
+  color: white;
+}
+
+.logo {
+  font-size: 4rem;
+  letter-spacing: 12px;
+  animation: pop 1.5s ease forwards;
+}
+
+.loading-bar {
+  width: 300px;
+  height: 8px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 10px;
+  margin-top: 40px;
+  overflow: hidden;
+}
+
+.loading-fill {
+  height: 100%;
+  background: white;
+  transition: width 0.2s ease;
+}
+
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.7); }
+  to { opacity: 1; transform: scale(1); }
+}
