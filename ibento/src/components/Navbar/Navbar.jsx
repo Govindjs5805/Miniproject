@@ -52,7 +52,9 @@ function Navbar() {
         {/* Club Lead */}
         {user && role === "clubLead" && (
           <>
-            <NavLink to="/dashboard">Dashboard</NavLink>
+                      <NavLink to="/home">Home</NavLink>
+
+            <NavLink to="/admin">Dashboard</NavLink>
             <NavLink to="/admin/create-event">Create Event</NavLink>
           </>
         )}

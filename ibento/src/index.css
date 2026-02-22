@@ -8,9 +8,9 @@
 html, body {
   font-family: 'Segoe UI', sans-serif;
   scroll-behavior: smooth;
-  background: #f8f9fa;
+  background: #ffffff;
   color: #222;
-}
+}  
 
 body.light {
   background: #f8f9fa;
