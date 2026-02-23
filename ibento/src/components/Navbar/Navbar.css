@@ -13,7 +13,8 @@
 }
 
 body.dark .navbar {
-  background: rgba(18,18,18,0.8);
+  background: rgb(18, 18, 18);
+  color: white;
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
