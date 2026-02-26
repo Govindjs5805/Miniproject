@@ -40,7 +40,7 @@ function AppContent() {
       {showNavbar && <Navbar />}
       
       {/* Offset content only if Navbar is visible */}
-      <div style={{ marginTop: showNavbar ? "0px" : "0px" }}>
+      <div style={{ marginTop: showNavbar ? "70px" : "0px" }}>
         <Routes>
           {/* Splash Screen */}
           <Route path="/" element={<Splash />} />

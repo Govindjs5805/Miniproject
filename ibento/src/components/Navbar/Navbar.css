@@ -37,9 +37,11 @@ body.dark .navbar {
 
 .nav-links {
   display: flex;
+  font-size: 15px;
+  font-weight: bold;
   gap: 25px;
   align-items: center;
-  margin-left: 850px;
+  margin-left: 790px;
 }
 
 .nav-links a {
@@ -103,7 +105,7 @@ body {
 .nav-logo {
   font-size: 2rem;
   font-weight: 800;
-  color:#cbb4e0;
+  color:rgb(224, 191, 242);
   letter-spacing: 2px;
   margin-left: 20px;
 }
@@ -112,7 +114,7 @@ body {
   color: #ffffff;
   text-decoration: none;
   margin-left: 20px;
-  font-size: 14px;
+  font-size: 18px;
   transition: 0.3s;
 }
 
