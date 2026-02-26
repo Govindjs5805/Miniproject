@@ -6,17 +6,14 @@
 }
 
 html, body {
-  font-family: 'Segoe UI', sans-serif;
-  scroll-behavior: smooth;
-  background: #ffffff;
-  color: #222;
-}  
-
-body.light {
-  background: #f8f9fa;
-  color: #222;
+  margin: 0;
+  padding: 0;
+  /* Hardcoded dark theme colors */
+  background-color: #0f0c29 !important; 
+  color: #ffffff !important;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
-
 /* Dark Mode */
 body.dark {
   background: #121212;
@@ -26,4 +23,17 @@ body.dark {
 /* Smooth transition */
 body {
   transition: background 0.3s ease, color 0.3s ease;
+}
+.app-container {
+  /* This radial gradient matches your splash screen exactly */
+  background: radial-gradient(circle at top left, #1e1b4b, #0f0c29);
+  min-height: 100vh;
+  width: 100%;
+}
+.glass-panel, .card, .admin-box {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  border-radius: 15px;
+  color: white;
 }

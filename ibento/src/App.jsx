@@ -1,23 +1,24 @@
-import { Routes, Route } from "react-router-dom";
+import React from "react";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 
+// Components
+import Navbar from "./components/Navbar/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Splash from "./pages/Splash";
+
+// Pages
 import Home from "./pages/Home";
 import Events from "./pages/Events";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import VerifyEmail from "./pages/VerifyEmail"; // ✅ ADD THIS
-
+import VerifyEmail from "./pages/VerifyEmail";
 import StudentDashboard from "./pages/StudentDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminRegistrations from "./pages/AdminRegistrations";
-import AdminEventReport from "./pages/AdminEventReport";
+import AdminReport from "./pages/AdminReport";
 import AdminAttendanceAnalytics from "./pages/AdminAttendanceAnalytics";
 import AdminCheckIn from "./pages/AdminCheckIn";
-
 import SuperAdminDashboard from "./pages/SuperAdminDashboard";
-
-import Navbar from "./components/Navbar/Navbar";
-import ProtectedRoute from "./components/ProtectedRoute";
 import EventDetails from "./pages/EventDetails";
 import MyEvents from "./pages/MyEvents";
 import Ticket from "./pages/Ticket";
@@ -26,145 +27,59 @@ import Feedback from "./pages/Feedback";
 import AdminFeedbacks from "./pages/AdminFeedbacks";
 import AdminEventDocuments from "./pages/AdminEventDocuments";
 
-function App() {
-  return (
-    <>
-      <Navbar />
-      <div style={{ marginTop: "70px" }}>
-        <Routes>
+function AppContent() {
+  const location = useLocation();
 
-          {/* Splash */}
+  // Hide Navbar on Splash, Login, Register, and Verify Email pages
+  const noNavbarRoutes = ["/", "/login", "/register", "/verify-email"];
+  const showNavbar = !noNavbarRoutes.includes(location.pathname);
+
+  return (
+    <div className="app-container">
+      {/* Navbar shows only on internal pages */}
+      {showNavbar && <Navbar />}
+      
+      {/* Offset content only if Navbar is visible */}
+      <div style={{ marginTop: showNavbar ? "0px" : "0px" }}>
+        <Routes>
+          {/* Splash Screen */}
           <Route path="/" element={<Splash />} />
 
-          {/* Public */}
+          {/* Public Routes */}
           <Route path="/home" element={<Home />} />
           <Route path="/events" element={<Events />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-
-          {/* ✅ NEW VERIFY EMAIL ROUTE */}
           <Route path="/verify-email" element={<VerifyEmail />} />
 
-          {/* Student */}
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute allowedRole="student">
-                <StudentDashboard />
-              </ProtectedRoute>
-            }
-          />
+          {/* Student Protected Routes */}
+          <Route path="/dashboard" element={<ProtectedRoute allowedRole="student"><StudentDashboard /></ProtectedRoute>} />
           <Route path="/feedback/:eventId" element={<Feedback />} />
-
-<Route path="/admin/feedbacks" element={<ProtectedRoute allowedRole="clubLead"><AdminFeedbacks /></ProtectedRoute>} />
-
-          <Route
-            path="/my-events"
-            element={
-              <ProtectedRoute allowedRole="student">
-                <MyEvents />
-              </ProtectedRoute>
-            }
-          />
-          <Route 
-  path="/admin/feedbacks" 
-  element={
-    <ProtectedRoute allowedRole="clubLead">
-      <AdminFeedbacks />
-    </ProtectedRoute>
-  } 
-/>
-        <Route 
-  path="/admin/documents" 
-  element={
-    <ProtectedRoute allowedRole="clubLead">
-      <AdminEventDocuments />
-    </ProtectedRoute>
-  } 
-/>
-
-          <Route
-            path="/ticket/:registrationId"
-            element={
-              <ProtectedRoute allowedRole="student">
-                <Ticket />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Events Details */}
+          <Route path="/my-events" element={<ProtectedRoute allowedRole="student"><MyEvents /></ProtectedRoute>} />
+          <Route path="/ticket/:registrationId" element={<ProtectedRoute allowedRole="student"><Ticket /></ProtectedRoute>} />
           <Route path="/events/:id" element={<EventDetails />} />
 
-          {/* Club Lead Main Dashboard */}
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute allowedRole="clubLead">
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
+          {/* Club Lead Protected Routes */}
+          <Route path="/admin" element={<ProtectedRoute allowedRole="clubLead"><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/admin/registrations" element={<ProtectedRoute allowedRole="clubLead"><AdminRegistrations /></ProtectedRoute>} />
+          <Route path="/admin/report" element={<ProtectedRoute allowedRole="clubLead"><AdminReport /></ProtectedRoute>} />
+          <Route path="/admin/analytics" element={<ProtectedRoute allowedRole="clubLead"><AdminAttendanceAnalytics /></ProtectedRoute>} />
+          <Route path="/admin/create-event" element={<ProtectedRoute allowedRole="clubLead"><AdminCreateEvent /></ProtectedRoute>} />
+          <Route path="/admin/checkin" element={<ProtectedRoute allowedRole="clubLead"><AdminCheckIn /></ProtectedRoute>} />
+          <Route path="/admin/feedbacks" element={<ProtectedRoute allowedRole="clubLead"><AdminFeedbacks /></ProtectedRoute>} />
+          <Route path="/admin/documents" element={<ProtectedRoute allowedRole="clubLead"><AdminEventDocuments /></ProtectedRoute>} />
 
-          {/* Club Lead Sub Pages */}
-          <Route
-            path="/admin/registrations"
-            element={
-              <ProtectedRoute allowedRole="clubLead">
-                <AdminRegistrations />
-              </ProtectedRoute>
-            }
-          />
+          {/* Super Admin Protected Route */}
+          <Route path="/superadmin" element={<ProtectedRoute allowedRole="superAdmin"><SuperAdminDashboard /></ProtectedRoute>} />
 
-          <Route
-            path="/admin/report"
-            element={
-              <ProtectedRoute allowedRole="clubLead">
-                <AdminEventReport />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/admin/analytics"
-            element={
-              <ProtectedRoute allowedRole="clubLead">
-                <AdminAttendanceAnalytics />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/admin/create-event"
-            element={
-              <ProtectedRoute allowedRole="clubLead">
-                <AdminCreateEvent />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/admin/checkin"
-            element={
-              <ProtectedRoute allowedRole="clubLead">
-                <AdminCheckIn />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Super Admin */}
-          <Route
-            path="/superadmin"
-            element={
-              <ProtectedRoute allowedRole="superAdmin">
-                <SuperAdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-
+          {/* Fallback to Splash */}
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
-    </>
+    </div>
   );
 }
 
-export default App;
+export default function App() {
+  return <AppContent />;
+}

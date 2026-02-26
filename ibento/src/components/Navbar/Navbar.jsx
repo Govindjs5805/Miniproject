@@ -22,7 +22,7 @@ function Navbar() {
 
   return (
     <nav className="navbar">
-      <div className="nav-logo" onClick={() => navigate("/home")}>
+      <div className="nav-logo" onClick={() => navigate("/")}>
         IBENTO
       </div>
 
@@ -61,14 +61,6 @@ function Navbar() {
             Logout
           </button>
         )}
-
-        <button
-          className="theme-toggle"
-          onClick={() => setDark(!dark)}
-        >
-          {dark ? "Light" : "Dark"}
-        </button>
-
       </div>
     </nav>
   );

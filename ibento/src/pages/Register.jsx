@@ -4,7 +4,8 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
-import { auth } from "../firebase";
+import { doc, setDoc } from "firebase/firestore"; // Added Firestore methods
+import { auth, db } from "../firebase"; // Ensure db is exported from your firebase.js
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -30,6 +31,7 @@ const Register = () => {
     setSuccess("");
     setLoading(true);
 
+    // Basic Validation
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       setLoading(false);
@@ -37,24 +39,48 @@ const Register = () => {
     }
 
     try {
+      // 1. Create user in Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         formData.email,
         formData.password
       );
 
+      const user = userCredential.user;
+
+      // 2. Save additional user data to Firestore
+      // This ensures the user exists in your database, not just Auth
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        name: formData.name,
+        email: formData.email,
+        role: "student", // Default role
+        createdAt: new Date().toISOString(),
+      });
+
+      // 3. Set local storage for immediate Navbar feedback
       localStorage.setItem("role", "student");
 
-      await sendEmailVerification(userCredential.user);
+      // 4. Send Verification Email
+      await sendEmailVerification(user);
 
-      setSuccess("Verification email sent. Please check your inbox.");
+      setSuccess("Account created! Verification email sent. Please check your inbox.");
 
+      // 5. Redirect to verification notice page
       setTimeout(() => {
         navigate("/verify-email");
-      }, 1500);
+      }, 2000);
 
     } catch (err) {
-      setError(err.message);
+      console.error("Registration Error:", err);
+      // Friendly error mapping
+      if (err.code === "auth/email-already-in-use") {
+        setError("This email is already registered.");
+      } else if (err.code === "permission-denied") {
+        setError("Database permission denied. Check Firebase Rules.");
+      } else {
+        setError(err.message);
+      }
       setLoading(false);
     }
   };

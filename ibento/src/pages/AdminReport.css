@@ -1,0 +1,122 @@
+/* Screen Styles */
+.printable-report-area {
+  background: #ffffff;
+  width: 210mm; /* A4 Width */
+  margin: 40px auto;
+  padding: 60px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  font-family: 'Times New Roman', serif;
+  color: #111;
+  line-height: 1.6;
+}
+
+.report-header { text-align: center; margin-bottom: 30px; }
+.doc-type { font-size: 0.85rem; letter-spacing: 2px; color: #555; }
+.header-line { height: 2px; background: #000; margin-top: 10px; }
+
+.section-title {
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+.summary-paragraph { text-align: justify; margin-bottom: 30px; }
+
+.report-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+.report-table td { border: 1px solid #ddd; padding: 12px; font-size: 0.95rem; }
+.label { width: 30%; font-weight: bold; background: #f9f9f9; }
+
+.report-footer { margin-top: 80px; }
+.sig-container { display: flex; justify-content: space-between; }
+.sig-box { width: 40%; text-align: center; }
+.sig-line { border-top: 1px solid #000; margin-bottom: 5px; }
+.generated-on { font-size: 0.7rem; color: #999; text-align: center; margin-top: 40px; }
+
+/* Control UI */
+.report-controls { padding: 25px; background: #f4f4f4; border-bottom: 1px solid #ddd; }
+.controls-flex { display: flex; gap: 15px; justify-content: center; }
+.report-select { padding: 10px; width: 300px; border-radius: 4px; }
+.print-btn { background: #1a73e8; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+
+/* --- THE PRINT LOGIC --- */
+@media print {
+  /* Hide the rest of the app (Sidebars, Navs, Buttons) */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Only make the report area visible */
+  .printable-report-area, .printable-report-area * {
+    visibility: visible;
+  }
+
+  /* Position it perfectly on the page */
+  .printable-report-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Force hide sidebar/nav items by their typical class names */
+  .no-print, .sidebar, nav, header:not(.report-header) {
+    display: none !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 2cm;
+  }
+}
+/* Screen Styles */
+.printable-report-area {
+  background: #ffffff;
+  width: 210mm;
+  margin: 20px auto;
+  padding: 60px;
+  font-family: 'Times New Roman', serif;
+  color: #000;
+}
+
+.report-header { text-align: center; margin-bottom: 25px; }
+.header-line { height: 2px; background: #000; margin-top: 5px; }
+
+.section-title {
+  font-size: 1rem;
+  font-weight: bold;
+  border-bottom: 1px solid #000;
+  margin: 20px 0 10px 0;
+  padding-bottom: 3px;
+}
+
+.report-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+.report-table td { border: 1px solid #000; padding: 10px; font-size: 1rem; }
+.label { width: 40%; font-weight: bold; background: #f2f2f2; }
+
+.summary-paragraph { text-align: justify; line-height: 1.6; }
+
+.report-footer { margin-top: 60px; }
+.sig-container { display: flex; justify-content: space-between; }
+.sig-box { width: 40%; text-align: center; }
+.sig-line { border-top: 1px solid #000; margin-bottom: 5px; }
+
+/* Hide sidebars and other UI during print */
+@media print {
+  body * { visibility: hidden; }
+  .printable-report-area, .printable-report-area * { visibility: visible; }
+  .printable-report-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border: none;
+    padding: 0;
+  }
+  .no-print, nav, .sidebar { display: none !important; }
+}
