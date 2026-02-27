@@ -1,6 +1,6 @@
 .hero {
   position: relative;
-  height: 100vh;
+  height: 90vh; /* Leave room for marquee overlap */
   width: 100%;
   overflow: hidden;
   background: radial-gradient(
@@ -12,6 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
 }
 
 .hero-bg {
@@ -22,62 +23,69 @@
 
 .hero-content {
   position: relative;
-  z-index: 10;
+  z-index: 10; /* Ensures buttons and title are above the marquee */
   text-align: center;
   color: white;
   animation: fadeIn 1.5s ease-in-out;
 }
 
 .hero-title {
-  font-size: 10rem;
+  font-size: clamp(4rem, 10vw, 8rem); /* Responsive sizing */
   font-weight: 800;
   letter-spacing: 8px;
-  margin-bottom: 1px;
+  margin-bottom: 5px;
   background: linear-gradient(90deg, #ffffff, #8b5cf6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.3));
 }
 
 .hero-subtitle {
-  font-size: 25px;
-  font-weight: bold;
+  font-size: 22px;
+  font-weight: 600;
   margin-bottom: 40px;
-  opacity: 0.8;
+  opacity: 0.9;
+  letter-spacing: 1px;
 }
 
 .hero-buttons {
   display: flex;
   justify-content: center;
-  gap: 30px;
+  gap: 20px;
 }
 
 .btn-primary {
   background: #8b5cf6;
-  padding: 12px 28px;
-  border-radius: 8px;
+  padding: 14px 32px;
+  border-radius: 12px;
   text-decoration: none;
   color: white;
   font-weight: 600;
-  transition: 0.3s ease;
+  transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
 }
 
 .btn-secondary {
-  border: 1px solid #8b5cf6;
-  padding: 12px 28px;
-  border-radius: 8px;
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+  padding: 14px 32px;
+  border-radius: 12px;
   text-decoration: none;
-  color: #8b5cf6;
+  color: white;
   font-weight: 600;
   transition: 0.3s ease;
 }
 
 .btn-primary:hover {
+  transform: translateY(-3px);
   background: #7c3aed;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.6);
 }
 
 .btn-secondary:hover {
-  background: #8b5cf6;
-  color: white;
+  background: rgba(139, 92, 246, 0.1);
+  border-color: #8b5cf6;
 }
 
 @keyframes fadeIn {

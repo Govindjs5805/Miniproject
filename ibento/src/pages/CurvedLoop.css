@@ -1,0 +1,21 @@
+.curved-loop-jacket {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 40px 0; /* Changed from 100vh to a reasonable padding */
+  overflow: hidden;
+  margin-top: -50px;
+}
+
+.curved-loop-svg {
+  user-select: none;
+  width: 100%;
+  aspect-ratio: 100 / 12;
+  overflow: visible;
+  display: block;
+  font-size: 3rem; /* Slightly smaller to fit campus vibe */
+  fill: #7c3aed; /* Ibento Purple */
+  font-weight: 800;
+  text-transform: uppercase;
+}
