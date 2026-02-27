@@ -18,11 +18,10 @@ function Home() {
     "/IEEE-logo-WHITE.png", 
     "/Mulearn Logo.png",
     "/tinkerhub.png",
+       "/IEDC WhiteSVG 1.png", 
      "/FOCES White 1.png", 
-    "/IEDC WhiteSVG 1.png", 
-    "/IEEE-logo-WHITE.png", 
-    "/Mulearn Logo.png",
-    "/tinkerhub.png"
+ "/Mulearn Logo.png",
+    "/Group 13.png"
   ];
 
   useEffect(() => {
@@ -45,7 +44,7 @@ function Home() {
         logos={forumLogos} 
         speed={0.2} 
         curveAmount={0} 
-        logoSize={120} 
+        logoSize={80} 
       />
 
       <section className="home-section">

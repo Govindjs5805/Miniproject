@@ -8,26 +8,33 @@ const CurvedLoop = ({
   logoSize = 80
 }) => {
   const [offset, setOffset] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
   const requestRef = useRef();
   const uid = useId();
   const pathId = `curve-${uid}`;
   
-  // Path starts at -5% and ends at 105% to hide the 'entry' and 'exit'
-  const pathD = `M -100,100 Q 720,${100 + curveAmount} 1540,100`;
+  // Adjusted path to start further left (-200) and end further right (1640)
+  // to ensure logos are always visible at the screen edges.
+  const pathD = `M -200,100 Q 720,${100 + curveAmount} 1640,100`;
 
   useEffect(() => {
     const animate = () => {
-      setOffset((prev) => (prev + speed) % 100);
+      if (!isHovered) {
+        setOffset((prev) => (prev + speed) % 100);
+      }
       requestRef.current = requestAnimationFrame(animate);
     };
     requestRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(requestRef.current);
-  }, [speed]);
+  }, [speed, isHovered]);
 
   return (
-    <div className="curved-loop-jacket logo-mode">
-      {/* We use 1440 as the standard internal width for the SVG */}
-      <svg className="curved-loop-svg" viewBox="0 0 1440 400" preserveAspectRatio="none">
+    <div 
+      className="curved-loop-jacket logo-mode"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <svg className="curved-loop-svg" viewBox="0 0 1440 450" preserveAspectRatio="xMidYMid slice">
         <defs>
           <path id={pathId} d={pathD} fill="none" />
         </defs>
@@ -37,6 +44,7 @@ const CurvedLoop = ({
 
           return (
             <image
+            preserveAspectRatio="xMidYMid meet"
               key={i}
               href={logoUrl}
               width={logoSize}
@@ -46,7 +54,8 @@ const CurvedLoop = ({
                 offsetDistance: `${distance}%`,
                 transformBox: 'fill-box',
                 transformOrigin: 'center',
-                translate: `-${logoSize / 2}px -${logoSize / 2}px` 
+                translate: `-${logoSize / 2}px -${logoSize / 2}px`,
+                cursor: 'pointer'
               }}
             />
           );
