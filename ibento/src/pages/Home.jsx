@@ -68,7 +68,6 @@ function Home() {
               </div>
               <div className="card-content">
                 <h3>{event.title}</h3>
-                <p className="event-loc">📍 {event.location || "Campus Hub"}</p>
                 <button className="glass-btn-sm">View Details</button>
               </div>
             </div>

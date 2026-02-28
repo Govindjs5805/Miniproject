@@ -3,12 +3,7 @@
   height: 90vh; /* Leave room for marquee overlap */
   width: 100%;
   overflow: hidden;
-  background: radial-gradient(
-    circle at center,
-    #141018 0%,
-    #0b0b12 40%,
-    #000000 100%
-  );
+  background: #070415;
   display: flex;
   align-items: center;
   justify-content: center;
