@@ -147,7 +147,7 @@
 }
 /* 1. Main Dashboard Wrapper - The New Deep Background */
 div[style*="padding: 40px"] {
-    background: radial-gradient(circle at top right, #1a1a2e 0%, #050505 60%);
+    background: radial-gradient(circle at top, #1a1a2e 0%, #050505 60%);
     min-height: 100vh;
     color: white;
     font-family: 'Inter', -apple-system, sans-serif;

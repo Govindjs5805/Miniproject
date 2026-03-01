@@ -43,7 +43,7 @@
   display: flex;
   overflow-x: auto;
   gap: 30px;
-  padding: 20px 10px 80px;
+  padding: 20px 10px 0px;
   scrollbar-width: none; /* Firefox */
 }
 .events-grid::-webkit-scrollbar { display: none; }
@@ -107,6 +107,7 @@
 
 .organizer-tag {
   position: absolute;
+  margin-top: 0px;
   bottom: 15px;
   left: 15px;
   background: #a78bfa;
@@ -147,15 +148,18 @@
 }
 
 /* --- COMMUNITIES --- */
-.organizers-section { padding: 80px 5% 120px; background: #000; }
+.organizers-section { padding: 50px 120px;     background: radial-gradient(circle at top, #1a1a2e 0%, #050505 60%);
+
+padding-bottom: 200px; }
 .organizers-row {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 40px;
+  gap: 60px;
 }
 
-.community-circle-card { text-align: center; }
+.community-circle-card { text-align: center;
+padding-top: 80px; }
 .community-avatar {
   width: 120px;
   height: 120px;
