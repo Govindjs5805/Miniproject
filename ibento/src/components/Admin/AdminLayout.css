@@ -46,7 +46,8 @@
 .club-logo-placeholder {
   font-size: 32px;
   font-weight: bold;
-  color: #198754;
+  color: #8b5cf6;
+
 }
 
 .sidebar-club-name {
@@ -66,7 +67,7 @@
 .sidebar-nav a {
   padding: 14px 25px;
   text-decoration: none;
-  color: #6c757d;
+  color: #8b5cf6;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -76,13 +77,13 @@
 
 .sidebar-nav a:hover {
   background: #f8f9fa;
-  color: #198754;
+  color: #8b5cf6;
 }
 
 .sidebar-nav a.active {
   background: #e8f5e9;
-  color: #198754;
-  border-right: 4px solid #198754;
+  color: #8b5cf6;
+  border-right: 4px solid #8b5cf6;
 }
 
 .admin-main-content {
