@@ -111,7 +111,7 @@ function Events() {
               {userData?.role === "student" && (
                 <button
                   type="button"
-                  onClick={() => handleRegister(event)}
+                  onClick={() => navigate(`/events/${event.id}`)}
                 >
                   Register
                 </button>
