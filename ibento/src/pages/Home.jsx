@@ -40,18 +40,18 @@ function Home() {
 
   return (
     <div className="home-page-layout">
-      {/* 1. Hero Section with Glow Blender */}
+      {/* 1. Hero Section */}
       <div className="hero-container-main">
         <Hero />
         <div className="section-blender"></div> 
       </div>
 
-      {/* 2. Smooth Scrolling Logo Strip */}
+      {/* 2. Logo Strip */}
       <div className="branding-strip">
         <CurvedLoop logos={forumLogos} speed={0.05} curveAmount={0} logoSize={90} />
       </div>
 
-      {/* 3. Modern Events Section */}
+      {/* 3. Events Section */}
       <section className="home-section">
         <h2 className="massive-title">Upcoming Events</h2>
         <div className="events-grid">
@@ -59,25 +59,16 @@ function Home() {
             <div className="modern-event-card" key={event.id} onClick={() => navigate(`/events/${event.id}`)}>
               <div className="event-img-container">
                 <img src={event.posterURL} alt={event.title} />
-                
-                {/* Modern Date Badge */}
                 <div className="modern-date-badge">
                   <span className="m-month">{new Date(event.date).toLocaleDateString('en-US', { month: 'short' })}</span>
                   <span className="m-day">{new Date(event.date).getDate()}</span>
                 </div>
-
-                {/* Organizer Forum Tag */}
-                <div className="organizer-tag">
-                  {event.organizer || "Campus Event"}
-                </div>
+                <div className="organizer-tag">{event.organizer || "Campus Event"}</div>
               </div>
-
               <div className="modern-card-info">
                 <h3>{event.title}</h3>
                 <div className="card-footer-action">
-                  <button className="modern-view-btn">
-                    View Details <span>→</span>
-                  </button>
+                  <button className="modern-view-btn">View Details <span>→</span></button>
                 </div>
               </div>
             </div>
@@ -85,12 +76,17 @@ function Home() {
         </div>
       </section>
 
-      {/* 4. Communities Section */}
+      {/* 4. Communities Section - CLICKABLE */}
       <section className="organizers-section">
         <h2 className="massive-title">Our Communities</h2>
         <div className="organizers-row">
           {forums.map((forum, index) => (
-            <div className="community-circle-card" key={index}>
+            <div 
+              className="community-circle-card" 
+              key={index}
+              onClick={() => navigate(`/forum/${forum.name.replace(/\s+/g, '-').toLowerCase()}`)}
+              style={{ cursor: 'pointer' }}
+            >
               <div className="community-avatar">
                 <img src={forum.img} alt={forum.name} />
               </div>
@@ -99,9 +95,8 @@ function Home() {
           ))}
         </div>
       </section>
-      <Reviews />
 
-      {/* 5. Integrated Footer */}
+      <Reviews />
       <Footer />
     </div>
   );

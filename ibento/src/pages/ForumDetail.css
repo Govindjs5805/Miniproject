@@ -1,0 +1,145 @@
+.forum-detail-page {
+  background: #000;
+  color: white;
+  min-height: 100vh;
+}
+
+.forum-header {
+  height: 45vh;
+  background: radial-gradient(circle at center, #1e1b4b 0%, #000 100%);
+  display: flex;
+  margin-bottom: 0px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.back-btn {
+  position: absolute;
+  top: 40px;
+  left: 5%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.forum-logo-large {
+  width: 150px;
+  height: 150px;
+  background: #000000;
+  border-radius: 30px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 50px rgba(167, 139, 250, 0.3);
+}
+
+.forum-logo-large img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.forum-title {
+  font-size: 3rem;
+  margin-bottom: 0px;
+  justify-content: center;
+  padding-bottom: 40px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* Tabs */
+.forum-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: -30px;
+  position: relative;
+  z-index: 10;
+}
+
+.tab-btn {
+  background: rgba(20, 20, 20, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  padding: 15px 40px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.tab-btn.active {
+  background: #a78bfa;
+  color: #000;
+  border-color: #a78bfa;
+}
+
+/* Content Area */
+.forum-content-container {
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 0 5%;
+  min-height: 400px;
+}
+
+.info-glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 32px;
+  padding: 50px;
+  line-height: 1.8;
+}
+
+.info-glass-card h3 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #a78bfa;
+}
+
+.info-glass-card p {
+  font-size: 1.2rem;
+  color: #cbd5e1;
+}
+
+.forum-stats {
+  display: flex;
+  gap: 40px;
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stat-item span {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.stat-item strong {
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+/* Reuse existing modern-event-card styles from Home.css */
+.forum-events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 30px;
+}
+
+.no-events {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #64748b;
+  margin-top: 100px;
+}

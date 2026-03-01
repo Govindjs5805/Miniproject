@@ -26,7 +26,8 @@ import AdminCreateEvent from "./pages/AdminCreateEvent";
 import Feedback from "./pages/Feedback";
 import AdminFeedbacks from "./pages/AdminFeedbacks";
 import AdminEventDocuments from "./pages/AdminEventDocuments";
-import Footer from "./components/Footer/Footer"; // [Importing the Footer]
+import Footer from "./components/Footer/Footer";
+import ForumDetail from "./pages/ForumDetail"; // Import the new page // [Importing the Footer]
 
 function AppContent() {
   const location = useLocation();
@@ -59,6 +60,7 @@ function AppContent() {
           <Route path="/my-events" element={<ProtectedRoute allowedRole="student"><MyEvents /></ProtectedRoute>} />
           <Route path="/ticket/:registrationId" element={<ProtectedRoute allowedRole="student"><Ticket /></ProtectedRoute>} />
           <Route path="/events/:id" element={<EventDetails />} />          
+          <Route path="/forum/:forumId" element={<ForumDetail />} />          
 
 
           {/* Club Lead Protected Routes */}
