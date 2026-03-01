@@ -1,15 +1,23 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaTwitter, FaInstagram, FaFacebook, FaDiscord } from "react-icons/fa";
 import "./Footer.css";
 
 const Footer = () => {
+    const navigate = useNavigate();
+
   return (
     <footer className="main-footer">
       {/* 1. CTA Banner Section (Like your screenshot) */}
       <div className="footer-cta-container">
         <div className="footer-cta-card">
           <h2>Join Us to Create, Explore and Organize Campus Events</h2>
-          <button className="join-community-btn">Join Community</button>
+          <button 
+            className="join-community-btn" 
+            onClick={() => navigate('/register')} 
+          >
+            Join Community
+          </button>
         </div>
       </div>
 
