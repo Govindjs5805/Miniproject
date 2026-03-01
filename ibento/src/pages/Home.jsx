@@ -11,7 +11,7 @@ function Home() {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
 
-  const forumLogos = ["/FOCES White 1.png", "/IEDC WhiteSVG 1.png", "/IEEE-logo-WHITE.png", "/Mulearn Logo.png", "/tinkerhub.png", "/Group 13.png","/gdg.png"];
+  const forumLogos = ["/FOCES White 1.png", "/IEDC WhiteSVG 1.png", "/IEEE-logo-WHITE.png", "/Mulearn Logo.png", "/tinkerhub.png", "/Group 13.png","/gdg.png","/IEEE-logo-WHITE.png", "/Mulearn Logo.png", "/tinkerhub.png", "/Group 13.png"];
   const forums = [
     { name: "FOCES", img: "/FOCES White 1.png" },
     { name: "IEDC", img: "/IEDC WhiteSVG 1.png" },
