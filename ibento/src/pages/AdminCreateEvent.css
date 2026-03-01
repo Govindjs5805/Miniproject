@@ -1,0 +1,156 @@
+.create-event-wrapper {
+  padding: 40px;
+  background: #0b0b0f;
+  min-height: 100vh;
+  color: white;
+}
+
+/* Step Indicator */
+.step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.step-dot {
+  padding: 10px 20px;
+  border-radius: 30px;
+  background: #1a1a24;
+  color: #64748b;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.step-dot.active {
+  background: #a78bfa;
+  color: #000;
+  box-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
+}
+
+.step-line {
+  width: 50px;
+  height: 2px;
+  background: #1a1a24;
+}
+
+.step-line.active {
+  background: #a78bfa;
+}
+
+/* Form Sections */
+.form-section {
+  max-width: 700px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 40px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-form input, 
+.admin-form textarea, 
+.admin-form select {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 20px;
+  background: #16161e;
+  border: 1px solid #2d2d3a;
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+}
+
+/* Payment Toggle */
+.payment-toggle {
+  margin-bottom: 20px;
+}
+
+.toggle-btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.toggle-btns button {
+  flex: 1;
+  padding: 12px;
+  background: #16161e;
+  border: 1px solid #2d2d3a;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.toggle-btns button.active {
+  background: rgba(167, 139, 250, 0.1);
+  border-color: #a78bfa;
+  color: #a78bfa;
+}
+
+/* Dynamic Field Cards */
+.dynamic-field-card {
+  background: #16161e;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  border-left: 4px solid #a78bfa;
+}
+
+.field-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  color: #a78bfa;
+  font-weight: bold;
+}
+
+.remove-btn {
+  background: transparent;
+  color: #ef4444;
+  border: none;
+  cursor: pointer;
+}
+
+/* Buttons */
+.add-field-btn {
+  width: 100%;
+  padding: 15px;
+  background: transparent;
+  border: 2px dashed #2d2d3a;
+  color: #a78bfa;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  cursor: pointer;
+}
+
+.add-field-btn:hover {
+  background: rgba(167, 139, 250, 0.05);
+  border-color: #a78bfa;
+}
+
+.button-group {
+  display: flex;
+  gap: 15px;
+}
+
+.nav-btn, .submit-btn {
+  padding: 15px 30px;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+}
+
+.submit-btn {
+  flex: 2;
+  background: #a78bfa;
+  color: black;
+}
+
+.nav-btn {
+  flex: 1;
+  background: #2d2d3a;
+  color: white;
+}
