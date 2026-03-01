@@ -129,3 +129,19 @@
 .control-btn:hover {
   transform: scale(1.1);
 }
+.reviews-loader, .no-reviews {
+  color: #64748b;
+  padding: 50px;
+  font-style: italic;
+  font-size: 1.1rem;
+}
+
+.star-empty {
+  color: #334155; /* Dark grey for un-filled stars */
+}
+
+/* Ensure the avatar has a nice glow to match the UI */
+.reviewer-avatar {
+  box-shadow: 0 0 15px rgba(167, 139, 250, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
