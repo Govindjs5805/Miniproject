@@ -1,0 +1,93 @@
+/* Target the main div (padding: 40px) */
+div[style*="padding: 40px"] {
+    background-color: #050505;
+    min-height: 100vh;
+    color: white;
+    font-family: 'Inter', -apple-system, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Welcome Heading (h1) */
+div[style*="padding: 40px"] h1 {
+    font-size: 4.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    text-align: center;
+    margin-bottom: 10px;
+    /* Silver Metallic Gradient */
+    background: linear-gradient(to bottom, #ffffff 30%, #a1a1a1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Subtitle (p) */
+div[style*="padding: 40px"] > p {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* The Table Styling */
+table {
+    border: none !important; /* Removes the border="1" look */
+    background: #111111;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    margin-top: 20px !important;
+}
+
+thead {
+    background-color: #1a1a1a;
+}
+
+th {
+    padding: 18px;
+    color: #8b5cf6; /* IBENTO Red */
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    border: none !important;
+}
+
+td {
+    padding: 16px;
+    border-bottom: 1px solid #222 !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+    color: #cbd5e1;
+    font-size: 0.95rem;
+}
+
+/* Hover effect for rows */
+tbody tr:hover {
+    background-color: #161616;
+    transition: 0.3s;
+}
+
+/* Target the Attendance Column (last child) to look like a pill */
+td:last-child {
+    font-weight: bold;
+    color: #22c55e; /* Green for Present */
+}
+
+/* If text contains "Not Checked-in", make it Red */
+td:contains("Not Checked-in") {
+    color: #ef4444;
+}
+
+/* Make it look good on mobile */
+@media (max-width: 768px) {
+    div[style*="padding: 40px"] h1 {
+        font-size: 2.5rem;
+    }
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+}

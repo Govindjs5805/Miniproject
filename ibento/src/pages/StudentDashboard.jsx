@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
+import "./StudentDashboard.css";
+
 
 function StudentDashboard() {
   const { user,fullName } = useAuth();
