@@ -27,7 +27,7 @@ function FeedbackForm() {
         comment,
         submittedAt: serverTimestamp(),
       });
-      alert("Feedback received! 💜");
+      alert("Feedback received!");
       navigate("/my-events");
     } catch (err) {
       alert("Error: " + err.message);
