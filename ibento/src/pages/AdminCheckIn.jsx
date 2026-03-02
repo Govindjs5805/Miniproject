@@ -41,7 +41,7 @@ function AdminCheckIn() {
       scannerRef.current = scanner;
 
       scanner.start(
-        { facingMode: "user" }, 
+        { facingMode: "environment" }, 
         { 
           fps: 30, // High FPS for better motion capture
           qrbox: (viewfinderWidth, viewfinderHeight) => {
