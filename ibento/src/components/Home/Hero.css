@@ -26,7 +26,7 @@
 }
 
 .hero-title {
-  font-size: clamp(4rem, 10vw, 8rem); /* Responsive sizing */
+  font-size: clamp(4rem, 10vw, 10rem); /* Responsive sizing */
   font-weight: 800;
   letter-spacing: 8px;
   margin-bottom: 5px;
