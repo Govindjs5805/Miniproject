@@ -14,18 +14,22 @@ function MyEvents() {
     const fetchRegistrations = async () => {
       if (!user) return;
 
-      const q = query(
-        collection(db, "registrations"),
-        where("userId", "==", user.uid)
-      );
+      try {
+        const q = query(
+          collection(db, "registrations"),
+          where("userId", "==", user.uid)
+        );
 
-      const snap = await getDocs(q);
-      const list = snap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
+        const snap = await getDocs(q);
+        const list = snap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
 
-      setRegistrations(list);
+        setRegistrations(list);
+      } catch (error) {
+        console.error("Error fetching registrations:", error);
+      }
     };
 
     fetchRegistrations();
@@ -47,7 +51,9 @@ function MyEvents() {
             <div key={reg.id} className="my-event-card">
               <div className="card-info">
                 <h3>{reg.eventTitle}</h3>
-                <p className="reg-date">Registered: {reg.registeredAt?.toDate?.().toLocaleDateString?.() || "N/A"}</p>
+                <p className="reg-date">
+                  Registered: {reg.registeredAt?.toDate?.().toLocaleDateString() || "N/A"}
+                </p>
                 <p className={`status-text ${reg.checkInStatus ? 'status-green' : 'status-red'}`}>
                   {reg.checkInStatus ? "● Checked In" : "○ Not Checked In"}
                 </p>
@@ -58,13 +64,20 @@ function MyEvents() {
                   View Ticket
                 </button>
                 
-                {new Date(reg.eventDate) < new Date() && (
+                {/* CHANGE: Logic now strictly checks if the student is Checked In.
+                  If true, button is clickable. If false, it shows a status message.
+                */}
+                {reg.checkInStatus === true ? (
                   <button 
                     className="feedback-btn"
                     onClick={() => navigate(`/feedback/${reg.eventId}`)}
                   >
                     Give Feedback
                   </button>
+                ) : (
+                  <span className="pending-msg" style={{ fontSize: '0.8rem', color: '#94a3b8', fontStyle: 'italic' }}>
+                    Available after scan-in
+                  </span>
                 )}
               </div>
             </div>
