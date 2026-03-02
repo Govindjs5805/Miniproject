@@ -185,7 +185,7 @@ function AdminCreateEvent() {
               <div className="button-group">
                 <button type="button" className="nav-btn" onClick={() => setStep(1)}>← Back</button>
                 <button type="submit" className="submit-btn" disabled={uploading}>
-                  {uploading ? "Publishing..." : "Publish Event 🚀"}
+                  {uploading ? "Publishing..." : "Publish Event "}
                 </button>
               </div>
             </div>

@@ -138,11 +138,11 @@ function EventDetails() {
             </div>
             <div className="pay-options">
               <div className="pay-method-card" onClick={() => setPaymentStep("qr")}>
-                <div className="pay-icon">📸</div>
+                <div className="pay-icon"></div>
                 <span>UPI QR Code</span>
               </div>
               <div className="pay-method-card" onClick={() => setPaymentStep("upi")}>
-                <div className="pay-icon">📱</div>
+                <div className="pay-icon"></div>
                 <span>UPI ID</span>
               </div>
             </div>
@@ -249,12 +249,12 @@ function EventDetails() {
                   <>
                     {isPastEvent ? (
                       alreadyRegistered ? (
-                        <button onClick={() => navigate(`/feedback/${id}`)} className="feedback-btn-alt">Give Feedback ⭐</button>
+                        <button onClick={() => navigate(`/feedback/${id}`)} className="feedback-btn-alt">Give Feedback</button>
                       ) : (
                         <button disabled className="status-btn-disabled">Event Expired</button>
                       )
                     ) : alreadyRegistered ? (
-                      <button disabled className="status-btn-success">Already Registered ✅</button>
+                      <button disabled className="status-btn-success">Already Registered</button>
                     ) : seatsLeft > 0 ? (
                       <button onClick={() => { setPaymentStep("form"); setShowFormModal(true); }} className="hero-register-btn">
                         {event.isPaid ? "Register & Pay" : "Register Now"}

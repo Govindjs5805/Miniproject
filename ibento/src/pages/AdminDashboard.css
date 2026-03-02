@@ -1,0 +1,157 @@
+/* --- Global Admin Visibility Fixes --- */
+.admin-dash-content {
+    padding: 24px;
+    background: #0b0b0f;
+    min-height: 100vh;
+}
+
+.dash-welcome {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #ffffff !important;
+    background: linear-gradient(to right, #ffffff, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+}
+
+.dash-subtitle {
+    color: #94a3b8 !important;
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+}
+
+/* --- Stats Grid --- */
+.stats-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.admin-stat-card {
+    background: #16161e;
+    padding: 24px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+}
+
+.admin-stat-card:hover {
+    border-color: #a78bfa;
+    transform: translateY(-4px);
+}
+
+.stat-title {
+    color: #94a3b8 !important;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin: 0;
+}
+
+.stat-value {
+    color: #ffffff !important;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 12px 0 0 0;
+}
+
+/* --- The "Invisible Box" Fix (Reports & Feedback pages) --- */
+/* This forces any container that was previously white to be dark */
+.reporting-preview-card, 
+.admin-info-card-large,
+div[style*="background: white"], 
+div[style*="background: #ffffff"] {
+    background: #16161e !important;
+    border: 1px solid rgba(167, 139, 250, 0.3) !important;
+    padding: 30px !important;
+    border-radius: 24px !important;
+    color: #ffffff !important;
+}
+
+.card-highlight-title {
+    color: #a78bfa !important;
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+}
+
+.card-description {
+    color: #cbd5e1 !important;
+    line-height: 1.6;
+}
+
+.card-description strong {
+    color: #a78bfa;
+}
+
+/* --- Form & Dropdown Visibility (Feedbacks Page) --- */
+select, .event-selector {
+    background: #0b0b0f !important;
+    color: #ffffff !important;
+    border: 1px solid #334155 !important;
+    padding: 14px 20px !important;
+    border-radius: 12px !important;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 450px;
+    margin-top: 20px;
+}
+
+/* Sidebar Active Link Fix */
+.sidebar-link.active {
+    background: rgba(167, 139, 250, 0.1) !important;
+    color: #a78bfa !important;
+    font-weight: 700;
+}
+/* --- Global Admin Visibility Fixes --- */
+
+/* Targets the large white containers seen in Reports and Feedbacks */
+.reporting-preview-card, 
+.feedback-selection-container,
+div[style*="background: white"], 
+div[style*="background: #ffffff"],
+.admin-info-card-large {
+    background: #16161e !important; /* Force Dark Card Background */
+    border: 1px solid rgba(167, 139, 250, 0.3) !important;
+    padding: 30px !important;
+    border-radius: 24px !important;
+    color: #ffffff !important;
+}
+
+/* Force visibility on headings inside those boxes */
+h2, h3, .dash-welcome, .card-highlight-title {
+    color: #a78bfa !important; /* Vibrant Purple */
+    background: none !important;
+    -webkit-text-fill-color: initial !important;
+    margin-bottom: 15px;
+}
+
+/* Body text visibility fix */
+p, span, label, .card-description {
+    color: #cbd5e1 !important; /* Light Slate Gray */
+}
+
+/* Dropdown/Select fix (specifically for the selectors in screenshots 4 and 7) */
+select, .event-selector {
+    background-color: #0b0b0f !important;
+    color: #ffffff !important;
+    border: 1px solid #334155 !important;
+    padding: 12px 20px !important;
+    border-radius: 12px !important;
+    appearance: auto; /* Ensures the dropdown arrow is visible */
+}
+
+/* Stat Cards visibility (for the main dashboard view) */
+.admin-stat-card {
+    background: #1e1e2a !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.stat-title {
+    color: #94a3b8 !important;
+}
+
+.stat-value {
+    color: #ffffff !important;
+}

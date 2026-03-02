@@ -40,7 +40,7 @@ function AdminFeedbacks() {
   return (
     <AdminLayout>
       <div style={{ padding: "20px" }}>
-        <h2>Event Feedbacks 💬</h2>
+        <h2>Event Feedbacks</h2>
         <p>Select an event to see what students are saying.</p>
 
         <select 

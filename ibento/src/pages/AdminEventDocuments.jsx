@@ -148,7 +148,7 @@ function AdminEventDocuments() {
           </div>
         )}
 
-        <h2>Event Document Vault 📁</h2>
+        <h2>Event Document Vault</h2>
         
         <select 
           onChange={(e) => setSelectedEventId(e.target.value)} 
