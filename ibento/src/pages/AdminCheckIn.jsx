@@ -41,19 +41,18 @@ function AdminCheckIn() {
       scannerRef.current = scanner;
 
       scanner.start(
-        { facingMode: "environment" }, 
-        { 
-          fps: 30, // High FPS for better motion capture
-          qrbox: (viewfinderWidth, viewfinderHeight) => {
-             // Dynamic box size for laptop screens
-             const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
-             const fontSize = Math.floor(minEdge * 0.7);
-             return { width: fontSize, height: fontSize };
-          },
-          aspectRatio: 1.0,
-          // Optimization: This makes the scanner more sensitive to phone screens
-          disableFlip: false 
-        },
+{ facingMode: "environment" }, 
+  { 
+    fps: 60, // Increase to 60 for smoother motion capture
+    qrbox: { width: 250, height: 250 },
+    aspectRatio: 1.0,
+    // Add these experimental settings for speed
+    experimentalFeatures: {
+      useBarCodeDetectorIfSupported: true 
+    },
+    // This helps prevent the camera from "searching" too long
+    rememberLastUsedCamera: true
+  },
         async (decodedText) => {
           if (processingRef.current) return;
           
