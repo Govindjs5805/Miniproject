@@ -59,6 +59,7 @@ function AdminReport() {
   return (
     <AdminLayout>
       <div className="report-page-container">
+        {/* Everything inside 'no-print' will be hidden in PDF */}
         <div className="report-controls no-print">
           <h2 className="dash-welcome">Post-Event Reporting</h2>
           <div className="controls-flex">
@@ -132,6 +133,7 @@ function AdminReport() {
                   <p>Faculty In-Charge</p>
                 </div>
               </div>
+              <p className="generated-on-text">Report Generated On: {new Date().toLocaleDateString()}</p>
             </footer>
           </div>
         )}

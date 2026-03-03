@@ -6,7 +6,7 @@ import Footer from "../components/Footer/Footer";
 import "./ForumDetail.css";
 
 function ForumDetail() {
-  const { forumId } = useParams(); 
+  const { forumId } = useParams();
   const navigate = useNavigate();
   
   const [activeTab, setActiveTab] = useState("info");

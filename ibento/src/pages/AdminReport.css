@@ -1,11 +1,10 @@
 /* =========================================
-   1. SCREEN STYLES (What you see in App)
+   1. SCREEN STYLES (UI/Dashboard)
    ========================================= */
 
 .report-page-container {
     padding: 20px;
     color: white;
-    min-height: 100vh;
 }
 
 .report-controls {
@@ -29,7 +28,6 @@
     padding: 12px 20px;
     border-radius: 10px;
     width: 350px;
-    font-size: 1rem;
 }
 
 .print-btn {
@@ -40,15 +38,9 @@
     border-radius: 10px;
     font-weight: 700;
     cursor: pointer;
-    transition: 0.3s ease;
 }
 
-.print-btn:hover {
-    background: #c4b5fd;
-    transform: translateY(-2px);
-}
-
-/* --- Report Preview Card (A4 look on screen) --- */
+/* --- Report Preview (A4 Paper look) --- */
 .printable-report-area {
     background: #ffffff !important;
     width: 210mm;
@@ -59,19 +51,18 @@
     font-family: 'Times New Roman', Times, serif;
     color: #000 !important;
     line-height: 1.6;
-    display: block;
 }
 
 .report-header { text-align: center; margin-bottom: 40px; }
-.report-header h2 { color: #000 !important; margin: 0; font-size: 2.4rem; font-weight: bold; }
-.doc-type { font-size: 1rem; letter-spacing: 3px; color: #444 !important; margin-top: 5px; }
-.header-line { height: 3px; background: #000; margin-top: 15px; }
+.report-header h2 { color: #000 !important; margin: 0; font-size: 2.2rem; font-weight: bold; }
+.doc-type { font-size: 0.9rem; letter-spacing: 3px; color: #444 !important; }
+.header-line { height: 2px; background: #000; margin-top: 15px; }
 
 .section-title {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: bold;
-    border-bottom: 2px solid #000;
-    margin: 35px 0 15px 0;
+    border-bottom: 1px solid #000;
+    margin: 30px 0 15px 0;
     padding-bottom: 5px;
     color: #000 !important;
     text-transform: uppercase;
@@ -79,95 +70,71 @@
 
 .summary-paragraph { 
     text-align: justify; 
-    font-size: 1.15rem; 
+    font-size: 1.1rem; 
     color: #000 !important; 
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
-/* List-based metrics (No Tables) */
-.metrics-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.metric-item {
-    display: flex;
-    font-size: 1.1rem;
+.metrics-list { display: flex; flex-direction: column; gap: 10px; }
+.metric-item { 
+    display: flex; 
+    font-size: 1.1rem; 
     color: #000 !important;
     border-bottom: 1px dotted #ccc;
     padding-bottom: 5px;
 }
+.metric-label { font-weight: bold; width: 220px; }
+.metric-value { color: #000 !important; }
 
-.metric-label {
-    font-weight: bold;
-    width: 250px; /* Aligns values vertically */
-    flex-shrink: 0;
-}
-
-.metric-value {
-    color: #000 !important;
-}
-
-.report-footer { margin-top: 100px; }
+.report-footer { margin-top: 80px; }
 .sig-container { display: flex; justify-content: space-between; }
-.sig-box { width: 40%; text-align: center; color: #000 !important; }
+.sig-box { width: 40%; text-align: center; }
 .sig-line { border-top: 1px solid #000; margin-bottom: 8px; }
-.generated-on { text-align: right; font-size: 0.9rem; color: #666 !important; margin-top: 50px; }
+.generated-on-text { text-align: right; font-size: 0.8rem; color: #666 !important; margin-top: 40px; }
 
 /* =========================================
-   2. PRINT LOGIC (What the PDF uses)
+   2. PRINT LOGIC (PDF Generation)
    ========================================= */
 
 @media print {
-    /* Kill the dark background of the app entirely */
-    html, body, .admin-layout, .report-page-container {
-        background: white !important;
-        color: black !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        height: auto !important;
+    /* Step 1: Hide the entire body and all parent backgrounds */
+    body * {
+        visibility: hidden;
     }
 
-    /* Hide UI navigation and buttons */
-    .no-print, 
-    nav, 
-    .sidebar, 
-    .admin-sidebar, 
-    .admin-header, 
-    button, 
-    select, 
-    .report-controls {
+    /* Step 2: Only make the report area visible */
+    .printable-report-area, 
+    .printable-report-area * {
+        visibility: visible;
+    }
+
+    /* Step 3: Position the report at the very top of the PDF page */
+    .printable-report-area {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 10mm !important; /* Standard print margin */
+        box-shadow: none !important;
+        background: white !important;
+        color: black !important;
+    }
+
+    /* Step 4: Ensure background graphics and colors are forced on */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color: black !important;
+    }
+
+    /* Hide the UI controls specifically */
+    .no-print, nav, aside, .report-controls {
         display: none !important;
     }
 
-    /* Force the report area to be the ONLY thing on the page */
-    .printable-report-area {
-        position: static !important;
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 10mm !important; /* Smaller padding for actual print */
-        box-shadow: none !important;
-        display: block !important;
-        visibility: visible !important;
-    }
-
-    /* Ensure text renders as black, even if browser tries to "optimize" */
-    * {
-        color: black !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-    }
-
-    /* Avoid breaking sections across two pages if possible */
-    .report-section {
-        page-break-inside: avoid;
-        margin-bottom: 20px;
-    }
-
-    /* Page settings */
     @page {
         size: A4;
-        margin: 1.5cm;
+        margin: 1cm;
     }
 }

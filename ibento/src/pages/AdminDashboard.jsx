@@ -1,17 +1,32 @@
 import { useEffect, useState } from "react";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import AdminLayout from "../components/Admin/AdminLayout";
 import "./AdminDashboard.css";
 
 function AdminDashboard() {
-  const { clubId, fullName } = useAuth();
+  const { clubId, user } = useAuth();
+  const [adminName, setAdminName] = useState("Admin"); // Fallback
   const [totalEvents, setTotalEvents] = useState(0);
   const [totalRegistrations, setTotalRegistrations] = useState(0);
   const [totalCheckedIn, setTotalCheckedIn] = useState(0);
 
   useEffect(() => {
+    const loadAdminProfile = async () => {
+      if (!user) return;
+      try {
+        // Fetching the admin's actual name from the users collection
+        const adminDoc = await getDoc(doc(db, "users", user.uid));
+        if (adminDoc.exists()) {
+          const data = adminDoc.data();
+          setAdminName(data.fullName || data.name || "Admin");
+        }
+      } catch (err) {
+        console.error("Error fetching admin profile:", err);
+      }
+    };
+
     const loadStats = async () => {
       if (!clubId) return;
 
@@ -38,8 +53,9 @@ function AdminDashboard() {
       setTotalCheckedIn(checkInCount);
     };
 
+    loadAdminProfile();
     loadStats();
-  }, [clubId]);
+  }, [clubId, user]);
 
   const attendancePercentage = totalRegistrations > 0 
     ? ((totalCheckedIn / totalRegistrations) * 100).toFixed(1) 
@@ -48,22 +64,24 @@ function AdminDashboard() {
   return (
     <AdminLayout>
       <div className="admin-dash-content">
-        <h2 className="dash-welcome">Welcome, {fullName}</h2>
-        <p className="dash-subtitle">Club Overview Dashboard</p>
+        <header className="dash-header-section">
+          {/* Now using the fetched adminName */}
+          <h2 className="dash-welcome">Welcome, {adminName.toUpperCase()}</h2>
+          <p className="dash-subtitle">Club Overview Dashboard</p>
+        </header>
 
         <div className="stats-grid-container">
-          <StatCard title="Total Events" value={totalEvents}  />
-          <StatCard title="Total Registrations" value={totalRegistrations}/>
-          <StatCard title="Total Checked-In" value={totalCheckedIn} />
-          <StatCard title="Attendance Rate" value={`${attendancePercentage}%`}/>
+          <StatCard title="Total Events" value={totalEvents} icon="" />
+          <StatCard title="Total Registrations" value={totalRegistrations} icon="" />
+          <StatCard title="Total Checked-In" value={totalCheckedIn} icon="" />
+          <StatCard title="Attendance Rate" value={`${attendancePercentage}%`} icon="" />
         </div>
 
-        {/* This container replaces the white box seen in your screenshots */}
         <div className="admin-info-card-large">
           <h3 className="card-highlight-title">Quick Insights</h3>
           <p className="card-description">
-            Your most recent event has seen a <strong>{attendancePercentage}%</strong> check-in rate. 
-            Navigate to the <strong>Reports</strong> tab for a full student breakdown.
+            Your club's overall check-in rate is <strong>{attendancePercentage}%</strong>. 
+            Navigate to the <strong>Reports</strong> tab to generate official documentation for completed events.
           </p>
         </div>
       </div>
