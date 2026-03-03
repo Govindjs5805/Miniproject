@@ -33,8 +33,7 @@ function Navbar() {
 
         {user && role === "student" && (
           <>
-            <NavLink to="/dashboard">Dashboard</NavLink>
-            <NavLink to="/my-events">My Events</NavLink>
+            <NavLink to="/dashboard">My Events</NavLink>
           </>
         )}
 

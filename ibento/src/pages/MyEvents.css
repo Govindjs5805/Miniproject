@@ -1,121 +1,115 @@
-.my-events-page {
-  background: radial-gradient(circle at center, #6f51ba 0%, #201a36 80%);
+.my-events-wrapper {
+  background-color: #0d0016;
   min-height: 100vh;
-  padding: 80px 5%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: white;
-}
-
-/* Metallic Title Styling */
-.my-events-header {
-  text-align: center;
-  margin-bottom: 60px;
-}
-
-.massive-title {
-  font-size: 5rem;
-  font-weight: 950;
-  text-transform: uppercase;
-  letter-spacing: -3px;
-  background: linear-gradient(to bottom, #ffffff 40%, #a1a1a1 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin: 0;
-}
-
-.title-underline {
-  width: 60px;
-  height: 4px;
-  background: #8b5cf6; /* IBENTO Purple */
-  margin: 15px auto;
-  border-radius: 2px;
-}
-
-.subtitle {
-  color: #94a3b8;
-  letter-spacing: 1px;
-}
-
-/* Glass Card Design */
-.my-events-list {
   width: 100%;
-  max-width: 800px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  position: relative;
+  padding: 60px 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.my-event-card {
-  background: rgba(17, 17, 17, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  padding: 30px;
+.silk-bg {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(circle at 50% 50%, rgba(88, 28, 135, 0.2), transparent),
+              url('https://www.transparenttextures.com/patterns/dark-matter.png'); /* Subtle texture */
+  z-index: 0;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 40px;
+  z-index: 10;
+  position: relative;
+}
+
+.main-heading {
+  font-size: 2.5rem;
+  color: #fff;
+  letter-spacing: 2px;
+  margin-bottom: 5px;
+}
+
+.sub-heading { color: #94a3b8; font-size: 0.9rem; }
+
+.events-container {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 10;
+  position: relative;
+}
+
+/* Compact Glass Card */
+.glass-event-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: 0.3s ease;
 }
 
-.my-event-card:hover {
-  transform: translateX(10px);
-  border-color: rgba(139, 92, 246, 0.3);
-  background: rgba(25, 25, 25, 0.8);
-}
-
-.card-info h3 {
-  font-size: 1.6rem;
+.event-title-small {
+  color: #a78bfa;
+  font-size: 1.2rem;
   margin-bottom: 8px;
 }
 
-.reg-date {
-  color: #64748b;
-  font-size: 0.9rem;
-}
-
-.status-text {
-  font-weight: bold;
-  font-size: 0.85rem;
-  margin-top: 10px;
-  text-transform: uppercase;
-}
-
-.status-green { color: #22c55e; }
-.status-red { color: #ef4444; }
-
-/* Buttons */
-.card-actions {
+.compact-info {
   display: flex;
-  gap: 12px;
+  flex-direction: column;
+  gap: 5px;
 }
 
-.ticket-btn, .feedback-btn {
-  padding: 12px 20px;
-  border-radius: 10px;
-  font-weight: bold;
+.info-text { color: #cbd5e1; font-size: 0.85rem; }
+
+.status-text-pill {
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-top: 4px;
+}
+.is-in { color: #4ade80; }
+.is-out { color: #94a3b8; }
+
+/* Action Buttons */
+.card-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.compact-btn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
-  border: none;
   transition: 0.3s;
+  border: none;
 }
 
-.ticket-btn {
+.view-btn {
   background: #ffffff;
   color: #000;
 }
 
-.feedback-btn {
+.feed-btn {
   background: #8b5cf6;
-  color: white;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
 }
 
-.ticket-btn:hover, .feedback-btn:hover {
-  transform: scale(1.05);
+.view-btn:hover, .feed-btn:hover {
+  transform: translateY(-2px);
   filter: brightness(1.1);
 }
 
-@media (max-width: 768px) {
-  .massive-title { font-size: 3rem; }
-  .my-event-card { flex-direction: column; text-align: center; }
+.lock-text {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-style: italic;
 }

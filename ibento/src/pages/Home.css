@@ -33,7 +33,7 @@
   text-transform: uppercase;
   letter-spacing: -2px;
   margin-bottom: 50px;
-  background: linear-gradient(180deg, #fff 30%, rgba(167, 139, 250, 0.4) 100%);
+  background: linear-gradient(180deg, #fff 30%, rgba(255, 255, 255, 0.4) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -157,6 +157,7 @@ padding-bottom: 200px; }
   flex-wrap: wrap;
   gap: 60px;
 }
+
 
 .community-circle-card { text-align: center;
 padding-top: 80px; }
