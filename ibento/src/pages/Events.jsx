@@ -54,12 +54,12 @@ function Events() {
               <h3 className="event-title-compact">{event.title}</h3>
               
               <div className="detail-row-mini">
-                <span className="icon">📅</span>
+                <span className="icon"></span>
                 <span className="text">{event.date}</span>
               </div>
               
               <div className="detail-row-mini">
-                <span className="icon">📍</span>
+                <span className="icon"></span>
                 <span className="text">{event.venue}</span>
               </div>
 

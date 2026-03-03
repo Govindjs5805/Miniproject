@@ -39,7 +39,7 @@ function StudentDashboard() {
               <div className="card-top-info">
                 <h3 className="mini-event-title">{reg.eventTitle}</h3>
                 <div className="mini-date-row">
-                  <span className="icon">📅</span>
+                  <span className="icon"></span>
                   <span className="date-val">{reg.eventDate || "2026-02-27"}</span>
                 </div>
               </div>

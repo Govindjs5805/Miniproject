@@ -18,19 +18,19 @@
 
 .events-header {
   text-align: center;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
   position: relative;
   z-index: 10;
 }
 
 .glitch-text {
-  font-size: 3rem;
+  font-size: 4rem;
   font-weight: 900;
-  color: #fff;
-  letter-spacing: 5px;
+  color: rgb(176, 133, 233);
+  letter-spacing: 2px;
 }
 
-.header-sub { color: #94a3b8; font-size: 0.9rem; }
+.header-sub { color: #94a3b8; font-size: 1.3rem; }
 
 /* Compact Grid */
 .events-grid-container {
@@ -80,7 +80,8 @@
 
 .event-title-compact {
   color: #fff;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
+  font-weight: 750;
   margin-bottom: 10px;
 }
 
@@ -88,6 +89,7 @@
   display: flex;
   gap: 8px;
   margin-bottom: 5px;
+  font-weight: 800;
   font-size: 0.8rem;
   color: #cbd5e1;
 }
