@@ -23,7 +23,7 @@ import EventDetails from "./pages/EventDetails";
 import MyEvents from "./pages/MyEvents";
 import Ticket from "./pages/Ticket";
 import AdminCreateEvent from "./pages/AdminCreateEvent";
-import Feedback from "./pages/Feedback";
+import FeedbackForm from "./pages/FeedbackForm";
 import AdminFeedbacks from "./pages/AdminFeedbacks";
 import AdminEventDocuments from "./pages/AdminEventDocuments";
 import Footer from "./components/Footer/Footer";
@@ -56,7 +56,7 @@ function AppContent() {
 
           {/* Student Protected Routes */}
           <Route path="/dashboard" element={<ProtectedRoute allowedRole="student"><StudentDashboard /></ProtectedRoute>} />
-          <Route path="/feedback/:eventId" element={<Feedback />} />
+          <Route path="/feedback/:eventId" element={<FeedbackForm />} />
           <Route path="/my-events" element={<ProtectedRoute allowedRole="student"><MyEvents /></ProtectedRoute>} />
           <Route path="/ticket/:registrationId" element={<ProtectedRoute allowedRole="student"><Ticket /></ProtectedRoute>} />
           <Route path="/events/:id" element={<EventDetails />} />          

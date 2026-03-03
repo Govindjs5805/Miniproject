@@ -50,7 +50,7 @@ function AdminReport() {
 
   const generateSummary = () => {
     if (!selectedEvent) return "";
-    return `The event "${selectedEvent.title}" was successfully conducted by the ${clubName} on ${selectedEvent.date} at ${selectedEvent.venue}. 
+    return `The event "${selectedEvent.title}" was successfully conducted by ${clubName || "the organizer"} on ${selectedEvent.date} at ${selectedEvent.venue}. 
     A total of ${regCount} students registered for the program, indicating a strong interest in the subject matter. 
     Following the session, ${feedbacks.length} participants submitted formal feedback. 
     The event concluded effectively, meeting all planned administrative and engagement benchmarks.`;
@@ -61,8 +61,6 @@ function AdminReport() {
       <div className="report-page-container">
         <div className="report-controls no-print">
           <h2 className="dash-welcome">Post-Event Reporting</h2>
-          <p className="dash-subtitle">Generate official completion certificates and records</p>
-          
           <div className="controls-flex">
             <select onChange={handleSelectEvent} className="report-select">
               <option value="">-- Select Completed Event --</option>
@@ -72,70 +70,55 @@ function AdminReport() {
             </select>
             {selectedEvent && (
               <button onClick={() => window.print()} className="print-btn">
-                <span>Download PDF Report</span>
+                Download PDF Report
               </button>
             )}
           </div>
         </div>
 
-        {!selectedEvent && (
-           <div className="reporting-preview-card no-print">
-              <h3>Quick Insights</h3>
-              <p>Select an event from the dropdown above to generate a professional PDF report for your records.</p>
-           </div>
-        )}
-
         {selectedEvent && (
           <div className="printable-report-area">
             <header className="report-header">
-              <h2>{clubName?.toUpperCase() || "CLUB NAME"}</h2>
+              <h2>{clubName?.toUpperCase() || "MULEARN CHN"}</h2>
               <p className="doc-type">OFFICIAL EVENT COMPLETION RECORD</p>
               <div className="header-line"></div>
             </header>
 
             <section className="report-section">
-              <h4 className="section-title">I. EXECUTIVE SUMMARY</h4>
+              <h3 className="section-title">I. EXECUTIVE SUMMARY</h3>
               <p className="summary-paragraph">{generateSummary()}</p>
             </section>
 
             <section className="report-section">
-              <h4 className="section-title">II. EVENT LOGISTICS</h4>
-              <table className="report-table">
-                <tbody>
-                  <tr>
-                    <td className="label">Event Title</td>
-                    <td>{selectedEvent.title}</td>
-                  </tr>
-                  <tr>
-                    <td className="label">Organized Date</td>
-                    <td>{selectedEvent.date}</td>
-                  </tr>
-                  <tr>
-                    <td className="label">Venue Location</td>
-                    <td>{selectedEvent.venue}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <h3 className="section-title">II. EVENT DETAILS</h3>
+              <div className="metrics-list">
+                <div className="metric-item">
+                  <span className="metric-label">Event Title:</span>
+                  <span className="metric-value">{selectedEvent.title}</span>
+                </div>
+                <div className="metric-item">
+                  <span className="metric-label">Organized Date:</span>
+                  <span className="metric-value">{selectedEvent.date}</span>
+                </div>
+                <div className="metric-item">
+                  <span className="metric-label">Venue Location:</span>
+                  <span className="metric-value">{selectedEvent.venue}</span>
+                </div>
+              </div>
             </section>
 
             <section className="report-section">
-              <h4 className="section-title">III. PARTICIPATION METRICS</h4>
-              <table className="report-table">
-                <tbody>
-                  <tr>
-                    <td className="label">Total Registered Attendees</td>
-                    <td>{regCount} Students</td>
-                  </tr>
-                  <tr>
-                    <td className="label">Feedback Responses Collected</td>
-                    <td>{feedbacks.length} Participants</td>
-                  </tr>
-                  <tr>
-                    <td className="label">Maximum Capacity</td>
-                    <td>{selectedEvent.seatLimit || "N/A"}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <h3 className="section-title">III. PARTICIPATION METRICS</h3>
+              <div className="metrics-list">
+                <div className="metric-item">
+                  <span className="metric-label">Total Registrations:</span>
+                  <span className="metric-value">{regCount} Students</span>
+                </div>
+                <div className="metric-item">
+                  <span className="metric-label">Feedback Collected:</span>
+                  <span className="metric-value">{feedbacks.length} Responses</span>
+                </div>
+              </div>
             </section>
 
             <footer className="report-footer">
@@ -149,7 +132,6 @@ function AdminReport() {
                   <p>Faculty In-Charge</p>
                 </div>
               </div>
-              <p className="generated-on">Generated on: {new Date().toLocaleDateString()}</p>
             </footer>
           </div>
         )}

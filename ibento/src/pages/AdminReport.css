@@ -1,36 +1,35 @@
-/* Container Fixes */
+/* =========================================
+   1. SCREEN STYLES (What you see in App)
+   ========================================= */
+
 .report-page-container {
     padding: 20px;
     color: white;
+    min-height: 100vh;
 }
 
-/* Control UI - Match Dashboard Style */
 .report-controls {
     margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 12px;
 }
 
 .controls-flex {
     display: flex;
     gap: 15px;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
-/* Dropdown visibility fix */
 .report-select {
     background: #16161e !important;
     color: white !important;
     border: 1px solid rgba(167, 139, 250, 0.3) !important;
     padding: 12px 20px;
-    border-radius: 12px;
+    border-radius: 10px;
     width: 350px;
     font-size: 1rem;
-    cursor: pointer;
-}
-
-.report-select option {
-    background: #16161e;
-    color: white;
 }
 
 .print-btn {
@@ -38,10 +37,10 @@
     color: #111;
     padding: 12px 24px;
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     font-weight: 700;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.3s ease;
 }
 
 .print-btn:hover {
@@ -49,74 +48,124 @@
     transform: translateY(-2px);
 }
 
-/* Report Area - A4 Paper Style (Only visible on screen as a card) */
+/* --- Report Preview Card (A4 look on screen) --- */
 .printable-report-area {
-    background: #ffffff !important; /* Force white for the paper */
+    background: #ffffff !important;
     width: 210mm;
     min-height: 297mm;
     margin: 40px auto;
-    padding: 80px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    font-family: 'Times New Roman', serif;
-    color: #000 !important; /* Force black text on the paper */
+    padding: 25mm;
+    box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+    font-family: 'Times New Roman', Times, serif;
+    color: #000 !important;
     line-height: 1.6;
+    display: block;
 }
 
 .report-header { text-align: center; margin-bottom: 40px; }
-.report-header h2 { color: #000 !important; margin: 0; font-size: 2rem; }
-.doc-type { font-size: 0.9rem; letter-spacing: 3px; color: #444 !important; margin-top: 5px; }
-.header-line { height: 2px; background: #000; margin-top: 15px; }
+.report-header h2 { color: #000 !important; margin: 0; font-size: 2.4rem; font-weight: bold; }
+.doc-type { font-size: 1rem; letter-spacing: 3px; color: #444 !important; margin-top: 5px; }
+.header-line { height: 3px; background: #000; margin-top: 15px; }
 
 .section-title {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     font-weight: bold;
-    border-bottom: 1px solid #000;
-    margin: 30px 0 15px 0;
+    border-bottom: 2px solid #000;
+    margin: 35px 0 15px 0;
     padding-bottom: 5px;
     color: #000 !important;
+    text-transform: uppercase;
 }
 
-.summary-paragraph { text-align: justify; font-size: 1.1rem; color: #000 !important; }
-
-.report-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-.report-table td { 
-    border: 1px solid #000; 
-    padding: 12px; 
-    font-size: 1rem; 
+.summary-paragraph { 
+    text-align: justify; 
+    font-size: 1.15rem; 
     color: #000 !important; 
+    margin-bottom: 30px;
 }
-.label { width: 40%; font-weight: bold; background: #f2f2f2 !important; }
+
+/* List-based metrics (No Tables) */
+.metrics-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.metric-item {
+    display: flex;
+    font-size: 1.1rem;
+    color: #000 !important;
+    border-bottom: 1px dotted #ccc;
+    padding-bottom: 5px;
+}
+
+.metric-label {
+    font-weight: bold;
+    width: 250px; /* Aligns values vertically */
+    flex-shrink: 0;
+}
+
+.metric-value {
+    color: #000 !important;
+}
 
 .report-footer { margin-top: 100px; }
 .sig-container { display: flex; justify-content: space-between; }
 .sig-box { width: 40%; text-align: center; color: #000 !important; }
 .sig-line { border-top: 1px solid #000; margin-bottom: 8px; }
+.generated-on { text-align: right; font-size: 0.9rem; color: #666 !important; margin-top: 50px; }
 
-/* --- THE PRINT LOGIC --- */
+/* =========================================
+   2. PRINT LOGIC (What the PDF uses)
+   ========================================= */
+
 @media print {
-    /* Hide everything including background colors of the app */
-    body { background: white !important; }
-    
-    .no-print, .sidebar, nav, header, button, .dash-welcome, .dash-subtitle {
+    /* Kill the dark background of the app entirely */
+    html, body, .admin-layout, .report-page-container {
+        background: white !important;
+        color: black !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        height: auto !important;
+    }
+
+    /* Hide UI navigation and buttons */
+    .no-print, 
+    nav, 
+    .sidebar, 
+    .admin-sidebar, 
+    .admin-header, 
+    button, 
+    select, 
+    .report-controls {
         display: none !important;
     }
 
-    /* Make the report take the full page */
+    /* Force the report area to be the ONLY thing on the page */
     .printable-report-area {
-        position: absolute;
-        left: 0;
-        top: 0;
+        position: static !important;
         width: 100% !important;
         margin: 0 !important;
-        padding: 0 !important;
+        padding: 10mm !important; /* Smaller padding for actual print */
         box-shadow: none !important;
+        display: block !important;
         visibility: visible !important;
     }
 
-    .printable-report-area * {
-        visibility: visible !important;
+    /* Ensure text renders as black, even if browser tries to "optimize" */
+    * {
+        color: black !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
 
+    /* Avoid breaking sections across two pages if possible */
+    .report-section {
+        page-break-inside: avoid;
+        margin-bottom: 20px;
+    }
+
+    /* Page settings */
     @page {
         size: A4;
         margin: 1.5cm;
