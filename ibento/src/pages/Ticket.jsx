@@ -3,6 +3,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useParams } from "react-router-dom";
 import { db } from "../firebase";
 import { QRCodeCanvas } from "qrcode.react";
+import "./Ticket.css";
 
 function Ticket() {
   const { registrationId } = useParams();
@@ -13,7 +14,6 @@ function Ticket() {
     const fetchTicket = async () => {
       try {
         const snap = await getDoc(doc(db, "registrations", registrationId));
-
         if (snap.exists()) {
           setRegistration({ id: snap.id, ...snap.data() });
         } else {
@@ -32,24 +32,32 @@ function Ticket() {
   }, [registrationId]);
 
   if (loading) {
-    return <div style={{ padding: "40px" }}>Loading ticket...</div>;
+    return <div className="ticket-loading">Loading ticket...</div>;
   }
 
   if (!registration) {
-    return <div style={{ padding: "40px" }}>Ticket not found.</div>;
+    return <div className="ticket-loading">Ticket not found.</div>;
   }
 
   return (
-    <div style={{ padding: "40px", textAlign: "center" }}>
-      <h2>{registration.eventTitle}</h2>
-      <p><strong>Name:</strong> {registration.userName}</p>
-      <p><strong>Email:</strong> {registration.userEmail}</p>
+    <div className="ticket-page-wrapper">
+      <div className="ticket-container">
+        <h2 className="ticket-event-name">{registration.eventTitle}</h2>
+        
+        <div className="ticket-info">
+          <p><strong>Name:</strong> {registration.userName}</p>
+          <p><strong>Email:</strong> {registration.userEmail}</p>
+        </div>
 
-      <div style={{ margin: "30px 0" }}>
-        <QRCodeCanvas value={registration.id} size={220} />
+        {/* This container adds the white quiet zone and purple border */}
+        <div className="qr-border-frame">
+          <div className="qr-white-background">
+            <QRCodeCanvas value={registration.id} size={220} level="H" />
+          </div>
+        </div>
+
+        <p className="ticket-footer">Show this QR code at entry.</p>
       </div>
-
-      <p>Show this QR code at entry.</p>
     </div>
   );
 }
