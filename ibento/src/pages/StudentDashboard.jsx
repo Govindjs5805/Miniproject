@@ -9,19 +9,30 @@ function StudentDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [registrations, setRegistrations] = useState([]);
-  const [userName, setUserName] = useState("STUDENT");
-  const [submittedFeedbacks, setSubmittedFeedbacks] = useState({}); // Stores { eventId: true }
+  const [userName, setUserName] = useState(""); // Start empty to check loading state
+  const [submittedFeedbacks, setSubmittedFeedbacks] = useState({});
 
-  // 1. Fetch User Name
+  // 1. Fetch User Name from 'users' collection
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (!user) return;
       try {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
+        // Double check your Firestore collection name is 'users' 
+        // and the field is 'fullName'
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+        
         if (userDoc.exists()) {
-          setUserName(userDoc.data().fullName || "STUDENT");
+          const data = userDoc.data();
+          // We prioritize fullName, then display name, then fallback to 'STUDENT'
+          setUserName(data.fullName || data.name || user.displayName || "STUDENT");
+        } else {
+          setUserName(user.displayName || "STUDENT");
         }
-      } catch (err) { console.error(err); }
+      } catch (err) { 
+        console.error("Error fetching username:", err); 
+        setUserName("STUDENT");
+      }
     };
     fetchUserProfile();
   }, [user]);
@@ -32,17 +43,14 @@ function StudentDashboard() {
       if (!user) return;
 
       try {
-        // Get Registrations
         const q = query(collection(db, "registrations"), where("userId", "==", user.uid));
         const snap = await getDocs(q);
         const regData = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setRegistrations(regData);
 
-        // Get Feedbacks submitted by this user
         const fQuery = query(collection(db, "feedbacks"), where("userId", "==", user.uid));
         const fSnap = await getDocs(fQuery);
         
-        // Create a map of event IDs that already have feedback
         const feedbackMap = {};
         fSnap.docs.forEach(doc => {
           feedbackMap[doc.data().eventId] = true;
@@ -60,7 +68,10 @@ function StudentDashboard() {
       <div className="dashboard-silk-bg"></div>
 
       <header className="dashboard-header">
-        <h1 className="welcome-text">WELCOME, {userName.toUpperCase()} 👋</h1>
+        {/* If userName is still loading, show a space or '...' */}
+        <h1 className="welcome-text">
+            WELCOME, {userName ? userName.toUpperCase() : "..."} 👋
+        </h1>
         <p className="dashboard-subtitle">Manage your event participations</p>
       </header>
 
@@ -72,7 +83,7 @@ function StudentDashboard() {
             <div key={reg.id} className="mini-event-card">
               <div className="card-top-info">
                 <h3 className="mini-event-title">{reg.eventTitle}</h3>
-                <p className="date-val"> {reg.eventDate || "TBA"}</p>
+                <p className="date-val">{reg.eventDate || "TBA"}</p>
               </div>
 
               <div className="card-status-row">
@@ -88,12 +99,10 @@ function StudentDashboard() {
                 
                 {reg.checkInStatus && (
                   submittedFeedbacks[reg.eventId] ? (
-                    /* DISABLED BUTTON IF FEEDBACK EXISTS */
                     <button className="dashboard-btn feedback-submitted" disabled>
                       Feedback Submitted
                     </button>
                   ) : (
-                    /* ACTIVE BUTTON IF NO FEEDBACK FOUND */
                     <button className="dashboard-btn feedback-style" onClick={() => navigate(`/feedback/${reg.eventId}`)}>
                       Give Feedback
                     </button>
