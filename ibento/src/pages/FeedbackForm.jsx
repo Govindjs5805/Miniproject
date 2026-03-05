@@ -1,95 +1,120 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../firebase";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import "./Feedback.css";
 
 function FeedbackForm() {
   const { eventId } = useParams();
-  const { user, userData } = useAuth(); // Destructured userData for real name fallback
+  const { user, userData } = useAuth();
   const navigate = useNavigate();
-  const [rating, setRating] = useState(5);
-  const [hover, setHover] = useState(0);
-  const [comment, setComment] = useState("");
+  
+  const [eventData, setEventData] = useState(null);
+  const [responses, setResponses] = useState({}); // Stores answers dynamically
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
+
+  useEffect(() => {
+    const fetchEventSchema = async () => {
+      try {
+        const eventDoc = await getDoc(doc(db, "events", eventId));
+        if (eventDoc.exists()) {
+          setEventData(eventDoc.data());
+          // Initialize responses based on schema
+          const initialResponses = {};
+          const schema = eventDoc.data().feedbackSchema || [];
+          schema.forEach(field => {
+            initialResponses[field.label] = field.type === "rating" ? 5 : "";
+          });
+          setResponses(initialResponses);
+        }
+      } catch (err) {
+        console.error("Error fetching schema:", err);
+      } finally {
+        setFetching(false);
+      }
+    };
+    fetchEventSchema();
+  }, [eventId]);
+
+  const handleInputChange = (label, value) => {
+    setResponses(prev => ({ ...prev, [label]: value }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      // FIX: Changed collection name to "feedbacks" to match Admin query
       const feedbackRef = doc(db, "feedbacks", `${eventId}_${user.uid}`);
-      
       await setDoc(feedbackRef, {
         eventId,
         userId: user.uid,
-        // Fallback hierarchy for the name
-        userName: userData?.fullName || user.displayName || "Anonymous Student", 
+        userName: userData?.fullName || user.displayName || "Anonymous Student",
         userEmail: user.email,
-        rating: Number(rating),
-        comment: comment.trim(),
+        responses: responses, // ALL CUSTOM ANSWERS SAVED HERE
         submittedAt: serverTimestamp(),
       });
 
-      alert("Feedback received! Thank you ");
+      alert("Feedback received! Thank you");
       navigate("/dashboard");
     } catch (err) {
-      console.error("Submission Error:", err);
       alert("Error: " + err.message);
     } finally {
       setLoading(false);
     }
   };
 
+  if (fetching) return <div className="loading">Loading Feedback Form...</div>;
+
   return (
     <div className="feedback-outer-container">
-      <div className="bg-glow-1"></div>
-      <div className="bg-glow-2"></div>
-
       <div className="glass-feedback-card">
         <div className="brand-logo-small">IBENTO</div>
-        <h2 className="main-title">Your Feedback is Important to Us</h2>
-        <p className="sub-description">Rate your experience and share your thoughts</p>
-
+        <h2 className="main-title">Feedback for {eventData?.title}</h2>
+        
         <form onSubmit={handleSubmit} className="glass-form">
-          <div className="rating-block">
-            <label className="section-label">Rate your experience</label>
-            <div className="star-row">
-              {[1, 2, 3, 4, 5].map((num) => (
-                <button
-                  type="button"
-                  key={num}
-                  className={`glass-star ${num <= (hover || rating) ? "active" : ""}`}
-                  onClick={() => setRating(num)}
-                  onMouseEnter={() => setHover(num)}
-                  onMouseLeave={() => setHover(0)}
+          {eventData?.feedbackSchema?.map((field) => (
+            <div key={field.id} className="input-block">
+              <label className="section-label">{field.label}</label>
+              
+              {field.type === "rating" ? (
+                <div className="star-row">
+                  {[1, 2, 3, 4, 5].map((num) => (
+                    <button
+                      type="button"
+                      key={num}
+                      className={`glass-star ${num <= responses[field.label] ? "active" : ""}`}
+                      onClick={() => handleInputChange(field.label, num)}
+                    >
+                      ★
+                    </button>
+                  ))}
+                </div>
+              ) : field.type === "select" ? (
+                <select 
+                  className="glass-select"
+                  onChange={(e) => handleInputChange(field.label, e.target.value)}
+                  required={field.required}
                 >
-                  ★
-                </button>
-              ))}
+                  <option value="">Select an option</option>
+                  {field.options?.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                </select>
+              ) : (
+                <textarea
+                  className="glass-textarea"
+                  placeholder="Your answer..."
+                  value={responses[field.label]}
+                  onChange={(e) => handleInputChange(field.label, e.target.value)}
+                  required={field.required}
+                />
+              )}
             </div>
-            <div className="rating-scale">
-              <div className="scale-bar" style={{width: `${(rating/5)*100}%`}}></div>
-            </div>
-          </div>
-
-          <div className="input-block">
-            <label className="section-label">Share your thoughts</label>
-            <textarea
-              className="glass-textarea"
-              placeholder="Tell us what you liked or how we can improve..."
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              required
-            />
-          </div>
+          ))}
 
           <button type="submit" className="glass-submit-btn" disabled={loading}>
             {loading ? "SENDING..." : "Submit Feedback"}
           </button>
-          
-          <p className="footer-note">Thank you for helping us make IBENTO better!</p>
         </form>
       </div>
     </div>
