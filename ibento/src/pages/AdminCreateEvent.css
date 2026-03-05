@@ -33,8 +33,10 @@
   width: 50px;
   height: 2px;
   background: #1a1a24;
+  transition: 0.3s;
 }
 
+/* Active line logic for the 3-step process */
 .step-line.active {
   background: #a78bfa;
 }
@@ -47,6 +49,23 @@
   padding: 40px;
   border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.08);
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.admin-form h2 {
+  margin-bottom: 10px;
+  font-size: 1.8rem;
+}
+
+.admin-form .hint {
+  color: #94a3b8;
+  margin-bottom: 30px;
+  display: block;
 }
 
 .admin-form input, 
@@ -60,60 +79,55 @@
   border-radius: 12px;
   color: white;
   font-size: 1rem;
+  transition: 0.3s;
 }
 
-/* Payment Toggle */
-.payment-toggle {
-  margin-bottom: 20px;
-}
-
-.toggle-btns {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.toggle-btns button {
-  flex: 1;
-  padding: 12px;
-  background: #16161e;
-  border: 1px solid #2d2d3a;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.toggle-btns button.active {
-  background: rgba(167, 139, 250, 0.1);
+.admin-form input:focus, 
+.admin-form select:focus {
   border-color: #a78bfa;
-  color: #a78bfa;
+  outline: none;
+  background: #1c1c27;
 }
 
-/* Dynamic Field Cards */
+/* Dynamic Field Cards (Used for both Registration & Feedback Builder) */
 .dynamic-field-card {
   background: #16161e;
   padding: 20px;
   border-radius: 16px;
   margin-bottom: 20px;
   border-left: 4px solid #a78bfa;
+  position: relative;
 }
 
 .field-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 15px;
   color: #a78bfa;
   font-weight: bold;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .remove-btn {
-  background: transparent;
+  background: rgba(239, 68, 68, 0.1);
   color: #ef4444;
-  border: none;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  padding: 5px 10px;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 0.8rem;
+  transition: 0.3s;
 }
 
-/* Buttons */
+.remove-btn:hover {
+  background: #ef4444;
+  color: white;
+}
+
+/* Builder Buttons */
 .add-field-btn {
   width: 100%;
   padding: 15px;
@@ -121,8 +135,10 @@
   border: 2px dashed #2d2d3a;
   color: #a78bfa;
   border-radius: 12px;
-  margin-bottom: 30px;
+  margin: 10px 0 30px 0;
   cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
 }
 
 .add-field-btn:hover {
@@ -130,27 +146,53 @@
   border-color: #a78bfa;
 }
 
+/* Navigation & Submission */
 .button-group {
   display: flex;
   gap: 15px;
+  margin-top: 20px;
 }
 
 .nav-btn, .submit-btn {
-  padding: 15px 30px;
+  padding: 16px 30px;
   border-radius: 12px;
   font-weight: bold;
   cursor: pointer;
   border: none;
+  transition: 0.3s;
+  font-size: 1rem;
 }
 
 .submit-btn {
   flex: 2;
   background: #a78bfa;
   color: black;
+  box-shadow: 0 4px 15px rgba(167, 139, 250, 0.2);
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #c4b5fd;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(167, 139, 250, 0.4);
+}
+
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(1);
 }
 
 .nav-btn {
   flex: 1;
   background: #2d2d3a;
   color: white;
+}
+
+.nav-btn:hover {
+  background: #3d3d4d;
+}
+
+.nav-btn.next {
+  background: #a78bfa;
+  color: black;
 }
