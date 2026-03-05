@@ -8,7 +8,7 @@ import AdminOverview from "./AdminOverview";
 import SuperAdminRegistrations from "./SuperAdminRegistrations";
 import SuperAdminFeedbacks from "./SuperAdminFeedbacks";
 import SuperAdminReports from "./SuperAdminReports";
-import AdminDocumentVault from "./AdminDocumentVault";
+import AdminDocumentVault from "./SuperAdminDocumentVault";
 
 function SuperAdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -35,11 +35,11 @@ function SuperAdminDashboard() {
   }, []);
 
   const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: "📊" },
-    { id: "registrations", label: "Registrations", icon: "📝" },
-    { id: "feedbacks", label: "Feedbacks", icon: "💬" },
-    { id: "reports", label: "Reports", icon: "📈" },
-    { id: "vault", label: "Document Vault", icon: "📂" },
+    { id: "dashboard", label: "Dashboard", icon: "" },
+    { id: "registrations", label: "Registrations", icon: "" },
+    { id: "feedbacks", label: "Feedbacks", icon: "" },
+    { id: "reports", label: "Reports", icon: "" },
+    { id: "vault", label: "Document Vault", icon: "" },
   ];
 
   const renderContent = () => {
