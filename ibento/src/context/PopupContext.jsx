@@ -21,31 +21,32 @@ export const PopupProvider = ({ children }) => {
     <PopupContext.Provider value={{ showToast, confirmAction }}>
       {children}
 
-      {/* GLOBAL TOAST UI */}
+      {/* PREMIUM TOP-RIGHT TOAST */}
       {toast.show && (
-        <div style={{
-          position: "fixed", top: "20px", right: "20px", padding: "15px 25px",
-          backgroundColor: toast.type === "success" ? "#28a745" : "#dc3545",
-          color: "white", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-          zIndex: 9999, animation: "fadeIn 0.3s"
-        }}>
-          {toast.message}
+        <div className={`vault-toast ${toast.type}`}>
+          <div className="toast-content">
+            {toast.type === "success" ? "✅" : "❌"} {toast.message}
+          </div>
         </div>
       )}
 
-      {/* GLOBAL MODAL UI */}
+      {/* CENTERED GLASS MODAL */}
       {modal.show && (
-        <div style={{
-          position: "fixed", top: 0, left: 0, width: "100%", height: "100%",
-          backgroundColor: "rgba(0,0,0,0.6)", display: "flex", justifyContent: "center",
-          alignItems: "center", zIndex: 9998
-        }}>
-          <div style={{ background: "white", padding: "30px", borderRadius: "15px", width: "90%", maxWidth: "400px", textAlign: "center" }}>
-            <h3 style={{ marginTop: 0 }}>{modal.title}</h3>
-            <p>{modal.message}</p>
-            <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginTop: "25px" }}>
-              <button onClick={hideModal} style={{ padding: "10px 20px", border: "1px solid #ddd", background: "none", borderRadius: "8px", cursor: "pointer" }}>Cancel</button>
-              <button onClick={() => { modal.onConfirm(); hideModal(); }} style={{ padding: "10px 20px", background: "#dc3545", color: "white", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: "bold" }}>Confirm</button>
+        <div className="vault-modal-overlay">
+          <div className="vault-modal-card">
+            <h3 className="vault-modal-title">{modal.title}</h3>
+            <p className="vault-modal-message">{modal.message}</p>
+            
+            <div className="vault-modal-actions">
+              <button onClick={hideModal} className="v-btn-cancel">
+                Cancel
+              </button>
+              <button 
+                onClick={() => { modal.onConfirm(); hideModal(); }} 
+                className="v-btn-confirm"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>

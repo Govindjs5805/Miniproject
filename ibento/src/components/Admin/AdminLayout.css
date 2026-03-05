@@ -1,7 +1,16 @@
-/* 1. Global Theme & Deep Space Background */
+/* --- 0. THE RESET: KILLS THE WHITE LINE AT THE BOTTOM --- */
+html, body, #root {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
+  background-color: #08090d !important;
+  overflow-x: hidden;
+}
+
 :root {
   --primary-purple: #8b5cf6;
-  --bg-dark: #08090d; /* Ultra dark for high contrast */
+  --bg-dark: #08090d;
   --sidebar-bg: rgba(13, 14, 18, 0.95);
   --glass-card: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.08);
@@ -9,23 +18,26 @@
   --text-secondary: #94a3b8;
   --accent-glow: rgba(139, 92, 246, 0.4);
   --success-green: #00ffa3;
+  --danger-red: #ef4444;
 }
 
+/* 1. Main Layout Container */
 .admin-container {
   display: flex;
   min-height: 100vh;
+  width: 100%;
   background-color: var(--bg-dark);
-  /* Subtle radial glows like the Leadex reference */
   background-image: 
     radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.12) 0px, transparent 50%),
     radial-gradient(at 100% 100%, rgba(0, 255, 163, 0.05) 0px, transparent 50%);
   color: var(--text-primary);
-  font-family: 'Inter', -apple-system, sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
-/* 2. Sidebar - Vertical Brand Layout */
+/* 2. Sidebar */
 .admin-sidebar {
   width: 280px;
+  min-width: 280px;
   background: var(--sidebar-bg);
   backdrop-filter: blur(20px);
   border-right: 1px solid var(--glass-border);
@@ -40,63 +52,21 @@
 
 .sidebar-brand-section {
   display: flex;
-  flex-direction: column; /* Stack logo and text vertically */
-  align-items: center;    /* Center align for the "Schedule" look */
+  flex-direction: column;
+  align-items: center;
   text-align: center;
   gap: 20px;
   margin-bottom: 4rem;
 }
 
-.sidebar-club-logo {
-  width: 70px;
-  height: 70px;
-  border-radius: 20px;
-  object-fit: contain;
-  background: rgba(255, 255, 255, 0.02);
-  padding: 10px;
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-}
-
-.club-logo-placeholder {
-  width: 70px;
-  height: 70px;
-  background: linear-gradient(135deg, var(--primary-purple), #6366f1);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  font-weight: 800;
-  box-shadow: 0 0 20px var(--accent-glow);
-}
-
-.sidebar-org-info {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
 .sidebar-club-name {
   font-size: 1rem;
   font-weight: 700;
-  letter-spacing: 0.5px;
   text-transform: uppercase;
   color: #fff;
-  margin: 0;
-  line-height: 1.2;
+  margin-bottom: -40px;
 }
 
-.sidebar-status-tag {
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--success-green);
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  opacity: 0.8;
-}
-
-/* 3. Navigation Links */
 .sidebar-nav {
   display: flex;
   flex-direction: column;
@@ -108,80 +78,200 @@
   color: var(--text-secondary);
   padding: 14px 20px;
   border-radius: 14px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  align-items: center;
-  border: 1px solid transparent;
+  transition: all 0.3s;
 }
 
-.sidebar-nav a:hover {
-  background: rgba(255, 255, 255, 0.05);
+.sidebar-nav a:hover, .sidebar-nav a.active {
+  background: rgba(139, 92, 246, 0.15);
   color: #fff;
-  transform: translateX(4px);
-}
-
-.sidebar-nav a.active {
-  background: rgba(139, 92, 246, 0.15) !important;
-  color: #fff !important;
   border: 1px solid rgba(139, 92, 246, 0.4);
-  box-shadow: inset 0 0 15px rgba(139, 92, 246, 0.1);
 }
 
-/* 4. Main Content - Fixing the White-on-White Issue */
+/* 3. Content Area */
 .admin-main-content {
   flex: 1;
   padding: 50px 60px;
   overflow-y: auto;
 }
 
-/* Force dark glass for any element trying to be white */
-.admin-main-content .card, 
-.stats-card,
-div[style*="background: white"], 
-div[style*="background-color: white"] {
-  background: var(--glass-card) !important;
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border) !important;
-  border-radius: 28px !important;
-  padding: 35px !important;
-  min-width: 240px;
-  display: inline-flex;
-  flex-direction: column;
-  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4) !important;
-  margin-right: 20px;
-  margin-bottom: 20px;
-}
-
-/* Stats Styling (Numbers like 6, 7, 0.0%) */
-.admin-main-content .card h2, 
-.admin-main-content .card h3,
-.admin-main-content .big-number {
-  color: #ffffff !important;
-  font-size: 3.2rem !important;
-  font-weight: 800 !important;
-  margin: 15px 0 0 0 !important;
-  text-shadow: 0 0 25px var(--accent-glow);
-}
-
-.admin-main-content .card p {
-  color: var(--text-secondary) !important;
-  font-size: 0.8rem !important;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-}
-
 .welcome-text {
-  font-size: 2.5rem;
-  font-weight: 900;
-  background: linear-gradient(to right, #ffffff, #94a3b8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 0.5rem;
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 2rem;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+/* 5. DOCUMENT VAULT SPECIFIC UI */
+.vault-glass-card {
+  background: var(--glass-card) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 20px;
+  padding: 35px;
+  margin-top: 30px;
+}
+
+.vault-main-select, .vault-select-dark {
+  background: #111218 !important;
+  border: 1px solid var(--glass-border) !important;
+  color: white !important;
+  padding: 14px;
+  border-radius: 12px;
+  width: 100%;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border 0.3s;
+}
+
+.vault-main-select:focus, .vault-select-dark:focus {
+  border-color: var(--primary-purple) !important;
+}
+
+.vault-upload-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  background: rgba(255,255,255,0.02);
+  padding: 25px;
+  border-radius: 16px;
+  margin: 25px 0;
+  align-items: flex-end;
+  border: 1px solid var(--glass-border);
+}
+
+.vault-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.vault-input-group label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--primary-purple);
+  text-transform: uppercase;
+}
+
+.vault-primary-btn {
+  background: linear-gradient(135deg, var(--primary-purple), #6366f1);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.vault-primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+}
+
+.vault-file-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  margin-bottom: 12px;
+  transition: 0.3s;
+}
+
+.vault-file-row:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.v-link-view { color: var(--primary-purple); font-weight: 600; text-decoration: none; margin-right: 15px; }
+.v-link-dl { color: var(--success-green); font-weight: 600; text-decoration: none; margin-right: 20px;}
+
+.vault-badge {
+  background: rgba(139, 92, 246, 0.2);
+  color: var(--primary-purple);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-right: 15px;
+}
+
+/* --- 6. PREMIUM POPUPS & MODALS --- */
+.vault-toast {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  min-width: 250px;
+  padding: 16px 24px;
+  border-radius: 12px;
+  z-index: 11000;
+  color: white;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  animation: slideInLeft 0.3s ease-out;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.vault-toast.success { background: rgba(0, 255, 163, 0.15); border-color: var(--success-green); color: var(--success-green); }
+.vault-toast.error { background: rgba(239, 68, 68, 0.15); border-color: var(--danger-red); color: var(--danger-red); }
+
+@keyframes slideInLeft {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.vault-modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(0, 0, 0, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.vault-modal-card {
+  background: #0d0e12 !important;
+  border: 1px solid var(--glass-border) !important;
+  padding: 40px;
+  border-radius: 24px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.7);
+  animation: zoomIn 0.2s ease-out;
+}
+
+.vault-modal-title { color: white; font-size: 1.5rem; margin-bottom: 15px; }
+.vault-modal-message { color: var(--text-secondary); margin-bottom: 30px; line-height: 1.5; }
+.vault-modal-actions { display: flex; gap: 12px; justify-content: center; }
+
+.v-btn-cancel {
+  background: rgba(255,255,255,0.05);
+  color: rgb(255, 255, 255);
+  border: 1px solid var(--glass-border);
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.v-btn-confirm {
+  background: var(--danger-red);
+  color: rgb(255, 0, 0);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}

@@ -25,17 +25,26 @@
   position: relative;
 }
 
-.massive-title {
-  display: block;
-  font-size: clamp(2.5rem, 8vw, 4.5rem);
-  font-weight: 900;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: -2px;
-  margin-bottom: 50px;
-  background: linear-gradient(180deg, #fff 30%, rgba(255, 255, 255, 0.4) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* --- THE FORCED GRADIENT FIX --- */
+.massive-title, .welcome-text {
+  display: block !important;
+  font-size: 4.5rem !important;
+  font-weight: 900 !important;
+  text-align: center !important;
+  letter-spacing: -2px !important;
+  margin-top: 50px !important;
+  margin-bottom: 30px !important;
+  
+  /* Force the top-to-bottom white gradient */
+  background: linear-gradient(180deg, #ffffff 0%, rgba(151, 102, 231, 0.4) 100%) !important;
+  
+  /* Force clipping to text to remove the purple/blue color */
+  -webkit-background-clip: text !important;
+  background-clip: text !important; 
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  
+  text-transform: uppercase !important;
 }
 
 /* --- HORIZONTAL GRID --- */
@@ -44,7 +53,7 @@
   overflow-x: auto;
   gap: 30px;
   padding: 20px 10px 0px;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
 }
 .events-grid::-webkit-scrollbar { display: none; }
 
@@ -84,10 +93,6 @@
   transition: transform 0.8s ease;
 }
 
-.modern-event-card:hover .event-img-container img {
-  transform: scale(1.1);
-}
-
 /* Float Badges */
 .modern-date-badge {
   position: absolute;
@@ -105,27 +110,6 @@
 .m-month { display: block; font-size: 0.7rem; font-weight: 800; color: #a78bfa; text-transform: uppercase; }
 .m-day { display: block; font-size: 1.2rem; font-weight: 900; color: #fff; }
 
-.organizer-tag {
-  position: absolute;
-  margin-top: 0px;
-  bottom: 15px;
-  left: 15px;
-  background: #a78bfa;
-  color: #000;
-  padding: 6px 16px;
-  border-radius: 30px;
-  font-size: 0.7rem;
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
-.modern-card-info h3 {
-  font-size: 1.4rem;
-  font-weight: 800;
-  margin-bottom: 20px;
-  padding: 0 5px;
-}
-
 .modern-view-btn {
   width: 100%;
   padding: 16px;
@@ -142,15 +126,13 @@
   transition: 0.3s;
 }
 
-.modern-view-btn:hover {
-  filter: brightness(1.2);
-  gap: 15px;
+/* --- COMMUNITIES --- */
+.organizers-section { 
+  padding: 50px 120px; 
+  background: radial-gradient(circle at top, #1a1a2e 0%, #050505 60%);
+  padding-bottom: 200px; 
 }
 
-/* --- COMMUNITIES --- */
-.organizers-section { padding: 50px 120px;     background: radial-gradient(circle at top, #1a1a2e 0%, #050505 60%);
-
-padding-bottom: 200px; }
 .organizers-row {
   display: flex;
   justify-content: center;
@@ -158,9 +140,11 @@ padding-bottom: 200px; }
   gap: 60px;
 }
 
+.community-circle-card { 
+  text-align: center;
+  padding-top: 80px; 
+}
 
-.community-circle-card { text-align: center;
-padding-top: 80px; }
 .community-avatar {
   width: 120px;
   height: 120px;
@@ -175,9 +159,11 @@ padding-top: 80px; }
 }
 
 .community-avatar img { width: 100%; height: 100%; object-fit: contain; filter: grayscale(1); }
+
 .community-circle-card:hover .community-avatar {
   transform: scale(1.05);
   border-color: #a78bfa;
   background: #fff;
 }
+
 .community-circle-card:hover img { filter: grayscale(0) brightness(0); }

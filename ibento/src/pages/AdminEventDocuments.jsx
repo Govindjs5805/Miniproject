@@ -13,7 +13,6 @@ function AdminEventDocuments() {
   const [docType, setDocType] = useState("Permission Letter");
   const [uploading, setUploading] = useState(false);
 
-  // --- NEW UI STATES ---
   const [toast, setToast] = useState({ show: false, message: "", type: "success" });
   const [confirmModal, setConfirmModal] = useState({ show: false, doc: null });
 
@@ -31,7 +30,6 @@ function AdminEventDocuments() {
     setSelectedEventData(ev || null);
   }, [selectedEventId, events]);
 
-  // Helper to show custom toast
   const showToast = (msg, type = "success") => {
     setToast({ show: true, message: msg, type });
     setTimeout(() => setToast({ show: false, message: "", type: "success" }), 3000);
@@ -59,7 +57,7 @@ function AdminEventDocuments() {
   };
 
   const handleUpload = async () => {
-    if (!file || !selectedEventId) return showToast("Please select a file and event!", "error");
+    if (!file || !selectedEventId) return showToast("Select a file and event!", "error");
     setUploading(true);
 
     try {
@@ -87,7 +85,7 @@ function AdminEventDocuments() {
         documents: prev.documents ? [...prev.documents, newDoc] : [newDoc]
       }));
 
-      showToast(`${docType} Uploaded Successfully!`);
+      showToast(`${docType} Uploaded!`);
       setFile(null);
     } catch (error) {
       showToast("Upload failed.", "error");
@@ -106,9 +104,9 @@ function AdminEventDocuments() {
         ...prev,
         documents: prev.documents.filter(d => d.url !== docToDelete.url)
       }));
-      showToast("Document removed from vault.");
+      showToast("Document removed.");
     } catch (e) {
-      showToast("Failed to delete.", "error");
+      showToast("Delete failed.", "error");
     } finally {
       setConfirmModal({ show: false, doc: null });
     }
@@ -116,56 +114,46 @@ function AdminEventDocuments() {
 
   return (
     <AdminLayout>
-      <div style={{ padding: "20px", position: "relative" }}>
-        
-        {/* --- CUSTOM TOAST NOTIFICATION --- */}
+      <div className="vault-container">
+        {/* Toast Notification */}
         {toast.show && (
-          <div style={{
-            position: "fixed", top: "20px", right: "20px", padding: "15px 25px",
-            backgroundColor: toast.type === "success" ? "#28a745" : "#dc3545",
-            color: "white", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-            zIndex: 1000, animation: "fadeIn 0.3s"
-          }}>
+          <div className={`vault-toast ${toast.type}`}>
             {toast.message}
           </div>
         )}
 
-        {/* --- CUSTOM CONFIRMATION MODAL --- */}
+        {/* Delete Modal */}
         {confirmModal.show && (
-          <div style={{
-            position: "fixed", top: 0, left: 0, width: "100%", height: "100%",
-            backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center",
-            alignItems: "center", zIndex: 1001
-          }}>
-            <div style={{ background: "white", padding: "30px", borderRadius: "12px", width: "90%", maxWidth: "400px", textAlign: "center" }}>
+          <div className="vault-modal-overlay">
+            <div className="vault-modal-card">
               <h3>Confirm Delete</h3>
-              <p>Are you sure you want to remove <b>{confirmModal.doc?.name}</b>?</p>
-              <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginTop: "20px" }}>
-                <button onClick={() => setConfirmModal({ show: false, doc: null })} style={{ padding: "10px 20px", border: "1px solid #ddd", background: "none", borderRadius: "6px", cursor: "pointer" }}>Cancel</button>
-                <button onClick={executeDelete} style={{ padding: "10px 20px", background: "#dc3545", color: "white", border: "none", borderRadius: "6px", cursor: "pointer" }}>Delete</button>
+              <p>Remove <b>{confirmModal.doc?.name}</b>?</p>
+              <div className="vault-modal-actions">
+                <button onClick={() => setConfirmModal({ show: false, doc: null })} className="v-btn-secondary">Cancel</button>
+                <button onClick={executeDelete} className="v-btn-danger">Delete</button>
               </div>
             </div>
           </div>
         )}
 
-        <h2>Event Document Vault</h2>
+        <h2 className="welcome-text">Event Document Vault</h2>
         
         <select 
+          className="vault-main-select"
           onChange={(e) => setSelectedEventId(e.target.value)} 
-          style={{ padding: "10px", width: "100%", maxWidth: "400px", margin: "10px 0", borderRadius: "6px" }}
         >
           <option value="">-- Select Event --</option>
           {events.map(ev => <option key={ev.id} value={ev.id}>{ev.title}</option>)}
         </select>
 
         {selectedEventId && (
-          <div style={{ background: "#fff", padding: "20px", border: "1px solid #ddd", borderRadius: "12px", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}>
-            <h3>Manage: {selectedEventData?.title}</h3>
+          <div className="vault-glass-card">
+            <h3 className="vault-card-title">Manage: {selectedEventData?.title}</h3>
             
-            <div style={{ margin: "20px 0", display: "flex", gap: "10px", flexWrap: "wrap", background: "#f8f9fa", padding: "15px", borderRadius: "10px" }}>
-              <div>
-                <label style={{ display: "block", fontSize: "11px", fontWeight: "bold", color: "#666" }}>CATEGORY</label>
-                <select onChange={(e) => setDocType(e.target.value)} style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ccc" }}>
+            <div className="vault-upload-section">
+              <div className="vault-input-group">
+                <label>CATEGORY</label>
+                <select onChange={(e) => setDocType(e.target.value)} className="vault-select-dark">
                   <option>Permission Letter</option>
                   <option>Geotag Photo</option>
                   <option>Event Photo</option>
@@ -173,42 +161,45 @@ function AdminEventDocuments() {
                 </select>
               </div>
 
-              <div style={{ flex: 1 }}>
-                <label style={{ display: "block", fontSize: "11px", fontWeight: "bold", color: "#666" }}>FILE</label>
-                <input type="file" onChange={(e) => setFile(e.target.files[0])} style={{ padding: "5px" }} />
+              <div className="vault-input-group flex-1">
+                <label>FILE</label>
+                <input type="file" onChange={(e) => setFile(e.target.files[0])} className="vault-file-input" />
               </div>
 
               <button 
                 onClick={handleUpload} 
                 disabled={uploading} 
-                style={{ alignSelf: "flex-end", padding: "10px 25px", background: "#007bff", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "bold" }}
+                className="vault-primary-btn"
               >
                 {uploading ? "Uploading..." : "Upload File"}
               </button>
             </div>
 
-            <hr style={{ border: "0", borderTop: "1px solid #eee" }} />
+            <div className="vault-divider"></div>
 
-            <div style={{ marginTop: "20px" }}>
-              <h4 style={{ color: "#555" }}>Stored Files</h4>
+            <div className="vault-file-list">
+              <h4 className="vault-subtitle">Stored Files</h4>
               {selectedEventData?.documents?.map((d, i) => (
-                <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "15px", borderBottom: "1px solid #f1f1f1", alignItems: "center" }}>
-                  <span>
-                    <span style={{ fontSize: "11px", background: "#e9ecef", padding: "3px 8px", borderRadius: "12px", marginRight: "10px", color: "#495057" }}>{d.type}</span>
-                    {d.name}
-                  </span>
-                  <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
-                    <button onClick={() => handleFileAction(d.url, 'view')} style={{ color: "#007bff", background: "none", border: "none", cursor: "pointer", fontWeight: "600" }}>View</button>
-                    <button onClick={() => handleFileAction(d.url, 'download')} style={{ color: "#6c757d", background: "none", border: "none", cursor: "pointer" }}>Download</button>
+                <div key={i} className="vault-file-row">
+                  <div className="vault-file-info">
+                    <span className="vault-badge">{d.type}</span>
+                    <span className="vault-filename">{d.name}</span>
+                  </div>
+                  <div className="vault-row-actions">
+                    <button onClick={() => handleFileAction(d.url, 'view')} className="v-link-view">View</button>
+                    <button onClick={() => handleFileAction(d.url, 'download')} className="v-link-dl">Download</button>
                     <button 
                       onClick={() => setConfirmModal({ show: true, doc: d })} 
-                      style={{ background: "none", border: "none", cursor: "pointer", padding: "5px" }}
+                      className="v-btn-icon"
                     >
                       🗑️
                     </button>
                   </div>
                 </div>
               ))}
+              {(!selectedEventData?.documents || selectedEventData.documents.length === 0) && (
+                <p className="vault-empty-msg">No documents found for this event.</p>
+              )}
             </div>
           </div>
         )}
