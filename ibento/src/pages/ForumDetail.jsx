@@ -21,20 +21,24 @@ function ForumDetail() {
 
   const forumDataMap = {
     ieee: {
-      name: "IEEE Student Branch CEC",
-      desc: "Tech forum focusing on engineering excellence."
+      name: "IEEE SB CEC",
+      desc: "Tech forum focusing on engineering excellence.",
+      icon: "/IEEE-logo-WHITE.png"
     },
     iedc: {
-      name: "IEDC Bootcamp CEC",
-      desc: "Promoting entrepreneurship among students."
+      name: "IEDC BOOTCAMP CEC",
+      desc: "Promoting entrepreneurship among students.",
+      icon: "/IEDC WhiteSVG 1.png"
     },
     foces: {
       name: "FOCES CEC",
-      desc: "Forum of Computer Engineering students."
+      desc: "Forum of Computer Engineering students.",
+      icon: "/FOCES White 1.png"
     },
     mulearn: {
       name: "MuLearn CHN",
-      desc: "Peer-to-peer learning network for industry skills."
+      desc: "Peer-to-peer learning network for industry skills.",
+      icon: "/Mulearn Logo.png"
     }
   };
 
@@ -83,13 +87,22 @@ function ForumDetail() {
         </button>
 
         <div className="forum-hero">
+          {currentClub.icon && (
+            /* Updated to the black-box container class */
+            <div className="forum-logo-large">
+              <img 
+                src={currentClub.icon} 
+                alt={`${currentClub.name} logo`} 
+                className="forum-logo-img" 
+              />
+            </div>
+          )}
           <h1 className="forum-title">{currentClub.name}</h1>
         </div>
       </header>
 
       {/* TABS */}
       <div className="forum-tabs">
-
         <button
           className={`tab-btn ${activeTab === "info" ? "active" : ""}`}
           onClick={() => setActiveTab("info")}
@@ -103,65 +116,46 @@ function ForumDetail() {
         >
           Upcoming Events ({forumEvents.length})
         </button>
-
       </div>
 
       {/* CONTENT */}
       <main className="forum-content-container">
-
         {activeTab === "info" ? (
-
           <div className="info-glass-card">
             <h3>About {currentClub.name}</h3>
             <p>{currentClub.desc}</p>
           </div>
-
         ) : (
-
           <div className="forum-events-grid">
-
             {loading ? (
               <p>Loading events...</p>
             ) : forumEvents.length > 0 ? (
-
               forumEvents.map(event => (
-
                 <div
                   key={event.id}
                   className="modern-event-card"
                   onClick={() => navigate(`/events/${event.id}`)}
                 >
-
                   <div className="event-img-container">
                     <img
                       src={event.posterURL || event.image}
                       alt={event.title}
                     />
                   </div>
-
                   <div className="modern-card-info">
                     <h3>{event.title}</h3>
                     <p>Date: {event.date}</p>
                   </div>
-
                 </div>
-
               ))
-
             ) : (
-
               <p className="no-events">
                 No upcoming events found for {currentClub.name}.
               </p>
-
             )}
-
           </div>
-
         )}
-
       </main>
-
     </div>
   );
 }
