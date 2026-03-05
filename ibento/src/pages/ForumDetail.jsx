@@ -162,8 +162,6 @@ function ForumDetail() {
 
       </main>
 
-      <Footer />
-
     </div>
   );
 }
