@@ -4,8 +4,8 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore"; // Added Firestore methods
-import { auth, db } from "../firebase"; // Ensure db is exported from your firebase.js
+import { doc, setDoc } from "firebase/firestore"; 
+import { auth, db } from "../firebase";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -19,6 +19,10 @@ const Register = () => {
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Toggle states for password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -31,7 +35,6 @@ const Register = () => {
     setSuccess("");
     setLoading(true);
 
-    // Basic Validation
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       setLoading(false);
@@ -48,36 +51,39 @@ const Register = () => {
 
       const user = userCredential.user;
 
-      // 2. Save additional user data to Firestore
-      // This ensures the user exists in your database, not just Auth
+      // 2. Save user profile to Firestore
       await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
         name: formData.name,
         email: formData.email,
-        role: "student", // Default role
+        role: "student",
         createdAt: new Date().toISOString(),
       });
 
-      // 3. Set local storage for immediate Navbar feedback
+      // 3. SET LOCAL STORAGE (For Navbar/UI)
       localStorage.setItem("role", "student");
 
-      // 4. Send Verification Email
+      // 4. TRIGGER EMAIL VERIFICATION
+      // We await this to ensure the email is actually sent before moving on
       await sendEmailVerification(user);
 
-      setSuccess("Account created! Verification email sent. Please check your inbox.");
+      setSuccess("Account created! Verification email sent. Please check your inbox and spam folder.");
 
-      // 5. Redirect to verification notice page
+      // 5. REDIRECT AFTER SUCCESS
+      // Give the user 4 seconds to read the success message
       setTimeout(() => {
         navigate("/verify-email");
-      }, 2000);
+      }, 4000);
 
     } catch (err) {
       console.error("Registration Error:", err);
-      // Friendly error mapping
+      // Map Firebase codes to friendly messages
       if (err.code === "auth/email-already-in-use") {
         setError("This email is already registered.");
-      } else if (err.code === "permission-denied") {
-        setError("Database permission denied. Check Firebase Rules.");
+      } else if (err.code === "auth/invalid-email") {
+        setError("Invalid email format.");
+      } else if (err.code === "auth/weak-password") {
+        setError("Password should be at least 6 characters.");
       } else {
         setError(err.message);
       }
@@ -95,6 +101,7 @@ const Register = () => {
           align-items: center;
           background: radial-gradient(circle at top left, #1e1b4b, #0f0c29);
           padding: 20px;
+          font-family: sans-serif;
         }
 
         .auth-card {
@@ -121,10 +128,15 @@ const Register = () => {
           margin-bottom: 25px;
         }
 
+        .input-group {
+          position: relative;
+          width: 100%;
+          margin-bottom: 15px;
+        }
+
         .auth-card input {
           width: 100%;
           padding: 12px 15px;
-          margin-bottom: 15px;
           border-radius: 10px;
           border: 1px solid rgba(168, 85, 247, 0.3);
           background: rgba(255, 255, 255, 0.05);
@@ -132,6 +144,11 @@ const Register = () => {
           outline: none;
           font-size: 14px;
           transition: 0.3s;
+          box-sizing: border-box;
+        }
+
+        .password-field {
+          padding-right: 45px !important;
         }
 
         .auth-card input:focus {
@@ -139,7 +156,37 @@ const Register = () => {
           box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3);
         }
 
-        .auth-card button {
+        /* --- TOGGLE BUTTON STYLING --- */
+        .toggle-password-btn {
+          position: absolute;
+          right: 15px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0;
+          z-index: 10;
+        }
+
+        .eye-icon {
+          font-size: 18px;
+          transition: all 0.3s ease;
+          /* Default: Dark/Subtle */
+          filter: brightness(0); 
+          opacity: 0.4;
+        }
+
+        /* Active: Bright White when viewing */
+        .toggle-password-btn.active .eye-icon {
+          filter: brightness(0) invert(1);
+          opacity: 1;
+        }
+
+        .auth-card button[type="submit"] {
           width: 100%;
           padding: 12px;
           border-radius: 10px;
@@ -149,16 +196,7 @@ const Register = () => {
           font-weight: 600;
           cursor: pointer;
           transition: 0.3s;
-        }
-
-        .auth-card button:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-        }
-
-        .auth-card button:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5);
+          margin-top: 10px;
         }
 
         .auth-error {
@@ -188,11 +226,6 @@ const Register = () => {
         .auth-footer a {
           color: #a855f7;
           text-decoration: none;
-          font-weight: 500;
-        }
-
-        .auth-footer a:hover {
-          text-decoration: underline;
         }
       `}</style>
 
@@ -205,10 +238,54 @@ const Register = () => {
           {success && <div className="auth-success">{success}</div>}
 
           <form onSubmit={handleSubmit}>
-            <input type="text" name="name" placeholder="Full Name" onChange={handleChange} required />
-            <input type="email" name="email" placeholder="Email Address" onChange={handleChange} required />
-            <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
-            <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={handleChange} required />
+            <div className="input-group">
+              <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} required />
+            </div>
+
+            <div className="input-group">
+              <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} required />
+            </div>
+
+            {/* Password Field */}
+            <div className="input-group">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                className="password-field"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              <button
+                type="button"
+                className={`toggle-password-btn ${showPassword ? "active" : ""}`}
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <span className="eye-icon">👁</span>
+              </button>
+            </div>
+
+            {/* Confirm Password Field */}
+            <div className="input-group">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                className="password-field"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+              <button
+                type="button"
+                className={`toggle-password-btn ${showConfirmPassword ? "active" : ""}`}
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                <span className="eye-icon">👁</span>
+              </button>
+            </div>
+
             <button type="submit" disabled={loading}>
               {loading ? "Creating Account..." : "Create Account"}
             </button>

@@ -11,6 +11,7 @@ const Login = () => {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -39,9 +40,8 @@ const Login = () => {
       }
 
       localStorage.setItem("role", "student");
-
       navigate("/home");
-    } catch {
+    } catch (err) {
       setError("Invalid email or password");
       setLoading(false);
     }
@@ -57,6 +57,7 @@ const Login = () => {
           align-items: center;
           background: radial-gradient(circle at top left, #1e1b4b, #0f0c29);
           padding: 20px;
+          font-family: sans-serif;
         }
 
         .auth-card {
@@ -83,10 +84,15 @@ const Login = () => {
           margin-bottom: 25px;
         }
 
+        .input-group {
+          position: relative;
+          width: 100%;
+          margin-bottom: 15px;
+        }
+
         .auth-card input {
           width: 100%;
           padding: 12px 15px;
-          margin-bottom: 15px;
           border-radius: 10px;
           border: 1px solid rgba(168, 85, 247, 0.3);
           background: rgba(255, 255, 255, 0.05);
@@ -94,14 +100,44 @@ const Login = () => {
           outline: none;
           font-size: 14px;
           transition: 0.3s;
+          box-sizing: border-box;
         }
 
-        .auth-card input:focus {
-          border-color: #a855f7;
-          box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3);
+        .password-field {
+          padding-right: 45px !important;
         }
 
-        .auth-card button {
+        /* --- THE TOGGLE BUTTON --- */
+        .toggle-password-btn {
+          position: absolute;
+          right: 15px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0;
+          z-index: 10;
+        }
+
+        .eye-icon {
+          font-size: 18px;
+          transition: all 0.3s ease;
+          /* DEFAULT: DARK/SUBTLE (Matches the input background better) */
+          filter: brightness(0); 
+          opacity: 0.4;
+        }
+
+        /* ACTIVE: BRIGHT WHITE when viewing */
+        .toggle-password-btn.active .eye-icon {
+          filter: brightness(0) invert(1); /* Makes it pure white */
+          opacity: 1;
+        }
+
+        .auth-card button[type="submit"] {
           width: 100%;
           padding: 12px;
           border-radius: 10px;
@@ -111,25 +147,7 @@ const Login = () => {
           font-weight: 600;
           cursor: pointer;
           transition: 0.3s;
-        }
-
-        .auth-card button:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-        }
-
-        .auth-card button:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5);
-        }
-
-        .auth-error {
-          background: rgba(255, 0, 0, 0.2);
-          color: #f87171;
-          padding: 10px;
-          border-radius: 8px;
-          margin-bottom: 15px;
-          font-size: 13px;
+          margin-top: 10px;
         }
 
         .auth-footer {
@@ -141,11 +159,6 @@ const Login = () => {
         .auth-footer a {
           color: #a855f7;
           text-decoration: none;
-          font-weight: 500;
-        }
-
-        .auth-footer a:hover {
-          text-decoration: underline;
         }
       `}</style>
 
@@ -154,23 +167,39 @@ const Login = () => {
           <h2>Welcome Back</h2>
           <p className="auth-subtitle">Sign in to continue ✨</p>
 
-          {error && <div className="auth-error">{error}</div>}
+          {error && <div className="auth-error" style={{color: '#f87171', marginBottom: '15px'}}>{error}</div>}
 
           <form onSubmit={handleSubmit}>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email Address"
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              onChange={handleChange}
-              required
-            />
+            <div className="input-group">
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="input-group">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                className="password-field"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              <button
+                type="button"
+                className={`toggle-password-btn ${showPassword ? "active" : ""}`}
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <span className="eye-icon">👁</span>
+              </button>
+            </div>
+
             <button type="submit" disabled={loading}>
               {loading ? "Logging in..." : "Login"}
             </button>

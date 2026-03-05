@@ -9,74 +9,86 @@ function StudentDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [registrations, setRegistrations] = useState([]);
-  const [userName, setUserName] = useState("STUDENT"); // Default fallback
+  const [userName, setUserName] = useState(""); // Start empty to check loading state
+  const [submittedFeedbacks, setSubmittedFeedbacks] = useState({});
 
-  // 1. Fetch User Profile Data (To get the Real Name)
+  // 1. Fetch User Name from 'users' collection
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (!user) return;
       try {
-        // Assuming your user details are in a 'users' collection with the UID as the Doc ID
-        const userDoc = await getDoc(doc(db, "users", user.uid));
+        // Double check your Firestore collection name is 'users' 
+        // and the field is 'fullName'
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+        
         if (userDoc.exists()) {
           const data = userDoc.data();
-          // Use 'fullName' or 'name' based on what you used in your Register.jsx
-          setUserName(data.fullName || data.name || "STUDENT");
+          // We prioritize fullName, then display name, then fallback to 'STUDENT'
+          setUserName(data.fullName || data.name || user.displayName || "STUDENT");
+        } else {
+          setUserName(user.displayName || "STUDENT");
         }
-      } catch (err) {
-        console.error("Error fetching user profile:", err);
+      } catch (err) { 
+        console.error("Error fetching username:", err); 
+        setUserName("STUDENT");
       }
     };
     fetchUserProfile();
   }, [user]);
 
-  // 2. Fetch Event Registrations
+  // 2. Fetch Registrations & Check Feedback Status
   useEffect(() => {
-    const fetchRegistrations = async () => {
+    const fetchRegistrationsAndFeedback = async () => {
       if (!user) return;
-      const q = query(collection(db, "registrations"), where("userId", "==", user.uid));
-      const snap = await getDocs(q);
-      setRegistrations(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+
+      try {
+        const q = query(collection(db, "registrations"), where("userId", "==", user.uid));
+        const snap = await getDocs(q);
+        const regData = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setRegistrations(regData);
+
+        const fQuery = query(collection(db, "feedbacks"), where("userId", "==", user.uid));
+        const fSnap = await getDocs(fQuery);
+        
+        const feedbackMap = {};
+        fSnap.docs.forEach(doc => {
+          feedbackMap[doc.data().eventId] = true;
+        });
+        setSubmittedFeedbacks(feedbackMap);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
     };
-    fetchRegistrations();
+    fetchRegistrationsAndFeedback();
   }, [user]);
 
   return (
     <div className="dashboard-wrapper">
-      {/* Animated silk background */}
       <div className="dashboard-silk-bg"></div>
 
       <header className="dashboard-header">
-        {/* Personalized Welcome Message */}
-        <h1 className="welcome-text">WELCOME, {userName.toUpperCase()} 👋</h1>
-        <p className="dashboard-subtitle">Here are the events you have registered for</p>
+        {/* If userName is still loading, show a space or '...' */}
+        <h1 className="welcome-text">
+            WELCOME, {userName ? userName.toUpperCase() : "..."} 👋
+        </h1>
+        <p className="dashboard-subtitle">Manage your event participations</p>
       </header>
 
       <main className="dashboard-grid">
         {registrations.length === 0 ? (
-          <div className="no-data-card">
-            <p className="no-data-text">No active registrations found.</p>
-            <button className="dashboard-btn ticket-style" onClick={() => navigate('/events')}>
-              Browse Events
-            </button>
-          </div>
+          <p className="no-data-text">No active registrations found.</p>
         ) : (
           registrations.map((reg) => (
             <div key={reg.id} className="mini-event-card">
               <div className="card-top-info">
                 <h3 className="mini-event-title">{reg.eventTitle}</h3>
-                <div className="mini-date-row">
-                  <span className="icon">📅</span>
-                  <span className="date-val">{reg.eventDate || "TBA"}</span>
-                </div>
+                <p className="date-val">{reg.eventDate || "TBA"}</p>
               </div>
 
               <div className="card-status-row">
                 <span className={`mini-pill ${reg.checkInStatus ? 'is-present' : 'is-absent'}`}>
                   {reg.checkInStatus ? "● PRESENT" : "○ NOT CHECKED-IN"}
-                </span>
-                <span className="mini-pill status-info">
-                   {reg.status || "Confirmed"}
                 </span>
               </div>
 
@@ -86,9 +98,15 @@ function StudentDashboard() {
                 </button>
                 
                 {reg.checkInStatus && (
-                  <button className="dashboard-btn feedback-style" onClick={() => navigate(`/feedback/${reg.eventId}`)}>
-                    Feedback
-                  </button>
+                  submittedFeedbacks[reg.eventId] ? (
+                    <button className="dashboard-btn feedback-submitted" disabled>
+                      Feedback Submitted
+                    </button>
+                  ) : (
+                    <button className="dashboard-btn feedback-style" onClick={() => navigate(`/feedback/${reg.eventId}`)}>
+                      Give Feedback
+                    </button>
+                  )
                 )}
               </div>
             </div>

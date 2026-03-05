@@ -17,7 +17,7 @@ function Home() {
     { name: "FOCES", img: "/FOCES White 1.png" },
     { name: "IEDC", img: "/IEDC WhiteSVG 1.png" },
     { name: "IEEE", img: "/IEEE-logo-WHITE.png" },
-    { name: "μLearn", img: "/Mulearn Logo.png" },
+    { name: "MuLearn", img: "/Mulearn Logo.png" },
     { name: "TinkerHub", img: "/tinkerhub.png" },
     { name: "PRODDEC", img: "/Group 13.png" },
     { name: "GDG", img: "/gdg.png" }

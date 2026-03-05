@@ -1,0 +1,62 @@
+/* Container to match your dark theme */
+.ticket-page-wrapper {
+  background-color: #05050a;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-family: 'Inter', sans-serif;
+  color: white;
+}
+
+.ticket-container {
+  text-align: center;
+  max-width: 450px;
+  width: 100%;
+}
+
+.ticket-event-name {
+  color: #a855f7;
+  font-size: 2rem;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.ticket-info {
+  margin-bottom: 30px;
+  font-size: 1.1rem;
+  color: #cbd5e1;
+}
+
+/* THE FIX: Purple border frame */
+.qr-border-frame {
+  display: inline-block;
+  padding: 15px;
+  background: transparent;
+  border: 4px solid #a855f7 !important; /* Purple border from reference */
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+}
+
+/* THE FIX: White background for scannability */
+.qr-white-background {
+  background: white !important; /* Creates the necessary "Quiet Zone" */
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ticket-footer {
+  margin-top: 25px;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.ticket-loading {
+  color: white;
+  text-align: center;
+  padding: 100px;
+}
