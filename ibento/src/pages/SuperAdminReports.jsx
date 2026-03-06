@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
+import "./SuperAdminReport.css";
 
 function SuperAdminReport({ events, registrations }) {
   const [selectedEventId, setSelectedEventId] = useState("");
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [feedbackCount, setFeedbackCount] = useState(0);
-  
-  // Checkbox States
+
+  // Every single info piece is now a choice
   const [options, setOptions] = useState({
-    title: true,
-    description: true,
-    date: true,
-    venue: true,
-    time: true,
-    organizers: true,
-    totalReg: true,
-    totalAttended: true,
-    feedbacks: true,
+    executiveSummary: true,
+    eventDetails: true,
+    detailTitle: true,
+    detailDate: true,
+    detailVenue: true,
+    participationMetrics: true,
+    metricRegistrations: true,
+    metricAttendance: true,
+    metricFeedback: true,
     signature: true,
   });
 
@@ -39,127 +40,144 @@ function SuperAdminReport({ events, registrations }) {
     setFeedbackCount(snap.size);
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
-
-  // Calculations for report
   const eventRegs = registrations.filter(r => r.eventId === selectedEventId);
-  const attendedCount = eventRegs.filter(r => r.checkInStatus).length;
+  const totalStudents = eventRegs.length;
+  const attendedCount = eventRegs.filter(r => r.attended === true || r.status === "attended").length;
 
   return (
-    <div className="admin-section-card report-page-container">
-      {/* CONFIGURATION SECTION (Hidden during print) */}
-      <div className="report-config no-print">
-        <div className="registration-controls">
-          <label>1. Select Event</label>
+    <div className="report-container-main">
+      {/* UI Configuration Card - Every info is a choice here */}
+      <div className="report-config-card no-print">
+        <h2 className="report-ui-title">Report Configuration</h2>
+        
+        <div className="config-group">
+          <label className="config-label">1. Select Event</label>
           <select 
             value={selectedEventId} 
             onChange={(e) => setSelectedEventId(e.target.value)}
-            className="admin-dropdown"
+            className="report-dropdown-custom"
           >
-            <option value="">-- Select Event --</option>
+            <option value="">-- Choose Event --</option>
             {events.map(e => <option key={e.id} value={e.id}>{e.title}</option>)}
           </select>
         </div>
 
-        <div className="options-grid">
-          <label><input type="checkbox" name="title" checked={options.title} onChange={handleCheckboxChange} /> Event Title</label>
-          <label><input type="checkbox" name="description" checked={options.description} onChange={handleCheckboxChange} /> Short Description</label>
-          <label><input type="checkbox" name="date" checked={options.date} onChange={handleCheckboxChange} /> Event Date</label>
-          <label><input type="checkbox" name="venue" checked={options.venue} onChange={handleCheckboxChange} /> Venue</label>
-          <label><input type="checkbox" name="time" checked={options.time} onChange={handleCheckboxChange} /> Time</label>
-          <label><input type="checkbox" name="organizers" checked={options.organizers} onChange={handleCheckboxChange} /> Organizers</label>
-          <label><input type="checkbox" name="totalReg" checked={options.totalReg} onChange={handleCheckboxChange} /> Total Registered</label>
-          <label><input type="checkbox" name="totalAttended" checked={options.totalAttended} onChange={handleCheckboxChange} /> Total Attended</label>
-          <label><input type="checkbox" name="feedbacks" checked={options.feedbacks} onChange={handleCheckboxChange} /> Total Feedbacks</label>
-          <label><input type="checkbox" name="signature" checked={options.signature} onChange={handleCheckboxChange} /> Signature Section</label>
+        <div className="config-group">
+          <label className="config-label">2. Select Information to Display</label>
+          <div className="options-grid-custom">
+            {Object.keys(options).map((key) => (
+              <label key={key} className="custom-checkbox-item">
+                <input 
+                  type="checkbox" 
+                  name={key} 
+                  checked={options[key]} 
+                  onChange={handleCheckboxChange} 
+                />
+                <span>{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</span>
+              </label>
+            ))}
+          </div>
         </div>
 
         {selectedEventId && (
-          <button className="print-btn" onClick={handlePrint}>Generate & Print PDF</button>
+          <button className="generate-report-btn" onClick={() => window.print()}>
+            Download PDF
+          </button>
         )}
       </div>
 
-      {/* REPORT PREVIEW (The Actual Template) */}
-      {selectedEventId ? (
-        <div className="report-preview-paper" id="printable-report">
-          <div className="report-header">
-            <h1 className="report-main-title">EVENT COMPLETION REPORT</h1>
-            <p className="report-subtitle">Generated by iBento SuperAdmin System</p>
-          </div>
+      {/* REPORT SECTION - Dynamically filtering every line based on choices */}
+      {selectedEventId && (
+        <div className="official-report-paper" id="printable-report">
+          <div className="report-inner-margin">
+            <header className="report-paper-header">
+              <h1 className="org-name-title">{selectedEvent?.clubId?.toUpperCase() || "ORGANIZING BODY"}</h1>
+              <div className="header-divider"></div>
+              <p className="doc-subtitle">OFFICIAL EVENT COMPLETION RECORD</p>
+            </header>
 
-          <div className="report-body">
-            {options.title && (
-              <div className="report-item">
-                <span className="label">Event Name:</span>
-                <span className="value">{selectedEvent?.title}</span>
-              </div>
-            )}
-
-            {options.organizers && (
-              <div className="report-item">
-                <span className="label">Organizing Body:</span>
-                <span className="value">{selectedEvent?.clubId?.toUpperCase()}</span>
-              </div>
-            )}
-
-            {(options.date || options.time || options.venue) && (
-              <div className="report-row">
-                {options.date && <div className="report-item"><strong>Date:</strong> {selectedEvent?.date}</div>}
-                {options.time && <div className="report-item"><strong>Time:</strong> {selectedEvent?.time || "N/A"}</div>}
-                {options.venue && <div className="report-item"><strong>Venue:</strong> {selectedEvent?.venue || "Main Campus"}</div>}
-              </div>
-            )}
-
-            {options.description && (
-              <div className="report-block">
-                <h3>Event Description</h3>
-                <p>{selectedEvent?.description || "No description provided."}</p>
-              </div>
-            )}
-
-            <div className="report-stats-grid">
-              {options.totalReg && (
-                <div className="stat-box">
-                  <p>Registered</p>
-                  <strong>{eventRegs.length}</strong>
+            <section className="report-paper-body">
+              {/* I. EXECUTIVE SUMMARY */}
+              {options.executiveSummary && (
+                <div className="paper-section">
+                  <h3 className="paper-section-title">I. EXECUTIVE SUMMARY</h3>
+                  <p className="summary-paragraph">
+                    The event "{selectedEvent?.title}" was successfully conducted by {selectedEvent?.clubId?.toUpperCase()} on {selectedEvent?.date}. 
+                    Administrative records confirm {totalStudents} student registrations. 
+                    Attendance was verified for {attendedCount} participants, and {feedbackCount} formal feedbacks were collected.
+                  </p>
                 </div>
               )}
-              {options.totalAttended && (
-                <div className="stat-box">
-                  <p>Attended</p>
-                  <strong>{attendedCount}</strong>
-                </div>
-              )}
-              {options.feedbacks && (
-                <div className="stat-box">
-                  <p>Feedbacks</p>
-                  <strong>{feedbackCount}</strong>
-                </div>
-              )}
-            </div>
 
-            {options.signature && (
-              <div className="signature-area">
-                <div className="sig-box">
-                  <p>__________________________</p>
-                  <span>Authorized Signatory</span>
+              {/* II. EVENT DETAILS */}
+              {options.eventDetails && (
+                <div className="paper-section">
+                  <h3 className="paper-section-title">II. EVENT DETAILS</h3>
+                  {options.detailTitle && (
+                    <div className="text-data-row">
+                      <span className="text-label">Event Title:</span>
+                      <span className="text-value">{selectedEvent?.title}</span>
+                    </div>
+                  )}
+                  {options.detailDate && (
+                    <div className="text-data-row">
+                      <span className="text-label">Organized Date:</span>
+                      <span className="text-value">{selectedEvent?.date}</span>
+                    </div>
+                  )}
+                  {options.detailVenue && (
+                    <div className="text-data-row">
+                      <span className="text-label">Venue Location:</span>
+                      <span className="text-value">{selectedEvent?.venue || "N/A"}</span>
+                    </div>
+                  )}
                 </div>
-                <div className="sig-box">
-                  <p>__________________________</p>
-                  <span>Event Coordinator</span>
+              )}
+
+              {/* III. PARTICIPATION METRICS */}
+              {options.participationMetrics && (
+                <div className="paper-section">
+                  <h3 className="paper-section-title">III. PARTICIPATION METRICS</h3>
+                  {options.metricRegistrations && (
+                    <div className="text-data-row">
+                      <span className="text-label">Total Registrations:</span>
+                      <span className="text-value">{totalStudents} Students</span>
+                    </div>
+                  )}
+                  {options.metricAttendance && (
+                    <div className="text-data-row">
+                      <span className="text-label">Verified Attendance:</span>
+                      <span className="text-value">{attendedCount} Students</span>
+                    </div>
+                  )}
+                  {options.metricFeedback && (
+                    <div className="text-data-row">
+                      <span className="text-label">Feedback Collected:</span>
+                      <span className="text-value">{feedbackCount} Responses</span>
+                    </div>
+                  )}
                 </div>
-              </div>
-            )}
+              )}
+
+              {/* SIGNATURE AREA */}
+              {options.signature && (
+                <div className="signature-container">
+                  <div className="sig-block">
+                    <div className="sig-line"></div>
+                    <p className="sig-text">Club Coordinator</p>
+                  </div>
+                  <div className="sig-block">
+                    <div className="sig-line"></div>
+                    <p className="sig-text">Faculty In-Charge</p>
+                  </div>
+                </div>
+              )}
+            </section>
+
+            <footer className="paper-footer">
+              <p>Report Generated On: {new Date().toLocaleDateString()}</p>
+            </footer>
           </div>
-          <div className="report-footer">
-            <p>© {new Date().getFullYear()} iBento - Official Record</p>
-          </div>
-        </div>
-      ) : (
-        <div className="no-print no-selection-placeholder">
-          <p>Please select an event to configure the report.</p>
         </div>
       )}
     </div>

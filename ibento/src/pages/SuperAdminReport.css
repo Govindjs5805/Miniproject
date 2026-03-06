@@ -1,0 +1,349 @@
+/* --- UI/DASHBOARD STYLES (Screen Only) --- */
+.report-container-main {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.report-config-card {
+    background: #11121a;
+    border: 1px solid rgba(167, 139, 250, 0.2);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+.report-ui-title {
+    color: #a78bfa;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+}
+
+.config-group {
+    margin-bottom: 20px;
+}
+
+.config-label {
+    display: block;
+    color: #94a3b8;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.report-dropdown-custom {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    background: #1e1e2d;
+    border: 1px solid #334155;
+    color: white;
+    border-radius: 8px;
+}
+
+.options-grid-custom {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.custom-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #cbd5e1;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 8px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 6px;
+}
+
+.generate-report-btn {
+    background: #7c3aed;
+    color: white;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.2s;
+}
+
+.generate-report-btn:hover {
+    background: #6d28d9;
+}
+
+/* --- PRINTABLE PAPER STYLES --- */
+.official-report-paper {
+    background: white !important;
+    color: black !important;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 25mm;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.report-paper-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.org-name-title {
+    font-size: 26pt;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: black !important;
+}
+
+.header-divider {
+    height: 3px;
+    background: black;
+    width: 100%;
+    margin: 15px 0;
+}
+
+.doc-subtitle {
+    font-size: 14pt;
+    letter-spacing: 2px;
+    font-weight: 700;
+    color: black !important;
+}
+
+/* HIGH-CONTRAST TEXT TABLES FOR PDF VISIBILITY [cite: 8, 10] */
+.official-text-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    border: 1.5pt solid black; /* Strong border for PDF */
+}
+
+.official-text-table td {
+    padding: 12px;
+    border: 1pt solid black;
+    font-size: 12pt;
+    color: black !important;
+    background: transparent !important;
+}
+
+.cell-label-text {
+    width: 35%;
+    font-weight: bold;
+    background-color: #f0f0f0 !important; /* Shading usually stays in PDF */
+}
+
+.cell-value-text {
+    width: 65%;
+}
+
+.paper-section {
+    margin-bottom: 35px;
+}
+
+.paper-section-title {
+    font-size: 13pt;
+    border-bottom: 2px solid black;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: black !important;
+}
+
+.summary-paragraph {
+    line-height: 1.7;
+    font-size: 12pt;
+    text-align: justify;
+    color: black !important;
+}
+
+.signature-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 80px;
+}
+
+.sig-block {
+    text-align: center;
+    width: 220px;
+}
+
+.sig-line {
+    border-top: 1.5pt solid black;
+    margin-bottom: 10px;
+}
+
+.sig-text {
+    font-size: 11pt;
+    font-weight: 700;
+    color: black !important;
+}
+
+.paper-footer {
+    margin-top: 60px;
+    border-top: 1pt solid black;
+    padding-top: 15px;
+    font-size: 10pt;
+    color: black !important;
+    text-align: center;
+}
+
+.system-tag {
+    font-style: italic;
+    font-size: 9pt;
+    margin-top: 5px;
+}
+
+/* --- CRITICAL PRINT OVERRIDES --- */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .no-print {
+        display: none !important;
+    }
+    #printable-report, #printable-report * {
+        visibility: visible;
+    }
+    #printable-report {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+    }
+}
+/* --- PRINT VISIBILITY FIXES --- */
+.pdf-safe-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    border: 1.5pt solid black !important; /* Forces visible border in PDF */
+}
+
+.pdf-safe-table td {
+    padding: 10px;
+    border: 1pt solid black !important; /* Solid black border */
+    color: black !important;
+    font-size: 11pt;
+    background: transparent !important;
+}
+
+.pdf-cell-label {
+    font-weight: bold;
+    width: 35%;
+    background-color: #f2f2f2 !important; /* Only shaded part allowed */
+    -webkit-print-color-adjust: exact;
+}
+
+.official-report-paper {
+    background: white !important;
+    color: black !important;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 20mm;
+}
+
+.paper-section-title {
+    color: black !important;
+    border-bottom: 2px solid black !important;
+    font-weight: bold;
+    margin-top: 25px;
+    padding-bottom: 5px;
+}
+
+.header-divider {
+    height: 2px;
+    background: black !important;
+    width: 100%;
+    margin: 10px 0;
+}
+
+/* --- UI/SCREEN ONLY --- */
+.report-container-main { padding: 20px; max-width: 1200px; margin: 0 auto; }
+.report-config-card { background: #11121a; padding: 25px; border-radius: 12px; margin-bottom: 30px; }
+.report-ui-title { color: #a78bfa; margin-bottom: 20px; }
+.report-dropdown-custom { padding: 12px; width: 300px; background: #1e1e2d; color: white; border-radius: 8px; }
+.options-grid-custom { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 20px 0; }
+.custom-checkbox-item { color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+.generate-report-btn { background: #7c3aed; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; }
+
+/* --- OFFICIAL PDF TEXT STYLES --- */
+.official-report-paper {
+    background: white !important;
+    color: black !important;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 25mm;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.report-paper-header { text-align: center; margin-bottom: 40px; }
+.org-name-title { font-size: 26pt; font-weight: bold; color: black !important; margin: 0; }
+.header-divider { height: 2px; background: black !important; width: 100%; margin: 15px 0; }
+.doc-subtitle { font-size: 14pt; letter-spacing: 2px; font-weight: bold; color: black !important; }
+
+.paper-section { margin-bottom: 40px; }
+.paper-section-title { 
+    font-size: 14pt; 
+    border-bottom: 2px solid black !important; 
+    padding-bottom: 5px; 
+    margin-bottom: 20px; 
+    font-weight: bold; 
+    color: black !important; 
+}
+
+/* TEXT-BASED DATA ROWS (Guaranteed PDF Visibility)  */
+.text-data-row {
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+    font-size: 12pt;
+    color: black !important;
+}
+
+.text-label {
+    width: 200px;
+    font-weight: bold;
+    color: black !important;
+}
+
+.text-value {
+    color: black !important;
+}
+
+.summary-paragraph {
+    line-height: 1.8;
+    font-size: 12pt;
+    text-align: justify;
+    color: black !important;
+}
+
+/* SIGNATURE SECTION [cite: 11, 12] */
+.signature-container { display: flex; justify-content: space-between; margin-top: 100px; }
+.sig-block { text-align: center; width: 220px; }
+.sig-line { border-top: 2px solid black !important; margin-bottom: 10px; }
+.sig-text { font-size: 11pt; font-weight: bold; color: black !important; }
+
+.paper-footer {
+    margin-top: 60px;
+    border-top: 1px solid black !important;
+    padding-top: 15px;
+    text-align: center;
+    font-size: 10pt;
+    color: black !important;
+}
+
+/* --- PRINT LOGIC --- */
+@media print {
+    body * { visibility: hidden; }
+    .no-print { display: none !important; }
+    #printable-report, #printable-report * { visibility: visible; }
+    #printable-report { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; margin: 0; padding: 0; }
+}
