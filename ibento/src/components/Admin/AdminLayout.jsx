@@ -45,7 +45,6 @@ const AdminLayout = ({ children }) => {
           <NavLink to="/admin/report" className={({ isActive }) => isActive ? "active" : ""}>
              Reports
           </NavLink>
-
         </nav>
       </aside>
 
