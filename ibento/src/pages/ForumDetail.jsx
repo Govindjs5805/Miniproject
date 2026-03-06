@@ -19,7 +19,10 @@ function ForumDetail() {
     ieee: { name: "IEEE SB CEC", desc: "Tech forum focusing on engineering excellence.", icon: "/IEEE-logo-WHITE.png" },
     iedc: { name: "IEDC BOOTCAMP CEC", desc: "Promoting entrepreneurship among students.", icon: "/IEDC WhiteSVG 1.png" },
     foces: { name: "FOCES CEC", desc: "Forum of Computer Engineering students.", icon: "/FOCES White 1.png" },
-    mulearn: { name: "MuLearn CHN", desc: "Peer-to-peer learning network for industry skills.", icon: "/Mulearn Logo.png" }
+    mulearn: { name: "MuLearn CHN", desc: "Peer-to-peer learning network for industry skills.", icon: "/Mulearn Logo.png" },
+    tinkerhub: { name: "TinkerHub", desc: "Innovation and maker community.", icon: "/tinkerhub.png" },
+    proddec: { name: "Proddec CEC", desc: "Product development community.", icon: "/Group 13.png" },
+    gdg: { name: "GDG", desc: "Google Developer Group.", icon: "/gdg.png" },
   };
 
   useEffect(() => {

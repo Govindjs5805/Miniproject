@@ -45,9 +45,7 @@ const AdminLayout = ({ children }) => {
           <NavLink to="/admin/report" className={({ isActive }) => isActive ? "active" : ""}>
              Reports
           </NavLink>
-          <NavLink to="/admin/analytics" className={({ isActive }) => isActive ? "active" : ""}>
-             Analytics
-          </NavLink>
+
         </nav>
       </aside>
 

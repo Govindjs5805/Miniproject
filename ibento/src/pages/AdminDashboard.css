@@ -1,8 +1,15 @@
-/* --- Global Admin Visibility Fixes --- */
+/* =========================================
+   1. GLOBAL DASHBOARD LAYOUT
+   ========================================= */
 .admin-dash-content {
     padding: 24px;
     background: #0b0b0f;
     min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.dash-header-section {
+    margin-bottom: 40px;
 }
 
 .dash-welcome {
@@ -17,11 +24,12 @@
 
 .dash-subtitle {
     color: #94a3b8 !important;
-    margin-bottom: 40px;
     font-size: 1.1rem;
 }
 
-/* --- Stats Grid --- */
+/* =========================================
+   2. STATS GRID & CARDS
+   ========================================= */
 .stats-grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -30,16 +38,17 @@
 }
 
 .admin-stat-card {
-    background: #16161e;
+    background: #16161e !important;
     padding: 24px;
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
     transition: all 0.3s ease;
 }
 
 .admin-stat-card:hover {
-    border-color: #a78bfa;
+    border-color: #a78bfa !important;
     transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(167, 139, 250, 0.1);
 }
 
 .stat-title {
@@ -57,10 +66,14 @@
     margin: 12px 0 0 0;
 }
 
-/* --- The "Invisible Box" Fix (Reports & Feedback pages) --- */
-/* This forces any container that was previously white to be dark */
+/* =========================================
+   3. INFO CARDS & VISIBILITY FIXES
+   ========================================= */
+/* Targets the large containers in Dashboard, Reports, and Feedbacks */
 .reporting-preview-card, 
 .admin-info-card-large,
+.management-table-card,
+.feedback-selection-container,
 div[style*="background: white"], 
 div[style*="background: #ffffff"] {
     background: #16161e !important;
@@ -68,12 +81,14 @@ div[style*="background: #ffffff"] {
     padding: 30px !important;
     border-radius: 24px !important;
     color: #ffffff !important;
+    margin-bottom: 30px;
 }
 
 .card-highlight-title {
     color: #a78bfa !important;
     font-size: 1.4rem;
     margin-bottom: 16px;
+    font-weight: 700;
 }
 
 .card-description {
@@ -85,9 +100,81 @@ div[style*="background: #ffffff"] {
     color: #a78bfa;
 }
 
-/* --- Form & Dropdown Visibility (Feedbacks Page) --- */
+/* =========================================
+   4. EVENT MANAGEMENT TABLE
+   ========================================= */
+.table-responsive {
+    overflow-x: auto;
+    margin-top: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: #a78bfa #16161e;
+}
+
+.dash-events-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    min-width: 600px;
+}
+
+.dash-events-table th {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 18px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dash-events-table td {
+    padding: 18px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: #cbd5e1 !important;
+    vertical-align: middle;
+}
+
+.event-title-cell {
+    font-weight: 600;
+    color: #ffffff !important;
+}
+
+.no-data-text {
+    text-align: center;
+    padding: 40px !important;
+    color: #64748b !important;
+    font-style: italic;
+}
+
+/* =========================================
+   5. ACTION BUTTONS (DELETE)
+   ========================================= */
+.dash-delete-btn {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dash-delete-btn:hover {
+    background: #ef4444;
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    transform: scale(1.05);
+}
+
+.dash-delete-btn:active {
+    transform: scale(0.95);
+}
+
+/* =========================================
+   6. FORMS, DROPDOWNS & SIDEBAR
+   ========================================= */
 select, .event-selector {
-    background: #0b0b0f !important;
+    background-color: #0b0b0f !important;
     color: #ffffff !important;
     border: 1px solid #334155 !important;
     padding: 14px 20px !important;
@@ -95,63 +182,25 @@ select, .event-selector {
     font-size: 1rem;
     width: 100%;
     max-width: 450px;
-    margin-top: 20px;
+    margin-top: 10px;
+    appearance: auto;
 }
 
-/* Sidebar Active Link Fix */
 .sidebar-link.active {
     background: rgba(167, 139, 250, 0.1) !important;
     color: #a78bfa !important;
     font-weight: 700;
-}
-/* --- Global Admin Visibility Fixes --- */
-
-/* Targets the large white containers seen in Reports and Feedbacks */
-.reporting-preview-card, 
-.feedback-selection-container,
-div[style*="background: white"], 
-div[style*="background: #ffffff"],
-.admin-info-card-large {
-    background: #16161e !important; /* Force Dark Card Background */
-    border: 1px solid rgba(167, 139, 250, 0.3) !important;
-    padding: 30px !important;
-    border-radius: 24px !important;
-    color: #ffffff !important;
+    border-right: 3px solid #a78bfa;
 }
 
-/* Force visibility on headings inside those boxes */
-h2, h3, .dash-welcome, .card-highlight-title {
-    color: #a78bfa !important; /* Vibrant Purple */
-    background: none !important;
-    -webkit-text-fill-color: initial !important;
-    margin-bottom: 15px;
+/* Custom Scrollbar for the table */
+.table-responsive::-webkit-scrollbar {
+    height: 6px;
 }
-
-/* Body text visibility fix */
-p, span, label, .card-description {
-    color: #cbd5e1 !important; /* Light Slate Gray */
+.table-responsive::-webkit-scrollbar-track {
+    background: #0b0b0f;
 }
-
-/* Dropdown/Select fix (specifically for the selectors in screenshots 4 and 7) */
-select, .event-selector {
-    background-color: #0b0b0f !important;
-    color: #ffffff !important;
-    border: 1px solid #334155 !important;
-    padding: 12px 20px !important;
-    border-radius: 12px !important;
-    appearance: auto; /* Ensures the dropdown arrow is visible */
-}
-
-/* Stat Cards visibility (for the main dashboard view) */
-.admin-stat-card {
-    background: #1e1e2a !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-
-.stat-title {
-    color: #94a3b8 !important;
-}
-
-.stat-value {
-    color: #ffffff !important;
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #a78bfa;
+    border-radius: 10px;
 }
