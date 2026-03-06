@@ -13,7 +13,7 @@ function AdminReport() {
   const [regCount, setRegCount] = useState(0);
   const [attendedCount, setAttendedCount] = useState(0);
 
-  // Dynamic configuration options (Matched with SuperAdmin)
+  // Dynamic configuration options (Only declared ONCE)
   const [options, setOptions] = useState({
     executiveSummary: true,
     eventDetails: true,

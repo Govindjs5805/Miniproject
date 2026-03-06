@@ -2,6 +2,7 @@
 .report-page-container {
     padding: 20px;
     color: white;
+    min-height: 100vh;
 }
 
 .report-controls {
@@ -12,11 +13,17 @@
     border: 1px solid #2d2d3d;
 }
 
+.dash-welcome {
+    color: #a78bfa;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
 .config-step-label {
     display: block;
     font-size: 1.1rem;
     color: #a78bfa; 
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     font-weight: 600;
 }
 
@@ -29,6 +36,7 @@
     width: 100%;
     max-width: 400px;
     margin-bottom: 20px;
+    outline: none;
 }
 
 /* Checkbox Grid Spacing */
@@ -48,6 +56,11 @@
     padding: 12px;
     border-radius: 8px;
     color: #cbd5e1;
+    transition: background 0.2s;
+}
+
+.checkbox-label-item:hover {
+    background: rgba(167, 139, 250, 0.1);
 }
 
 /* Violet Print Button */
@@ -59,100 +72,146 @@
     border-radius: 10px;
     font-weight: 700;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: all 0.2s;
 }
 
 .print-btn-main:hover {
     background: #8b5cf6 !important;
     transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
 }
 
-/* --- PRINTABLE PAPER STYLES --- */
+/* --- PRINTABLE PAPER PREVIEW (On Screen) --- */
 .printable-report-area {
-    background: #ffffff !important;
+    background-color: #ffffff !important;
     width: 210mm;
     min-height: 297mm;
     margin: 40px auto;
-    padding: 25mm;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    padding: 20mm;
+    box-shadow: 0 10px 50px rgba(0,0,0,0.5);
     font-family: 'Times New Roman', Times, serif !important;
     color: #000000 !important;
+    border-radius: 4px;
 }
 
-.report-header { text-align: center; margin-bottom: 40px; }
+/* Internal Report Structure */
+.report-header { 
+    text-align: center; 
+    margin-bottom: 40px; 
+    border-bottom: 2px solid #000;
+    padding-bottom: 20px;
+}
+
 .report-header h2 { 
     color: #000000 !important; 
-    font-size: 26pt; 
+    font-size: 24pt; 
     font-weight: bold !important; 
     margin: 0; 
+    text-transform: uppercase;
 }
 
 .doc-type { 
     font-size: 14pt; 
-    letter-spacing: 2px; 
-    color: #000000 !important; 
+    letter-spacing: 1px; 
+    color: #333 !important; 
     font-weight: bold; 
     margin-top: 10px;
 }
 
-.header-line { 
-    height: 2px; 
-    background: #000000 !important; 
-    margin-top: 15px; 
+.report-section {
+    margin-bottom: 30px;
 }
 
-/* Section Headings - Forced Black & Bold */
-.printable-report-area .section-title {
+.section-title {
     font-size: 14pt !important;
-    font-weight: 800 !important;
-    border-bottom: 2px solid #000000 !important;
-    margin: 30px 0 15px 0 !important;
-    padding-bottom: 5px !important;
-    color: #000000 !important;
-    text-transform: uppercase !important;
+    font-weight: bold !important;
+    border-bottom: 1.5px solid #000;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    color: #000 !important;
+    text-transform: uppercase;
 }
 
 .summary-paragraph {
     text-align: justify;
     font-size: 12pt;
-    line-height: 1.8;
-    color: #000000 !important;
+    line-height: 1.6;
+    color: #000 !important;
 }
 
-/* Table Style */
-.report-table { width: 100%; display: flex; flex-direction: column; }
+.report-table { 
+    width: 100%; 
+}
+
 .table-row { 
     display: flex; 
-    padding: 10px 0; 
-    border-bottom: 1px solid #ddd; 
+    padding: 12px 0; 
+    border-bottom: 1px solid #eee; 
 }
+
 .table-label { 
     font-weight: bold !important; 
-    width: 220px; 
-    color: #000000 !important; 
+    width: 250px; 
+    color: #000 !important; 
 }
-.table-value { color: #000000 !important; }
+
+.table-value { 
+    color: #000 !important; 
+    flex: 1;
+}
 
 /* Signatures */
-.report-footer { margin-top: 80px; }
-.sig-container { display: flex; justify-content: space-between; }
-.sig-box { width: 220px; text-align: center; }
-.sig-line { border-top: 2px solid #000000 !important; margin-bottom: 10px; }
-.sig-box p { font-weight: bold !important; color: #000000 !important; }
+.report-footer { 
+    margin-top: 100px; 
+}
+
+.sig-container { 
+    display: flex; 
+    justify-content: space-between; 
+}
+
+.sig-box { 
+    width: 200px; 
+    text-align: center; 
+}
+
+.sig-line { 
+    border-top: 1.5px solid #000 !important; 
+    margin-bottom: 10px; 
+}
+
+.sig-box p { 
+    font-weight: bold !important; 
+    color: #000 !important; 
+    margin: 0;
+}
 
 .generated-on-text { 
     text-align: center; 
     font-size: 10pt; 
-    color: #000000 !important; 
-    margin-top: 50px; 
+    color: #666 !important; 
+    margin-top: 60px; 
+    font-style: italic;
 }
 
-/* --- PRINT LOGIC --- */
+/* --- FINAL PRINT LOGIC --- */
 @media print {
-    body * { visibility: hidden; }
-    .no-print, .report-controls, nav, aside { display: none !important; }
+    /* Hide everything except the report */
+    body * { 
+        visibility: hidden; 
+    }
     
-    #printable-report, #printable-report * {
+    .no-print, 
+    .report-controls, 
+    nav, 
+    aside, 
+    .AdminSidebar, 
+    .AdminHeader { 
+        display: none !important; 
+    }
+    
+    #printable-report, 
+    #printable-report * {
         visibility: visible;
     }
 
@@ -162,11 +221,12 @@
         top: 0 !important;
         width: 100% !important;
         margin: 0 !important;
-        padding: 20mm !important;
+        padding: 15mm !important;
         box-shadow: none !important;
         background: white !important;
     }
 
+    /* Force high quality colors in PDF */
     * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
