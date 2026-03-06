@@ -168,13 +168,6 @@ function AdminDashboard() {
           <StatCard title="Attendance Rate" value={`${attendancePercentage}%`} />
         </div>
 
-        <div className="admin-info-card-large">
-          <h3 className="card-highlight-title">Quick Insights</h3>
-          <p className="card-description">
-            Your club's overall check-in rate is <strong>{attendancePercentage}%</strong>. 
-          </p>
-        </div>
-
         <div className="management-table-card">
           <h3 className="card-highlight-title">Manage Club Events</h3>
           <div className="table-responsive">
