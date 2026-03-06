@@ -12,6 +12,22 @@ function AdminReport() {
   const [feedbacks, setFeedbacks] = useState([]);
   const [regCount, setRegCount] = useState(0);
 
+  const [options, setOptions] = useState({
+    executiveSummary: true,
+    eventDetails: true,
+    detailTitle: true,
+    detailDate: true,
+    detailVenue: true,
+    participationMetrics: true,
+    metricRegistrations: true,
+    metricFeedback: true,
+    signatureSection: true,
+  });
+
+  const handleCheckboxChange = (e) => {
+    setOptions({ ...options, [e.target.name]: e.target.checked });
+  };
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -50,8 +66,8 @@ function AdminReport() {
 
   const generateSummary = () => {
     if (!selectedEvent) return "";
-    return `The event "${selectedEvent.title}" was successfully conducted by ${clubName || "the organizer"} on ${selectedEvent.date} at ${selectedEvent.venue}. 
-    A total of ${regCount} students registered for the program, indicating a strong interest in the subject matter. 
+    return `The event "${selectedEvent.title}" was successfully conducted by ${clubName || "the organizer"} on ${selectedEvent.date || "N/A"} at ${selectedEvent.venue || "the designated venue"}. 
+    Based on administrative records, ${regCount} students registered for the program, indicating a strong interest in the subject matter. 
     Following the session, ${feedbacks.length} participants submitted formal feedback. 
     The event concluded effectively, meeting all planned administrative and engagement benchmarks.`;
   };
@@ -59,82 +75,124 @@ function AdminReport() {
   return (
     <AdminLayout>
       <div className="report-page-container">
-        {/* Everything inside 'no-print' will be hidden in PDF */}
+        {/* Everything in report-controls will disappear on print */}
         <div className="report-controls no-print">
-          <h2 className="dash-welcome">Post-Event Reporting</h2>
-          <div className="controls-flex">
+          <h2 className="dash-welcome">Report Configuration</h2>
+          
+          <div className="config-section">
+            <label className="config-step-label">1. Select Event</label>
             <select onChange={handleSelectEvent} className="report-select">
-              <option value="">-- Select Completed Event --</option>
+              <option value="">-- Choose Event --</option>
               {events.map(ev => (
                 <option key={ev.id} value={ev.id}>{ev.title}</option>
               ))}
             </select>
-            {selectedEvent && (
-              <button onClick={() => window.print()} className="print-btn">
-                Download PDF Report
-              </button>
-            )}
           </div>
+
+          {selectedEvent && (
+            <div className="config-section fade-in">
+              <label className="config-step-label">2. Select Information to Display</label>
+              <div className="options-grid-selection">
+                {Object.keys(options).map((key) => (
+                  <label key={key} className="checkbox-label-item">
+                    <input 
+                      type="checkbox" 
+                      name={key} 
+                      checked={options[key]} 
+                      onChange={handleCheckboxChange} 
+                    />
+                    <span>{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</span>
+                  </label>
+                ))}
+              </div>
+              <button onClick={() => window.print()} className="print-btn-main">
+                Generate Official PDF
+              </button>
+            </div>
+          )}
         </div>
 
+        {/* The Actual Report - Visible on screen as a preview, but isolated for print */}
         {selectedEvent && (
           <div className="printable-report-area">
             <header className="report-header">
-              <h2>{clubName?.toUpperCase() || "MULEARN CHN"}</h2>
-              <p className="doc-type">OFFICIAL EVENT COMPLETION RECORD</p>
+              <h2 className="doc-type-main">OFFICIAL EVENT COMPLETION REPORT</h2>
+              <p className="club-name-sub">{clubName?.toUpperCase() || "MULEARN CHN"}</p>
               <div className="header-line"></div>
             </header>
 
-            <section className="report-section">
-              <h3 className="section-title">I. EXECUTIVE SUMMARY</h3>
-              <p className="summary-paragraph">{generateSummary()}</p>
-            </section>
+            {options.executiveSummary && (
+              <section className="report-section">
+                <h3 className="section-title">I. EXECUTIVE SUMMARY</h3>
+                <p className="summary-paragraph">{generateSummary()}</p>
+              </section>
+            )}
 
-            <section className="report-section">
-              <h3 className="section-title">II. EVENT DETAILS</h3>
-              <div className="metrics-list">
-                <div className="metric-item">
-                  <span className="metric-label">Event Title:</span>
-                  <span className="metric-value">{selectedEvent.title}</span>
+            {options.eventDetails && (
+              <section className="report-section">
+                <h3 className="section-title">II. EVENT DETAILS</h3>
+                <div className="report-table">
+                  {options.detailTitle && (
+                    <div className="table-row">
+                      <span className="table-label">Event Title:</span>
+                      <span className="table-value">{selectedEvent.title}</span>
+                    </div>
+                  )}
+                  {options.detailDate && (
+                    <div className="table-row">
+                      <span className="table-label">Organized Date:</span>
+                      <span className="table-value">{selectedEvent.date || "N/A"}</span>
+                    </div>
+                  )}
+                  {options.detailVenue && (
+                    <div className="table-row">
+                      <span className="table-label">Venue Location:</span>
+                      <span className="table-value">{selectedEvent.venue}</span>
+                    </div>
+                  )}
                 </div>
-                <div className="metric-item">
-                  <span className="metric-label">Organized Date:</span>
-                  <span className="metric-value">{selectedEvent.date}</span>
-                </div>
-                <div className="metric-item">
-                  <span className="metric-label">Venue Location:</span>
-                  <span className="metric-value">{selectedEvent.venue}</span>
-                </div>
-              </div>
-            </section>
+              </section>
+            )}
 
-            <section className="report-section">
-              <h3 className="section-title">III. PARTICIPATION METRICS</h3>
-              <div className="metrics-list">
-                <div className="metric-item">
-                  <span className="metric-label">Total Registrations:</span>
-                  <span className="metric-value">{regCount} Students</span>
+            {options.participationMetrics && (
+              <section className="report-section">
+                <h3 className="section-title">III. PARTICIPATION METRICS</h3>
+                <div className="report-table">
+                  {options.metricRegistrations && (
+                    <div className="table-row">
+                      <span className="table-label">Total Registrations:</span>
+                      <span className="table-value">{regCount} Students</span>
+                    </div>
+                  )}
+                  {options.metricFeedback && (
+                    <div className="table-row">
+                      <span className="table-label">Feedback Collected:</span>
+                      <span className="table-value">{feedbacks.length} Responses</span>
+                    </div>
+                  )}
                 </div>
-                <div className="metric-item">
-                  <span className="metric-label">Feedback Collected:</span>
-                  <span className="metric-value">{feedbacks.length} Responses</span>
-                </div>
-              </div>
-            </section>
+              </section>
+            )}
 
-            <footer className="report-footer">
-              <div className="sig-container">
-                <div className="sig-box">
-                  <div className="sig-line"></div>
-                  <p>Club Coordinator</p>
+            {options.signatureSection && (
+              <footer className="report-footer">
+                <div className="sig-container">
+                  <div className="sig-box">
+                    <div className="sig-line"></div>
+                    <p>Club Coordinator</p>
+                  </div>
+                  <div className="sig-box">
+                    <div className="sig-line"></div>
+                    <p>Faculty In-Charge</p>
+                  </div>
                 </div>
-                <div className="sig-box">
-                  <div className="sig-line"></div>
-                  <p>Faculty In-Charge</p>
+                <div className="footer-meta">
+                  <p className="generated-on-text-bold">
+                    Report Generated On: {new Date().toLocaleDateString()}
+                  </p>
                 </div>
-              </div>
-              <p className="generated-on-text">Report Generated On: {new Date().toLocaleDateString()}</p>
-            </footer>
+              </footer>
+            )}
           </div>
         )}
       </div>

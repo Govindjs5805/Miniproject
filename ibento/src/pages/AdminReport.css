@@ -1,140 +1,225 @@
-/* =========================================
-   1. SCREEN STYLES (UI/Dashboard)
-   ========================================= */
-
+/* --- SCREEN UI (DASHBOARD) --- */
 .report-page-container {
     padding: 20px;
     color: white;
 }
 
 .report-controls {
-    margin-bottom: 30px;
-    background: rgba(255, 255, 255, 0.05);
+    margin-bottom: 20px;
+    background: #11121a;
     padding: 20px;
     border-radius: 12px;
+    border: 1px solid #2d2d3d;
 }
 
-.controls-flex {
+.config-step-label {
+    display: block;
+    font-size: 1.1rem;
+    color: #a78bfa; 
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.options-grid-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.checkbox-label-item {
     display: flex;
-    gap: 15px;
     align-items: center;
-    margin-top: 15px;
-}
-
-.report-select {
-    background: #16161e !important;
-    color: white !important;
-    border: 1px solid rgba(167, 139, 250, 0.3) !important;
-    padding: 12px 20px;
-    border-radius: 10px;
-    width: 350px;
-}
-
-.print-btn {
-    background: #a78bfa;
-    color: #111;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 10px;
-    font-weight: 700;
+    gap: 10px;
     cursor: pointer;
+    background: #1c1d29;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background 0.2s;
 }
 
-/* --- Report Preview (A4 Paper look) --- */
+.checkbox-label-item:hover {
+    background: #252636;
+}
+
+.print-btn-main {
+    background-color: #a78bfa !important;
+    color: white !important;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(167, 139, 250, 0.3);
+}
+
+/* --- FORMAL REPORT (PREVIEW ON SCREEN) --- */
 .printable-report-area {
-    background: #ffffff !important;
+    background-color: #ffffff !important;
     width: 210mm;
-    min-height: 297mm;
-    margin: 40px auto;
-    padding: 25mm;
-    box-shadow: 0 10px 50px rgba(0,0,0,0.5);
-    font-family: 'Times New Roman', Times, serif;
-    color: #000 !important;
-    line-height: 1.6;
+    margin: 20px auto;
+    padding: 10mm 15mm;
+    color: #000000 !important; 
+    font-family: 'Times New Roman', Times, serif !important;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
-.report-header { text-align: center; margin-bottom: 40px; }
-.report-header h2 { color: #000 !important; margin: 0; font-size: 2.2rem; font-weight: bold; }
-.doc-type { font-size: 0.9rem; letter-spacing: 3px; color: #444 !important; }
-.header-line { height: 2px; background: #000; margin-top: 15px; }
+.printable-report-area * {
+    color: #000000 !important;
+}
 
-.section-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    border-bottom: 1px solid #000;
-    margin: 30px 0 15px 0;
-    padding-bottom: 5px;
-    color: #000 !important;
+.printable-report-area .doc-type-main {
+    text-align: center;
+    font-size: 1.6rem;
+    margin-bottom: 2px;
+    font-weight: bold !important;
     text-transform: uppercase;
 }
 
-.summary-paragraph { 
-    text-align: justify; 
-    font-size: 1.1rem; 
-    color: #000 !important; 
-    margin-bottom: 25px;
+.printable-report-area .club-name-sub {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 900 !important;
+    margin-top: 2px;
+    margin-bottom: 10px;
 }
 
-.metrics-list { display: flex; flex-direction: column; gap: 10px; }
-.metric-item { 
-    display: flex; 
-    font-size: 1.1rem; 
-    color: #000 !important;
-    border-bottom: 1px dotted #ccc;
-    padding-bottom: 5px;
+.header-line {
+    border-bottom: 2px solid #000;
+    margin-bottom: 15px;
 }
-.metric-label { font-weight: bold; width: 220px; }
-.metric-value { color: #000 !important; }
 
-.report-footer { margin-top: 80px; }
-.sig-container { display: flex; justify-content: space-between; }
-.sig-box { width: 40%; text-align: center; }
-.sig-line { border-top: 1px solid #000; margin-bottom: 8px; }
-.generated-on-text { text-align: right; font-size: 0.8rem; color: #666 !important; margin-top: 40px; }
+.printable-report-area h3.section-title {
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    border-bottom: 1.5px solid #000000 !important;
+    padding-bottom: 2px !important;
+    margin: 15px 0 8px 0 !important;
+    text-transform: uppercase !important;
+}
 
-/* =========================================
-   2. PRINT LOGIC (PDF Generation)
-   ========================================= */
+.printable-report-area .summary-paragraph {
+    line-height: 1.4;
+    text-align: justify;
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.report-table { width: 100%; }
+.table-row {
+    display: flex;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.table-label {
+    font-weight: bold !important;
+    width: 170px;
+}
+
+.table-value { flex: 1; }
+
+/* SIGNATURES SECTION */
+.report-footer {
+    margin-top: auto; 
+    padding-top: 40px;
+}
+
+.sig-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.sig-box {
+    width: 220px;
+    text-align: center;
+}
+
+.sig-line {
+    border-top: 1.5px solid #000000 !important;
+    margin-bottom: 8px;
+}
+
+.sig-box p {
+    font-weight: bold !important;
+    margin: 0;
+}
+
+.generated-on-text-bold {
+    font-size: 0.85rem;
+    font-weight: bold !important;
+    text-align: right;
+    margin-top: 20px;
+}
+
+/* --- FINAL PRINT LOGIC --- */
 
 @media print {
-    /* Step 1: Hide the entire body and all parent backgrounds */
+    @page {
+        size: A4;
+        margin: 15mm; /* Standard margin ensures nothing is cut off */
+    }
+
+    /* Hide UI Elements */
+    .no-print, nav, aside, footer, .report-controls, button, .print-btn-main {
+        display: none !important;
+    }
+
+    /* Reset Body for Print */
+    html, body {
+        background: white !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
     body * {
         visibility: hidden;
     }
 
-    /* Step 2: Only make the report area visible */
+    /* Show only the report */
     .printable-report-area, 
     .printable-report-area * {
-        visibility: visible;
+        visibility: visible !important;
     }
 
-    /* Step 3: Position the report at the very top of the PDF page */
     .printable-report-area {
-        position: absolute !important;
-        left: 0 !important;
-        top: 0 !important;
+        position: relative !important;
+        display: block !important;
         width: 100% !important;
         margin: 0 !important;
-        padding: 10mm !important; /* Standard print margin */
+        padding: 0 !important;
         box-shadow: none !important;
-        background: white !important;
         color: black !important;
     }
 
-    /* Step 4: Ensure background graphics and colors are forced on */
+    /* Force the signature container to stay together */
+    .report-footer {
+        display: block !important;
+        page-break-inside: avoid !important;
+        margin-top: 40px !important;
+    }
+
+    .sig-container {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+    }
+
+    .sig-box {
+        width: 45% !important; /* Ensures they sit side-by-side */
+    }
+
     * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
-        color: black !important;
-    }
-
-    /* Hide the UI controls specifically */
-    .no-print, nav, aside, .report-controls {
-        display: none !important;
-    }
-
-    @page {
-        size: A4;
-        margin: 1cm;
     }
 }
