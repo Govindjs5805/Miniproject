@@ -25,9 +25,7 @@ function AdminSidebar() {
         <li>
         <Link to="/admin/create-event">Create Event</Link>
 </li>
-<li>
-    <Link to="/admin/analytics">Analytics</Link>
-</li>
+
 
       </ul>
 

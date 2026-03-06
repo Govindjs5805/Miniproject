@@ -37,7 +37,6 @@ function SuperAdminFeedback({ events }) {
     <div className="admin-section-card">
       <header className="vault-header">
         <h2 className="dash-welcome">Event Feedbacks</h2>
-        <p className="subtitle">Real-time student reviews and ratings</p>
       </header>
 
       {/* FILTER SECTION */}
@@ -64,7 +63,6 @@ function SuperAdminFeedback({ events }) {
       <div className="feedback-content">
         {!selectedEventId ? (
           <div className="no-selection-placeholder">
-            <p className="vault-empty-msg">Select an event from the dropdown to see feedback.</p>
           </div>
         ) : loading ? (
           <p className="loader">Loading feedback...</p>

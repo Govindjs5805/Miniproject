@@ -66,7 +66,13 @@ html, body, #root {
   color: #fff;
   margin-bottom: -40px;
 }
-
+.sidebar-club-logo{
+  width: 120px;
+  height: 120px;
+  border-radius: 20%;
+  padding: 28px 15px;
+  border: 1px solid var(--primary-purple);
+}
 .sidebar-nav {
   display: flex;
   flex-direction: column;
@@ -90,12 +96,13 @@ html, body, #root {
 /* 3. Content Area */
 .admin-main-content {
   flex: 1;
+  margin-top: -30px;
   padding: 50px 60px;
   overflow-y: auto;
 }
 
 .welcome-text {
-  font-size: 2.2rem;
+  font-size: 3rem !important;
   font-weight: 800;
   letter-spacing: -1px;
   margin-bottom: 2rem;

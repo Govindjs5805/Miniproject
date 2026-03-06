@@ -11,7 +11,9 @@ function AdminReport() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [feedbacks, setFeedbacks] = useState([]);
   const [regCount, setRegCount] = useState(0);
+  const [attendedCount, setAttendedCount] = useState(0);
 
+  // Dynamic configuration options (Only declared ONCE)
   const [options, setOptions] = useState({
     executiveSummary: true,
     eventDetails: true,
@@ -20,6 +22,7 @@ function AdminReport() {
     detailVenue: true,
     participationMetrics: true,
     metricRegistrations: true,
+    metricAttendance: true,
     metricFeedback: true,
     signatureSection: true,
   });
@@ -52,13 +55,18 @@ function AdminReport() {
     setSelectedEvent(event);
 
     try {
+      // Fetch Feedback
       const fQuery = query(collection(db, "feedbacks"), where("eventId", "==", eventId));
       const fSnap = await getDocs(fQuery);
       setFeedbacks(fSnap.docs.map(doc => doc.data()));
 
+      // Fetch Registrations & Attendance
       const rQuery = query(collection(db, "registrations"), where("eventId", "==", eventId));
       const rSnap = await getDocs(rQuery);
+      const regs = rSnap.docs.map(doc => doc.data());
+      
       setRegCount(rSnap.size);
+      setAttendedCount(regs.filter(r => r.attended === true || r.status === "attended").length);
     } catch (err) {
       console.error("Error fetching report metrics:", err);
     }
@@ -67,15 +75,15 @@ function AdminReport() {
   const generateSummary = () => {
     if (!selectedEvent) return "";
     return `The event "${selectedEvent.title}" was successfully conducted by ${clubName || "the organizer"} on ${selectedEvent.date || "N/A"} at ${selectedEvent.venue || "the designated venue"}. 
-    Based on administrative records, ${regCount} students registered for the program, indicating a strong interest in the subject matter. 
-    Following the session, ${feedbacks.length} participants submitted formal feedback. 
+    Based on administrative records, ${regCount} students registered for the program. 
+    Attendance was verified for ${attendedCount} participants, and ${feedbacks.length} formal feedbacks were collected. 
     The event concluded effectively, meeting all planned administrative and engagement benchmarks.`;
   };
 
   return (
     <AdminLayout>
       <div className="report-page-container">
-        {/* Everything in report-controls will disappear on print */}
+        {/* DASHBOARD CONTROLS */}
         <div className="report-controls no-print">
           <h2 className="dash-welcome">Report Configuration</h2>
           
@@ -112,12 +120,12 @@ function AdminReport() {
           )}
         </div>
 
-        {/* The Actual Report - Visible on screen as a preview, but isolated for print */}
+        {/* OFFICIAL PRINTABLE REPORT */}
         {selectedEvent && (
-          <div className="printable-report-area">
+          <div className="printable-report-area" id="printable-report">
             <header className="report-header">
-              <h2 className="doc-type-main">OFFICIAL EVENT COMPLETION REPORT</h2>
-              <p className="club-name-sub">{clubName?.toUpperCase() || "MULEARN CHN"}</p>
+              <h2>{clubName?.toUpperCase() || "ORGANIZING BODY"}</h2>
+              <p className="doc-type">OFFICIAL EVENT COMPLETION RECORD</p>
               <div className="header-line"></div>
             </header>
 
@@ -141,7 +149,7 @@ function AdminReport() {
                   {options.detailDate && (
                     <div className="table-row">
                       <span className="table-label">Organized Date:</span>
-                      <span className="table-value">{selectedEvent.date || "N/A"}</span>
+                      <span className="table-value">{selectedEvent.date}</span>
                     </div>
                   )}
                   {options.detailVenue && (
@@ -162,6 +170,12 @@ function AdminReport() {
                     <div className="table-row">
                       <span className="table-label">Total Registrations:</span>
                       <span className="table-value">{regCount} Students</span>
+                    </div>
+                  )}
+                  {options.metricAttendance && (
+                    <div className="table-row">
+                      <span className="table-label">Verified Attendance:</span>
+                      <span className="table-value">{attendedCount} Students</span>
                     </div>
                   )}
                   {options.metricFeedback && (
@@ -186,11 +200,7 @@ function AdminReport() {
                     <p>Faculty In-Charge</p>
                   </div>
                 </div>
-                <div className="footer-meta">
-                  <p className="generated-on-text-bold">
-                    Report Generated On: {new Date().toLocaleDateString()}
-                  </p>
-                </div>
+                <p className="generated-on-text">Report Generated On: {new Date().toLocaleDateString()}</p>
               </footer>
             )}
           </div>
