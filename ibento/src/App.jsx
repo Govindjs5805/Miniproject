@@ -35,6 +35,7 @@ import TermsOfService from "./pages/TermsOfService";
 import Suggestions from "./pages/Suggestions";
 import About from "./pages/About";
 import HelpCentre from "./pages/HelpCentre";
+import AdminAbout from "./pages/AdminAbout";
 
 function AppContent() {
   const location = useLocation();
@@ -66,7 +67,8 @@ function AppContent() {
           <Route path="/suggestions" element={<Suggestions />} />
           <Route path="/about" element={<About />} />
           <Route path="/help" element={<HelpCentre />} />
-
+          <Route path="/admin/about" element={<AdminAbout />}/>
+          
 
           {/* Student Protected Routes */}
           <Route path="/dashboard" element={

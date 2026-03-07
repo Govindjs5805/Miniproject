@@ -1,0 +1,42 @@
+.admin-about-editor {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-about-editor h2 {
+  color: #a78bfa;
+  margin-bottom: 10px;
+}
+
+.admin-about-editor textarea {
+  width: 100%;
+  background: #16161e;
+  border: 1px solid #2d2d3a;
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 20px 0;
+  resize: vertical;
+}
+
+.admin-about-editor .submit-btn {
+  background: #a78bfa;
+  color: black;
+  padding: 15px 30px;
+  border-radius: 12px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.admin-about-editor .submit-btn:hover {
+  background: #c4b5fd;
+  transform: translateY(-2px);
+}
