@@ -57,7 +57,6 @@ const Footer = () => {
             <h3>My Account</h3>
             <ul>
               <li><Link to="/profile">Profile</Link></li>
-              <li><Link to="/settings">Settings</Link></li>
             </ul>
           </div>
           <div className="link-group">
