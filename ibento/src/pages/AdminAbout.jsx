@@ -10,6 +10,11 @@ function AdminAbout() {
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  
+  // --- TOAST STATES ---
+  const [showToast, setShowToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
+  const [toastType, setToastType] = useState("success"); // 'success' or 'error'
 
   useEffect(() => {
     const fetchCurrentAbout = async () => {
@@ -30,6 +35,14 @@ function AdminAbout() {
     fetchCurrentAbout();
   }, [clubId]);
 
+  // --- TOAST TRIGGER ---
+  const triggerToast = (msg, type = "success") => {
+    setToastMsg(msg);
+    setToastType(type);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  };
+
   const handleSave = async (e) => {
     e.preventDefault();
     setSaving(true);
@@ -39,9 +52,12 @@ function AdminAbout() {
         description: description,
         lastUpdated: new Date()
       }, { merge: true });
-      alert("Forum 'About' section updated successfully!");
+      
+      // Replaced alert with custom toast
+      triggerToast("Forum 'About' section updated successfully!");
+      
     } catch (err) {
-      alert("Error saving: " + err.message);
+      triggerToast("Error saving: " + err.message, "error");
     } finally {
       setSaving(false);
     }
@@ -49,11 +65,19 @@ function AdminAbout() {
 
   return (
     <AdminLayout>
+      {/* --- CUSTOM TOAST --- */}
+      {showToast && (
+        <div className={`about-toast ${toastType}`}>
+          <span className="toast-icon">{toastType === "success" ? "✓" : "✕"}</span>
+          <span className="toast-text">{toastMsg}</span>
+        </div>
+      )}
+
       <div className="admin-about-editor">
         <h2>Edit Forum About</h2>
         <p className="hint">This text will appear in the "Information" tab of your community page.</p>
         
-        {loading ? <p>Loading current info...</p> : (
+        {loading ? <p className="loading-text">Loading current info...</p> : (
           <form onSubmit={handleSave}>
             <textarea
               value={description}

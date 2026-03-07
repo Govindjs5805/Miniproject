@@ -5,11 +5,19 @@
   background: rgba(255, 255, 255, 0.03);
   border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
 }
 
 .admin-about-editor h2 {
   color: #a78bfa;
   margin-bottom: 10px;
+  font-size: 1.8rem;
+}
+
+.hint {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
 }
 
 .admin-about-editor textarea {
@@ -23,20 +31,79 @@
   line-height: 1.6;
   margin: 20px 0;
   resize: vertical;
+  outline: none;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.admin-about-editor textarea:focus {
+  border-color: #a78bfa;
 }
 
 .admin-about-editor .submit-btn {
-  background: #a78bfa;
-  color: black;
+  background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+  color: white;
   padding: 15px 30px;
   border-radius: 12px;
   font-weight: bold;
   border: none;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  width: 100%;
 }
 
 .admin-about-editor .submit-btn:hover {
-  background: #c4b5fd;
   transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(167, 139, 250, 0.3);
+}
+
+.admin-about-editor .submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* --- TOAST STYLES --- */
+.about-toast {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 24px;
+  border-radius: 12px;
+  z-index: 10000;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  animation: slideInToast 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.about-toast.success {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: #10b981;
+}
+
+.about-toast.error {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: #ef4444;
+}
+
+.toast-icon {
+  font-weight: bold;
+}
+
+.success .toast-icon { color: #10b981; }
+.error .toast-icon { color: #ef4444; }
+
+.toast-text {
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+@keyframes slideInToast {
+  from { transform: translateX(120%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
 }
