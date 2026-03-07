@@ -302,6 +302,8 @@
 .section-title {
   font-size: 1.5rem;
   margin-bottom: 20px;
-  color: #ffffff;
+  background: #d29ffd;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-weight: bold;
 }

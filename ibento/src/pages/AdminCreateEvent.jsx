@@ -125,7 +125,7 @@ function AdminCreateEvent() {
             <div className="form-section animate-in">
               <h2 className="section-title">Basic Details</h2>
               <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-              <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+              <input className="form-control" type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
               <input type="text" placeholder="Venue" value={venue} onChange={(e) => setVenue(e.target.value)} required />
               <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} rows="4" />
               <input type="number" placeholder="Seat Limit" value={seatLimit} onChange={(e) => setSeatLimit(e.target.value)} required />

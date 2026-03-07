@@ -4,6 +4,7 @@ import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import { Html5Qrcode } from "html5-qrcode";
 import AdminLayout from "../components/Admin/AdminLayout";
+import { color } from "chart.js/helpers";
 
 function AdminCheckIn() {
   const { clubId } = useAuth();
@@ -60,7 +61,7 @@ function AdminCheckIn() {
           processingRef.current = true;
           
           const cleanId = decodedText.trim();
-          setScannerStatus(`🔍 Processing Ticket: ${cleanId}`);
+          setScannerStatus(`Processing Ticket: ${cleanId}`);
 
           try {
             const regRef = doc(db, "registrations", cleanId);
@@ -110,8 +111,8 @@ function AdminCheckIn() {
 
   return (
     <AdminLayout>
-      <div style={{ padding: "20px", textAlign: "center", color: "#fff", background: "#0f172a", minHeight: "80vh" }}>
-        <h2 style={{ color: "#8b5cf6" }}>Laptop Attendance Scanner</h2>
+      <div style={{ padding: "20px", textAlign: "center", color: "#fff", background : "#080909", minHeight: "80vh" }}>
+        <h2 style={{ color: "#a883ff" }}>Laptop Attendance Scanner</h2>
         
         <select 
           value={selectedEvent} 

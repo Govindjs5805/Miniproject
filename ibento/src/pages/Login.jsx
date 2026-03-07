@@ -165,7 +165,7 @@ const Login = () => {
       <div className="auth-container">
         <div className="auth-card">
           <h2>Welcome Back</h2>
-          <p className="auth-subtitle">Sign in to continue ✨</p>
+          <p className="auth-subtitle">Sign in to continue</p>
 
           {error && <div className="auth-error" style={{color: '#f87171', marginBottom: '15px'}}>{error}</div>}
 
