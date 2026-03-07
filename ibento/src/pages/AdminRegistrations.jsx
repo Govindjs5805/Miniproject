@@ -10,6 +10,7 @@ import {
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import AdminLayout from "../components/Admin/AdminLayout";
+import { color } from "chart.js/helpers";
 
 function AdminRegistrations() {
   const { clubId } = useAuth();
@@ -135,7 +136,7 @@ function AdminRegistrations() {
 
   return (
     <AdminLayout>
-      <h2>Event Registrations</h2>
+      <h2 style={{ background: "linear-gradient(90deg, #a375f2, #ffffff)", fontSize: "2.5rem", margin: "20px 0px", fontWeight: "bold", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Event Registrations</h2>
 
       {!selectedEvent && (
         <>

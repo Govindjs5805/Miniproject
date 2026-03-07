@@ -11,6 +11,16 @@
 .dash-header-section {
     margin-bottom: 40px;
 }
+.welcome-text-2 {
+    font-size: 2.5rem;
+    text-align: center;
+    background: linear-gradient(90deg , #783be2, #dbcbef);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-top: 15px;
+    margin-bottom: 25px;
+    font-weight: 900;
+}
 
 .dash-welcome {
     font-size: 2.2rem;

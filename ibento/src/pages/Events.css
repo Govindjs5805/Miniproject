@@ -25,12 +25,12 @@
 }
 
 .glitch-text {
-  font-size: 4.5rem;
+  font-size: 4rem;
   font-weight: 900;
-  background: linear-gradient(180deg, #d2b5f0 0%, #504e4e 100%);
+  background: linear-gradient(180deg, #ffffff 50%, #000000 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  letter-spacing: -2px;
+  letter-spacing: -1px;
 }
 
 .header-sub { background: #b46be2;

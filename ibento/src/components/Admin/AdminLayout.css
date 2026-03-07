@@ -73,6 +73,7 @@ html, body, #root {
   padding: 40px 18px;
   border: 1px solid var(--primary-purple);
 }
+
 .sidebar-nav {
   display: flex;
   flex-direction: column;

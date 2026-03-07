@@ -1,183 +1,114 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=JetBrains+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500&family=Orbitron:wght@700&display=swap');
 
-.hyper-splash {
+.minimal-splash {
   position: fixed;
   inset: 0;
-  background: #010103;
-  color: #fff;
+  background: #050508;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   z-index: 10000;
   overflow: hidden;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Inter', sans-serif;
 }
 
-/* 1. Background Environment */
-.space-grid {
-  position: absolute;
-  inset: -100%;
-  background-image: 
-    linear-gradient(rgba(124, 58, 237, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(124, 58, 237, 0.05) 1px, transparent 1px);
-  background-size: 60px 60px;
-  transform: perspective(500px) rotateX(60deg) translateY(0);
-  animation: gridTravel 15s linear infinite;
-}
-
-.vignette-overlay {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, transparent 30%, #000 100%);
-  z-index: 2;
-}
-
-/* 2. Corner UI Brackets */
-.corner {
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  z-index: 10;
-  transition: 0.3s;
-}
-.corner::before {
-  content: '';
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  border: 2px solid #7c3aed;
-}
-
-.top-left { top: 40px; left: 40px; }
-.top-left::before { top: -2px; left: -2px; border-right: 0; border-bottom: 0; }
-
-.top-right { top: 40px; right: 40px; }
-.top-right::before { top: -2px; right: -2px; border-left: 0; border-bottom: 0; }
-
-.bottom-left { bottom: 40px; left: 40px; }
-.bottom-left::before { bottom: -2px; left: -2px; border-right: 0; border-top: 0; }
-
-.bottom-right { bottom: 40px; right: 40px; }
-.bottom-right::before { bottom: -2px; right: -2px; border-left: 0; border-top: 0; }
-
-/* 3. Side Data Reads */
-.ui-meta {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
+.central-brand {
+  text-align: center;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 30px;
 }
-.left { left: 60px; }
-.right { right: 60px; text-align: right; }
 
-.meta-item {
+/* MATCHING THE HERO SECTION LOGO */
+.hero-style-logo {
+  font-family: sans-serif;
+  font-size: 4.5rem; /* Large and bold like hero */
+  font-weight: 900;
+  letter-spacing: 1rem;
+  margin: 0;
+  text-indent: 1rem;
+  
+  /* Gradient Text Effect */
+  background: linear-gradient(90deg, #ffffff, #8b5cf6 );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+  /* Hero Glow */
+  filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.4));
+  
+  animation: heroLogoFade 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.progress-wrapper {
+  width: 240px;
   display: flex;
   flex-direction: column;
-  font-size: 0.65rem;
-  letter-spacing: 2px;
-  color: rgba(255,255,255,0.3);
-}
-.val { color: #7c3aed; font-weight: bold; margin-top: 4px; }
-
-/* 4. Central Hub */
-.logo-box {
-  position: relative;
-  text-align: center;
-  margin-bottom: 80px;
+  align-items: center;
+  gap: 15px;
+  opacity: 0;
+  animation: fadeIn 0.8s ease-out 0.4s forwards;
 }
 
-.glitch-logo {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 6.5rem;
-  letter-spacing: 30px;
-  margin: 0;
-  padding-left: 30px;
-  color: #fff;
-  text-shadow: 0 0 30px rgba(124, 58, 237, 0.4);
-  animation: logoAppear 1.2s ease-out forwards;
+.progress-rail {
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-.reflection {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 6.5rem;
-  letter-spacing: 30px;
-  margin-top: -45px;
-  opacity: 0.05;
-  transform: scaleY(-1);
-  filter: blur(8px);
-  mask-image: linear-gradient(to bottom, black, transparent);
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #7c3aed, #a855f7);
+  box-shadow: 0 0 15px rgba(124, 58, 237, 0.6);
+  transition: width 0.2s ease-out;
 }
 
-/* 5. Loading Bar */
-.load-container {
-  width: 480px;
-  margin: 0 auto;
-}
-
-.bar-labels {
-  display: flex;
-  justify-content: space-between;
+.percentage {
   font-size: 0.75rem;
-  margin-bottom: 12px;
-  color: #7c3aed;
-  font-weight: bold;
+  color: #94a3b8;
+  letter-spacing: 3px;
+  font-weight: 500;
 }
 
-.power-bar {
-  height: 6px;
-  background: rgba(255,255,255,0.03);
-  position: relative;
-  border: 1px solid rgba(255,255,255,0.05);
+.splash-footer {
+  position: absolute;
+  bottom: 50px;
   display: flex;
   align-items: center;
+  gap: 12px;
+  font-size: 0.65rem;
+  letter-spacing: 4px;
+  color: rgba(255, 255, 255, 0.15);
 }
 
-.power-fill {
-  height: 100%;
-  background: #fff;
-  box-shadow: 0 0 25px rgba(124, 58, 237, 0.8);
-  position: relative;
-  transition: width 0.4s cubic-bezier(0.1, 1, 0.1, 1);
+.dot {
+  width: 4px;
+  height: 4px;
+  background: #8b5cf6;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #8b5cf6;
 }
 
-.glow-tip {
-  position: absolute;
-  right: 0;
-  width: 20px;
-  height: 100%;
-  background: #fff;
-  filter: blur(5px);
+/* Animations */
+@keyframes heroLogoFade {
+  0% { 
+    opacity: 0; 
+    transform: scale(0.9);
+    filter: blur(15px) drop-shadow(0 0 0px rgba(139, 92, 246, 0));
+    letter-spacing: 2rem;
+  }
+  100% { 
+    opacity: 1; 
+    transform: scale(1);
+    filter: blur(0) drop-shadow(0 0 20px rgba(139, 92, 246, 0.4));
+    letter-spacing: 1rem;
+  }
 }
 
-.ticks {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 5px;
-  pointer-events: none;
-}
-.ticks span { width: 1px; height: 100%; background: rgba(255,255,255,0.1); }
-
-.system-msg {
-  font-size: 0.55rem;
-  color: rgba(255,255,255,0.2);
-  margin-top: 15px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-}
-
-/* 6. Animations */
-@keyframes gridTravel {
-  from { background-position: 0 0; }
-  to { background-position: 0 120px; }
-}
-
-@keyframes logoAppear {
-  0% { opacity: 0; transform: scale(0.8); filter: blur(20px); letter-spacing: 50px; }
-  100% { opacity: 1; transform: scale(1); filter: blur(0); letter-spacing: 30px; }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

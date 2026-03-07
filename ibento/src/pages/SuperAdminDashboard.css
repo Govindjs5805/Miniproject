@@ -90,7 +90,11 @@
 
 .content-header {
   padding: 30px 40px;
+  font-weight: bold;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: linear-gradient(90deg, #9a6de8, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .content-header h1 {
