@@ -1,76 +1,86 @@
+/* SuperAdminFeedback.css */
+
 .feedback-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 20px;
+    display: flex;
+    flex-direction: column; /* Stacked layout like the admin pic */
+    gap: 25px;
     margin-top: 25px;
+    max-width: 800px;
 }
 
 .feedback-card {
-    background: #1a1b23; /* Darker card background */
-    border: 1px solid rgba(167, 139, 250, 0.15);
-    padding: 20px;
-    border-radius: 12px;
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    background: #0f0c29; /* Deep dark background from admin panel */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-.feedback-card:hover {
-    border-color: #a78bfa;
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.feedback-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+.user-name-title {
+    color: #a78bfa; /* Purple accent for the name */
+    font-size: 1.2rem;
+    font-weight: 700;
     margin-bottom: 15px;
 }
 
-.user-name {
+/* Internal dark container for responses */
+.responses-container {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.response-entry {
+    margin-bottom: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 12px;
+}
+
+.response-entry:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.question-text {
+    color: #94a3b8; /* Muted grey for labels */
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+}
+
+.answer-text {
     color: #ffffff;
-    font-weight: 700;
-    font-size: 0.95rem;
+    font-size: 1rem;
+    font-weight: 500;
 }
 
 .star-rating {
-    font-size: 1rem;
-    letter-spacing: 2px;
+    font-size: 1.1rem;
+    letter-spacing: 3px;
 }
 
 .stars-filled {
-    color: #facc15; /* Gold/Yellow stars */
+    color: #facc15; /* Matching the yellow/gold stars in admin pic */
 }
 
 .stars-empty {
-    color: #475569; /* Muted grey stars */
-}
-
-.feedback-comment {
-    color: #cbd5e1;
-    font-style: italic;
-    line-height: 1.6;
-    margin-bottom: 15px;
-    font-size: 0.9rem;
-    flex-grow: 1;
+    color: #334155;
 }
 
 .feedback-footer {
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 15px;
     padding-top: 10px;
-    text-align: right;
 }
 
 .feedback-date {
-    color: #64748b;
-    font-size: 0.75rem;
+    color: #475569;
+    font-size: 0.7rem;
     text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
+/* Animations */
 .animate-fade {
-    animation: fadeIn 0.4s ease-in-out;
+    animation: fadeIn 0.5s ease forwards;
 }
 
 @keyframes fadeIn {

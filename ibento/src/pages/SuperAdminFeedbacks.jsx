@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
-import "./SuperAdminFeedback.css"; // Ensure you create/update this CSS file
+import "./SuperAdminFeedback.css"; 
 
 function SuperAdminFeedback({ events }) {
   const [selectedEventId, setSelectedEventId] = useState("");
@@ -71,16 +71,33 @@ function SuperAdminFeedback({ events }) {
             {feedbacks.map((item) => (
               <div key={item.id} className="feedback-card animate-fade">
                 <div className="feedback-header">
-                  <span className="user-name">{item.userName || "Anonymous Student"}</span>
-                  <div className="star-rating">
-                    <span className="stars-filled">{"★".repeat(item.rating)}</span>
-                    <span className="stars-empty">{"☆".repeat(5 - item.rating)}</span>
+                  <div className="user-info-block">
+                    {/* Removed email, focused on the Name and Entry ID */}
+                    <span className="user-name">{item.userName || "Anonymous Student"}</span>
+                    <span className="admin-status-badge"></span>
                   </div>
                 </div>
-                <p className="feedback-comment">"{item.comment}"</p>
+
+                {/* DYNAMIC RESPONSES SECTION */}
+                <div className="responses-list">
+                  {item.responses && Object.entries(item.responses).map(([question, answer], idx) => (
+                    <div key={idx} className="response-row">
+                      <p className="question-label">{question}</p>
+                      {typeof answer === "number" ? (
+                        <div className="star-rating">
+                          <span className="stars-filled">{"★".repeat(answer)}</span>
+                          <span className="stars-empty">{"★".repeat(5 - answer)}</span>
+                        </div>
+                      ) : (
+                        <p className="answer-text">{answer || "No response"}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
                 <div className="feedback-footer">
                    <span className="feedback-date">
-                    {item.createdAt?.toDate ? item.createdAt.toDate().toLocaleDateString() : "Recent"}
+                     Submitted: {item.submittedAt?.toDate ? item.submittedAt.toDate().toLocaleString() : "Recent"}
                   </span>
                 </div>
               </div>
