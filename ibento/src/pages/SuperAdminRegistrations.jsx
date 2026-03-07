@@ -1,10 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 function SuperAdminRegistrations({ events, registrations }) {
   const [selectedEventId, setSelectedEventId] = useState("");
+  const [enrichedRegs, setEnrichedRegs] = useState([]);
 
-  // Filter registrations based on selected event
-  const filteredRegs = registrations.filter(reg => reg.eventId === selectedEventId);
+  useEffect(() => {
+    const fetchRealNames = async () => {
+      // Filter registrations based on selected event
+      const filtered = registrations.filter(reg => reg.eventId === selectedEventId);
+
+      // Enrich filtered registrations with names from 'users' collection
+      const updated = await Promise.all(filtered.map(async (reg) => {
+        if (!reg.userName || reg.userName === "Student" || reg.userName === "N/A") {
+          try {
+            const userDoc = await getDoc(doc(db, "users", reg.userId));
+            if (userDoc.exists()) {
+              return { 
+                ...reg, 
+                userName: userDoc.data().fullName || userDoc.data().name || "Student" 
+              };
+            }
+          } catch (err) {
+            console.error("Error fetching user name:", err);
+          }
+        }
+        return reg;
+      }));
+
+      setEnrichedRegs(updated);
+    };
+
+    if (selectedEventId) {
+      fetchRealNames();
+    } else {
+      setEnrichedRegs([]);
+    }
+  }, [selectedEventId, registrations]);
 
   return (
     <div className="admin-section-card">
@@ -30,7 +63,7 @@ function SuperAdminRegistrations({ events, registrations }) {
           <div className="no-selection-placeholder">
             <div className="placeholder-icon"></div>
           </div>
-        ) : filteredRegs.length > 0 ? (
+        ) : enrichedRegs.length > 0 ? (
           <div className="table-responsive">
             <table className="admin-table">
               <thead>
@@ -41,9 +74,9 @@ function SuperAdminRegistrations({ events, registrations }) {
                 </tr>
               </thead>
               <tbody>
-                {filteredRegs.map((reg) => (
+                {enrichedRegs.map((reg) => (
                   <tr key={reg.id}>
-                    <td>{reg.userName || "N/A"}</td>
+                    <td>{reg.userName}</td>
                     <td>{reg.userEmail}</td>
                     <td>
                       <span className={`status-pill ${reg.checkInStatus ? "checked" : "pending"}`}>
