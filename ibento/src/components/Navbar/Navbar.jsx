@@ -34,7 +34,10 @@ function Navbar() {
             <NavLink to="/events" onClick={closeMenu}>Events</NavLink>
 
             {user && role === "student" && (
+              <>
               <NavLink to="/dashboard" onClick={closeMenu}>My Events</NavLink>
+              <NavLink to="/profile" onClick={closeMenu}>Profile</NavLink>
+              </>
             )}
 
             {user && role === "clubLead" && (
