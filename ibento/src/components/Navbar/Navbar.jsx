@@ -35,23 +35,35 @@ function Navbar() {
             <NavLink className="nav-link-login" to="/login" onClick={closeMenu}>Login</NavLink>
             <NavLink className="nav-link-register" to="/register" onClick={closeMenu}>Register</NavLink>
 
+            {/* Student Links */}
             {user && role === "student" && (
-              <NavLink to="/dashboard" onClick={closeMenu}>My Events</NavLink>
+              <>
+                <NavLink to="/dashboard" onClick={closeMenu}>My Events</NavLink>
+                {/* Profile link correctly integrated here */}
+                <NavLink to="/profile" onClick={closeMenu}>Profile</NavLink>
+              </>
             )}
 
+            {/* Club Lead Links */}
             {user && role === "clubLead" && (
               <>
                 <NavLink to="/admin" onClick={closeMenu}>Dashboard</NavLink>
                 <NavLink to="/admin/create-event" onClick={closeMenu}>Create Event</NavLink>
               </>
             )}
-             {user && role === "superAdmin" && (
-              <>
-                <NavLink to="/superadmin" onClick={closeMenu}>Dashboard</NavLink>
-              </>
+
+            {/* Super Admin Links */}
+            {user && role === "superAdmin" && (
+              <NavLink to="/superadmin" onClick={closeMenu}>Dashboard</NavLink>
             )}
 
-            {user && (
+            {/* Authentication Buttons */}
+            {!user ? (
+              <>
+                <NavLink to="/login" onClick={closeMenu}>Login</NavLink>
+                <NavLink to="/register" onClick={closeMenu}>Register</NavLink>
+              </>
+            ) : (
               <button className="logout-btn" onClick={handleLogout}>
                 Logout
               </button>
@@ -70,7 +82,7 @@ function Navbar() {
         </div>
       </nav>
 
-      {/* CLICK OUTSIDE TO CLOSE - Only shows when menu is open */}
+      {/* CLICK OUTSIDE TO CLOSE */}
       {isMobileMenuOpen && (
         <div className="nav-overlay" onClick={closeMenu}></div>
       )}

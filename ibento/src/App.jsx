@@ -5,6 +5,7 @@ import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Splash from "./pages/Splash";
+import Footer from "./components/Footer/Footer";
 
 // Pages
 import Home from "./pages/Home";
@@ -13,6 +14,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import VerifyEmail from "./pages/VerifyEmail";
 import StudentDashboard from "./pages/StudentDashboard";
+import ProfilePage from "./pages/ProfilePage"; // Integrated Profile Page
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminRegistrations from "./pages/AdminRegistrations";
 import AdminReport from "./pages/AdminReport";
@@ -26,8 +28,7 @@ import AdminCreateEvent from "./pages/AdminCreateEvent";
 import FeedbackForm from "./pages/FeedbackForm";
 import AdminFeedbacks from "./pages/AdminFeedbacks";
 import AdminEventDocuments from "./pages/AdminEventDocuments";
-import Footer from "./components/Footer/Footer";
-import ForumDetail from "./pages/ForumDetail"; // Import the new page // [Importing the Footer]
+import ForumDetail from "./pages/ForumDetail";
 
 function AppContent() {
   const location = useLocation();
@@ -55,13 +56,33 @@ function AppContent() {
           <Route path="/verify-email" element={<VerifyEmail />} />
 
           {/* Student Protected Routes */}
-          <Route path="/dashboard" element={<ProtectedRoute allowedRole="student"><StudentDashboard /></ProtectedRoute>} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute allowedRole="student">
+              <StudentDashboard />
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/profile" element={
+            <ProtectedRoute allowedRole="student">
+              <ProfilePage />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/my-events" element={
+            <ProtectedRoute allowedRole="student">
+              <MyEvents />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/ticket/:registrationId" element={
+            <ProtectedRoute allowedRole="student">
+              <Ticket />
+            </ProtectedRoute>
+          } />
+
           <Route path="/feedback/:eventId" element={<FeedbackForm />} />
-          <Route path="/my-events" element={<ProtectedRoute allowedRole="student"><MyEvents /></ProtectedRoute>} />
-          <Route path="/ticket/:registrationId" element={<ProtectedRoute allowedRole="student"><Ticket /></ProtectedRoute>} />
           <Route path="/events/:id" element={<EventDetails />} />          
           <Route path="/forum/:forumId" element={<ForumDetail />} />          
-
 
           {/* Club Lead Protected Routes */}
           <Route path="/admin" element={<ProtectedRoute allowedRole="clubLead"><AdminDashboard /></ProtectedRoute>} />
@@ -80,10 +101,10 @@ function AppContent() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
+      {showNavbar && <Footer />}
     </div>
   );
 }
 
-export default function App() {
-  return <AppContent />;
-}
+// Ensure this is the only place <Router> is used if it's NOT in index.js
+export default AppContent;
