@@ -37,6 +37,29 @@
   align-items: center;
   gap: 35px;
 }
+.nav-links .nav-link-login {
+  position: relative;
+  color: #ffffff;
+  background-color: #dac6e000;
+  border: 1px solid #dac6e0;
+  padding: 6px 16px;
+  border-radius: 8px;  
+}
+.nav-links .nav-link-login:hover {
+  background-color: #dac6e0;
+  color: #0f0c29;
+}
+.nav-links .nav-link-register {
+  position: relative;
+  color: #000000;
+  background-color: #a96ef5;
+  padding: 6px 16px;
+  border-radius: 8px;  
+}
+.nav-links .nav-link-register:hover {
+  background-color: #ffffff;
+  color: #0f0c29;
+}
 
 .nav-links a {
   text-decoration: none;

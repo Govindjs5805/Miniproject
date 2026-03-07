@@ -32,6 +32,8 @@ function Navbar() {
           <div className={`nav-links ${isMobileMenuOpen ? "mobile-active" : ""}`}>
             <NavLink to="/home" onClick={closeMenu}>Home</NavLink>
             <NavLink to="/events" onClick={closeMenu}>Events</NavLink>
+            <NavLink className="nav-link-login" to="/login" onClick={closeMenu}>Login</NavLink>
+            <NavLink className="nav-link-register" to="/register" onClick={closeMenu}>Register</NavLink>
 
             {user && role === "student" && (
               <NavLink to="/dashboard" onClick={closeMenu}>My Events</NavLink>
