@@ -15,6 +15,7 @@ const ProfilePage = () => {
   });
 
   const [loading, setLoading] = useState(true);
+  const [showToast, setShowToast] = useState(false); // Success popup state
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -40,7 +41,6 @@ const ProfilePage = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    // 10-Digit Phone Restriction
     if (name === "phone") {
       const onlyNums = value.replace(/[^0-9]/g, ''); 
       if (onlyNums.length <= 10) {
@@ -56,10 +56,13 @@ const ProfilePage = () => {
     try {
       const userRef = doc(db, "users", auth.currentUser.uid);
       await updateDoc(userRef, formData);
-      alert("Profile updated successfully! ✓");
-      // Optional: reload page to refresh summary section
+      
+      // TRIGGER CUSTOM GREEN POPUP
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000); // Auto-hide after 3s
+
     } catch (error) {
-      alert("Error saving changes.");
+      console.error("Error saving changes:", error);
     }
   };
 
@@ -67,6 +70,17 @@ const ProfilePage = () => {
 
   return (
     <div className="profile-wrapper-glass">
+      
+      {/* CUSTOM GREEN SUCCESS POPUP */}
+      {showToast && (
+        <div className="custom-toast-glass">
+          <div className="toast-content">
+            <span className="toast-icon">✓</span>
+            <p>Profile updated successfully!</p>
+          </div>
+        </div>
+      )}
+
       {/* === TOP SUMMARY SECTION: Read-Only === */}
       <div className="summary-section-glass">
         <div className="avatar-wrapper-glass">
@@ -77,7 +91,6 @@ const ProfilePage = () => {
         
         <div className="summary-info-glass">
           <p className="student-label">STUDENT</p>
-          {/* VISIBILITY FIX: The student name color */}
           <h1 className="student-name-glass">{formData.firstName} {formData.lastName}</h1>
           <p className="student-meta">{formData.department} | {formData.class}</p>
           

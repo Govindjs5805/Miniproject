@@ -1,11 +1,12 @@
 :root {
-  --glass-accent: #8b5cf6; /* Vibrant IBENTO Purple */
-  --glass-bg: rgba(255, 255, 255, 0.04); /* Frosted Glass Base */
-  --glass-glow: 0 8px 32px rgba(139, 92, 246, 0.2); /* Subtle Purple Glow */
+  --glass-accent: #8b5cf6; 
+  --glass-bg: rgba(255, 255, 255, 0.04); 
+  --glass-glow: 0 8px 32px rgba(139, 92, 246, 0.2); 
   --ibento-bg: #0a0a1a;
-  --text-dim: #94a3b8; /* Dimmed Gray/Blue */
-  --glass-border: rgba(255, 255, 255, 0.08); /* Faint Glass Edge */
-  --student-name: #22d3ee; /* VISIBILITY FIX: Brilliant Cyan for Name */
+  --text-dim: #94a3b8; 
+  --glass-border: rgba(255, 255, 255, 0.08); 
+  --student-name: #22d3ee; 
+  --success-green: #10b981; /* Green for Popup */
 }
 
 /* Page Wrapper */
@@ -14,6 +15,54 @@
   margin: 50px auto;
   font-family: 'Poppins', 'Segoe UI', sans-serif;
   color: #fff;
+  position: relative; /* For toast anchoring */
+}
+
+/* === GREEN RIGHT POPUP (TOAST) === */
+.custom-toast-glass {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  background: rgba(16, 185, 129, 0.15); /* Translucent Green */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--success-green);
+  padding: 15px 25px;
+  border-radius: 12px;
+  z-index: 9999;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+  animation: slideInLeft 0.5s ease forwards;
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toast-icon {
+  background: var(--success-green);
+  color: #fff;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.toast-content p {
+  margin: 0;
+  font-weight: 500;
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 /* === CLASSY GLASS SUMMARY SECTION === */
@@ -21,7 +70,7 @@
   display: flex;
   gap: 30px;
   background: var(--glass-bg);
-  backdrop-filter: blur(12px); /* Crucial for glass effect */
+  backdrop-filter: blur(12px); 
   -webkit-backdrop-filter: blur(12px);
   padding: 35px;
   border-radius: 20px;
@@ -61,13 +110,12 @@
   margin-bottom: 5px;
 }
 
-/* VISIBILITY FIX: Brilliant Cyan Name */
 .student-name-glass {
   font-size: 1.8rem;
   margin: 0;
   color: var(--student-name);
   font-weight: 700;
-  text-shadow: 0 0 10px rgba(34, 211, 238, 0.2); /* Soft Cyan Glow */
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.2); 
 }
 
 .student-meta {
@@ -110,7 +158,6 @@
 .edit-section-glass {
   background: var(--glass-bg);
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   padding: 35px;
   border-radius: 20px;
   border: 1px solid var(--glass-border);
@@ -138,11 +185,10 @@
   font-weight: 600;
 }
 
-/* Glass Inputs */
 .input-group input {
   width: 100%;
   padding: 14px;
-  background: rgba(0, 0, 0, 0.2); /* Deep input focus */
+  background: rgba(0, 0, 0, 0.2); 
   border: 1px solid var(--glass-border);
   border-radius: 10px;
   color: #fff;
@@ -177,7 +223,7 @@
 }
 
 .save-btn-glass:hover {
-  background-color: var(--ibento-purple-dark);
+  background-color: #7c3aed;
   box-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
   transform: translateY(-2px);
 }
@@ -193,4 +239,5 @@
   .summary-section-glass { flex-direction: column; align-items: center; text-align: center; }
   .form-row { grid-template-columns: 1fr; }
   .profile-wrapper-glass { padding: 0 15px; }
+  .custom-toast-glass { top: 20px; right: 20px; left: 20px; }
 }
