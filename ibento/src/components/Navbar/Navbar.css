@@ -36,6 +36,7 @@
   display: flex;
   align-items: center;
   gap: 35px;
+  font-size: 17px;
 }
 .nav-links .nav-link-login {
   position: relative;
@@ -65,7 +66,7 @@
   text-decoration: none;
   color: #ffffff;
   font-weight: 500;
-  font-size: 16px;
+  font-size: 18px;
   transition: 0.3s;
   white-space: nowrap;
 }

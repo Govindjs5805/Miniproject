@@ -29,6 +29,12 @@ import FeedbackForm from "./pages/FeedbackForm";
 import AdminFeedbacks from "./pages/AdminFeedbacks";
 import AdminEventDocuments from "./pages/AdminEventDocuments";
 import ForumDetail from "./pages/ForumDetail";
+import Contact from "./pages/Contact";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import Suggestions from "./pages/Suggestions";
+import About from "./pages/About";
+import HelpCentre from "./pages/HelpCentre";
 
 function AppContent() {
   const location = useLocation();
@@ -54,6 +60,13 @@ function AppContent() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/suggestions" element={<Suggestions />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/help" element={<HelpCentre />} />
+
 
           {/* Student Protected Routes */}
           <Route path="/dashboard" element={
