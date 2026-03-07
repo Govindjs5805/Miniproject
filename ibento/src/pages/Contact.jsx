@@ -3,37 +3,36 @@ import { useNavigate } from 'react-router-dom';
 
 const Contact = () => {
   const navigate = useNavigate();
+  const contactMethods = [
+    { icon: "", label: "Email", value: "support@ibento.com" },
+    { icon: "", label: "Location", value: "College of Engineering Chengannur" },
+    { icon: "", label: "Phone", value: "+91 9605770892" }
+  ];
+
   return (
-    <div className="contact-page">
+    <div className="page-wrapper">
       <style>{`
-        .contact-page { min-height: 100vh; padding: 100px 20px; background: #0a0a1a; color: white; }
-        .container-box { max-width: 1000px; margin: 0 auto; position: relative; }
-        .back-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 16px; border-radius: 8px; cursor: pointer; margin-bottom: 30px; transition: 0.3s; }
-        .back-btn:hover { background: rgba(139, 92, 246, 0.3); border-color: #8b5cf6; }
-        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .contact-card { background: rgba(255,255,255,0.05); padding: 30px; border-radius: 15px; border: 1px solid rgba(139, 92, 246, 0.2); text-align: center; }
-        .icon { font-size: 2rem; color: #22d3ee; margin-bottom: 15px; }
-        h2 { color: #8b5cf6; }
+        .page-wrapper { min-height: 100vh; padding: 120px 20px; background: #0a0a1a; color: white; display: flex; justify-content: center; align-items: center; font-family: 'Poppins', sans-serif; }
+        .content-stack { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 40px; }
+        .back-btn { align-self: flex-start; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 10px 20px; border-radius: 12px; margin-top: 80px; cursor: pointer; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .card { background: rgba(139, 92, 246, 0.05); padding: 40px; border-radius: 24px; border: 1px solid rgba(139, 92, 246, 0.1); text-align: center; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); background: rgba(139, 92, 246, 0.1); }
+        .icon { font-size: 3rem; margin-bottom: 20px; display: block; }
+        h3 { margin: 10px 0; color: #a855f7; }
       `}</style>
-      <div className="container-box">
+
+      <div className="content-stack">
         <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
-        <h1 style={{textAlign: 'center', marginBottom: '40px'}}>Contact Support</h1>
-        <div className="contact-grid">
-          <div className="contact-card">
-            <div className="icon">📧</div>
-            <h2>Email Us</h2>
-            <p>support@ibento.com</p>
-          </div>
-          <div className="contact-card">
-            <div className="icon">📍</div>
-            <h2>Office</h2>
-            <p>Campus Innovation Hub, Block A</p>
-          </div>
-          <div className="contact-card">
-            <div className="icon">📞</div>
-            <h2>Phone</h2>
-            <p>+91 98765 43210</p>
-          </div>
+        <h1 style={{fontSize: '3rem', margin: 0, textAlign: 'center'}}>Get in <span style={{color:'#8b5cf6'}}>Touch</span></h1>
+        <div className="grid">
+          {contactMethods.map((m, i) => (
+            <div className="card" key={i}>
+              <span className="icon">{m.icon}</span>
+              <h3>{m.label}</h3>
+              <p style={{color: '#94a3b8'}}>{m.value}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>
