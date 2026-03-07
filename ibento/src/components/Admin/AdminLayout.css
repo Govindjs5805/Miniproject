@@ -70,7 +70,7 @@ html, body, #root {
   width: 120px;
   height: 120px;
   border-radius: 20%;
-  padding: 28px 15px;
+  padding: 40px 18px;
   border: 1px solid var(--primary-purple);
 }
 .sidebar-nav {

@@ -61,6 +61,9 @@
   cursor: pointer;
   transition: 0.3s;
 }
+.logout-btn:hover {
+  background: #cd1c1c;
+}
 
 .nav-overlay {
   position: fixed;
