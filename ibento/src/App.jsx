@@ -101,7 +101,7 @@ function AppContent() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
-      {showNavbar && <Footer />}
+      {showNavbar}
     </div>
   );
 }
