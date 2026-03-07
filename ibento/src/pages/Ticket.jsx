@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate} from "react-router-dom";
 import { db } from "../firebase";
 import { QRCodeCanvas } from "qrcode.react";
 import "./Ticket.css";
 
 function Ticket() {
+  const navigate = useNavigate();
+
   const { registrationId } = useParams();
   const [registration, setRegistration] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -41,6 +43,9 @@ function Ticket() {
 
   return (
     <div className="ticket-page-wrapper">
+      <button className="ticket-back" onClick={() => navigate(-1)}>
+       Back
+      </button>
       <div className="ticket-container">
         <h2 className="ticket-event-name">{registration.eventTitle}</h2>
         

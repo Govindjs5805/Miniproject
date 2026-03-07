@@ -3,28 +3,37 @@ import { collection, query, where, getDocs, doc, getDoc } from "firebase/firesto
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import emailjs from '@emailjs/browser'; 
 import "./StudentDashboard.css";
 
 function StudentDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [registrations, setRegistrations] = useState([]);
-  const [userName, setUserName] = useState(""); // Start empty to check loading state
+  const [userName, setUserName] = useState(""); 
   const [submittedFeedbacks, setSubmittedFeedbacks] = useState({});
+  
+  // New States for Cancellation & Toast
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [selectedReg, setSelectedReg] = useState(null);
+  const [isSending, setIsSending] = useState(false);
+  const [toast, setToast] = useState({ show: false, message: "", type: "" });
 
-  // 1. Fetch User Name from 'users' collection
+  // Helper to show toast
+  const showToast = (message, type = "success") => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast({ show: false, message: "", type: "" }), 4000);
+  };
+
+  // 1. Fetch User Name (Existing Logic)
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (!user) return;
       try {
-        // Double check your Firestore collection name is 'users' 
-        // and the field is 'fullName'
         const userRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userRef);
-        
         if (userDoc.exists()) {
           const data = userDoc.data();
-          // We prioritize fullName, then display name, then fallback to 'STUDENT'
           setUserName(data.fullName || data.name || user.displayName || "STUDENT");
         } else {
           setUserName(user.displayName || "STUDENT");
@@ -37,11 +46,10 @@ function StudentDashboard() {
     fetchUserProfile();
   }, [user]);
 
-  // 2. Fetch Registrations & Check Feedback Status
+  // 2. Fetch Registrations & Feedback (Existing Logic)
   useEffect(() => {
     const fetchRegistrationsAndFeedback = async () => {
       if (!user) return;
-
       try {
         const q = query(collection(db, "registrations"), where("userId", "==", user.uid));
         const snap = await getDocs(q);
@@ -50,7 +58,6 @@ function StudentDashboard() {
 
         const fQuery = query(collection(db, "feedbacks"), where("userId", "==", user.uid));
         const fSnap = await getDocs(fQuery);
-        
         const feedbackMap = {};
         fSnap.docs.forEach(doc => {
           feedbackMap[doc.data().eventId] = true;
@@ -63,14 +70,74 @@ function StudentDashboard() {
     fetchRegistrationsAndFeedback();
   }, [user]);
 
+  // 3. Cancellation Request Logic (Updated with Custom Toast)
+  const handleCancelRequest = async () => {
+    if (!selectedReg) return;
+    setIsSending(true);
+
+    const templateParams = {
+      from_name: userName,
+      from_email: user.email,
+      event_name: selectedReg.eventTitle,
+      registration_id: selectedReg.id,
+      subject: "Request for Cancellation",
+      message: `User ${userName} (${user.email}) has requested to cancel their registration for the event: ${selectedReg.eventTitle}.`
+    };
+
+    try {
+      await emailjs.send(
+        'service_3u2u3we',   
+        'template_f9axmxh',  
+        templateParams,
+        'oxGLsxqSlC6va58K6'    
+      );
+      // Replaced alert with custom toast
+      showToast("Cancellation request sent successfully!");
+      setShowCancelModal(false);
+    } catch (error) {
+      console.error("EmailJS Error:", error);
+      showToast("Failed to send request.", "error");
+    } finally {
+      setIsSending(false);
+      setSelectedReg(null);
+    }
+  };
+
+  const openCancelModal = (reg) => {
+    setSelectedReg(reg);
+    setShowCancelModal(true);
+  };
+
   return (
     <div className="dashboard-wrapper">
       <div className="dashboard-silk-bg"></div>
 
+      {/* Custom Green Toast Notification */}
+      {toast.show && (
+        <div className={`custom-toast ${toast.type}`}>
+          <div className="toast-content">{toast.message}</div>
+        </div>
+      )}
+
+      {/* Custom Confirmation Modal */}
+      {showCancelModal && (
+        <div className="custom-modal-overlay">
+          <div className="custom-modal">
+            <h3>Request Cancellation?</h3>
+            <p>This will send a formal request to the admin to cancel your registration for <strong>{selectedReg?.eventTitle}</strong>.</p>
+            <div className="modal-btns">
+              <button className="modal-btn-confirm" onClick={handleCancelRequest} disabled={isSending}>
+                {isSending ? "Sending..." : "Confirm Request"}
+              </button>
+              <button className="modal-btn-cancel" onClick={() => setShowCancelModal(false)}>Back</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <header className="dashboard-header">
-        {/* If userName is still loading, show a space or '...' */}
         <h1 className="welcome-text">
-            WELCOME, {userName ? userName.toUpperCase() : "..."} 👋
+            WELCOME, {userName ? userName.toUpperCase() : "..."} 
         </h1>
         <p className="dashboard-subtitle">Manage your event participations</p>
       </header>
@@ -90,6 +157,11 @@ function StudentDashboard() {
                 <span className={`mini-pill ${reg.checkInStatus ? 'is-present' : 'is-absent'}`}>
                   {reg.checkInStatus ? "● PRESENT" : "○ NOT CHECKED-IN"}
                 </span>
+                {!reg.checkInStatus && (
+                   <button className="cancel-req-link" onClick={() => openCancelModal(reg)}>
+                     Request Cancellation
+                   </button>
+                )}
               </div>
 
               <div className="card-actions-row">

@@ -282,7 +282,7 @@
 .success-toast-content {
     background: #065f46;
     color: #ecfdf5;
-    padding: 16px 28px;
+    padding: 16px 15px;
     border-radius: 16px;
     display: flex;
     align-items: center;
@@ -302,7 +302,7 @@
 .section-title {
   font-size: 1.5rem;
   margin-bottom: 20px;
-  background: #d29ffd;
+  background: #c19ffd;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: bold;

@@ -56,11 +56,11 @@
 }
 
 .event-main-title {
-  font-size: 3rem;
-  font-weight: 800;
-  margin-bottom: 30px;
+  font-size: 3.5rem;
+  font-weight: 900;
+  margin-bottom: 25px;
   line-height: 1.1;
-  background: linear-gradient(to right, #ffffff, #aa98f5);
+  background: linear-gradient(to right, #b88bf7, #ffffff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -85,6 +85,11 @@
   padding: 14px 18px;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.stat-item:hover {
+  border-color: #a78bfa;
+  transform: translateY(-4px) ease 0.3s;
+  box-shadow: 0 10px 30px rgba(167, 139, 250, 0.1);
 }
 
 .stat-label {

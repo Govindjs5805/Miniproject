@@ -56,6 +56,7 @@ const Login = () => {
         formData.password
       );
 
+      // Reload to get latest verification status
       await userCredential.user.reload();
 
       if (!userCredential.user.emailVerified) {
@@ -64,13 +65,16 @@ const Login = () => {
         return;
       }
 
-      triggerToast("Login successful! Welcome back.");
+      // 1. Set the role immediately
       localStorage.setItem("role", "student");
-      
-      // Delay navigation slightly so they see the success toast
-      setTimeout(() => navigate("/home"), 1500);
+
+      // 2. Navigate IMMEDIATELY. 
+      // Artificial delays in Login often cause the "flicker" issue 
+      // with Protected Routes in App.js
+      navigate("/home");
       
     } catch (err) {
+      console.error(err);
       setError("Invalid email or password");
       setLoading(false);
     }
@@ -102,7 +106,6 @@ const Login = () => {
           position: relative;
         }
 
-        /* --- TOAST STYLES --- */
         .custom-toast-glass {
           position: fixed;
           top: 30px;
@@ -198,6 +201,11 @@ const Login = () => {
           transition: 0.3s;
         }
 
+        .auth-card button:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+
         .auth-footer { margin-top: 20px; font-size: 14px; color: #a1a1aa; }
         .auth-footer a { color: #a855f7; text-decoration: none; }
       `}</style>
@@ -215,7 +223,11 @@ const Login = () => {
           <h2>Welcome Back</h2>
           <p className="auth-subtitle">Sign in to continue</p>
 
-          {error && <div className="auth-error" style={{color: '#f87171', fontSize: '13px', marginBottom: '15px'}}>{error}</div>}
+          {error && (
+            <div className="auth-error" style={{color: '#f87171', fontSize: '13px', marginBottom: '15px'}}>
+              {error}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit}>
             <div className="input-group">
