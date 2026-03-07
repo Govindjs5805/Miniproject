@@ -7,37 +7,39 @@
   height: 70px;
   display: flex;
   align-items: center;
-  z-index: 1000;
-  background: rgba(15, 12, 41, 0.85); /* Slightly more opaque for better readability */
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  z-index: 2000;
+  background: rgba(15, 12, 41, 0.95);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .navbar-container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
   display: flex;
-  justify-content: space-between; /* This pushes logo to left and links to right */
   align-items: center;
-  padding: 0 1.5rem;
+  width: 100%;
+  max-width: 1400px; /* Gives laptop screens breathing room */
+  margin: 0 auto;
+  padding: 0 30px;
 }
 
 .nav-logo {
   font-size: 1.8rem;
   font-weight: 800;
-  color: rgb(224, 191, 242);
+  color: #e0bff2;
   letter-spacing: 2px;
-  text-decoration: none;
   cursor: pointer;
   flex-shrink: 0;
 }
 
+/* THE FIX: This pushes everything after it to the right */
+.nav-spacer {
+  flex-grow: 1;
+}
+
 .nav-links {
   display: flex;
-  gap: 30px; /* Reduced gap for desktop to fit better */
   align-items: center;
+  gap: 35px;
 }
 
 .nav-links a {
@@ -45,23 +47,32 @@
   color: #ffffff;
   font-weight: 500;
   font-size: 16px;
-  transition: 0.3s;
+  transition: 0.3s ease;
   white-space: nowrap;
 }
 
-.nav-links a:hover, 
-.nav-links a.active {
+.nav-links a.active, .nav-links a:hover {
   color: #cd93ed;
 }
 
-/* Mobile Menu Toggle (Hamburger) */
+.logout-btn {
+  background: #8b5cf6;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* MOBILE TOGGLE STYLING */
 .menu-toggle {
   display: none;
   flex-direction: column;
   gap: 5px;
   cursor: pointer;
-  z-index: 1001;
-  padding: 5px;
+  margin-left: 20px;
 }
 
 .menu-toggle span {
@@ -72,19 +83,12 @@
   transition: 0.3s;
 }
 
-/* Transform Hamburger to X when active */
-.menu-toggle.active span:nth-child(1) {
-  transform: translateY(8px) rotate(45deg);
-}
-.menu-toggle.active span:nth-child(2) {
-  opacity: 0;
-}
-.menu-toggle.active span:nth-child(3) {
-  transform: translateY(-8px) rotate(-45deg);
-}
-
-/* --- Responsive Layout --- */
+/* --- RESPONSIVE MEDIA QUERY --- */
 @media (max-width: 950px) {
+  .nav-spacer {
+    display: none; /* Spacer not needed on mobile */
+  }
+
   .menu-toggle {
     display: flex;
   }
@@ -92,42 +96,24 @@
   .nav-links {
     position: fixed;
     top: 0;
-    right: -100%; /* Hidden off-screen */
+    right: -100%; /* Hidden */
     height: 100vh;
-    width: 260px; /* Slightly narrower for mobile */
-    background: #0f0c29; /* Solid background for mobile drawer */
+    width: 280px;
+    background: #0f0c29;
     flex-direction: column;
     justify-content: center;
     gap: 30px;
-    transition: right 0.4s ease-in-out;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: -10px 0 30px rgba(0,0,0,0.5);
     padding: 2rem;
   }
 
   .nav-links.mobile-active {
-    right: 0; /* Slide in */
+    right: 0; /* Slide In */
   }
 
-  .nav-links a {
-    font-size: 1.2rem;
-    width: 100%;
-    text-align: center;
-  }
-}
-
-.logout-btn {
-  background: #8b5cf6;
-  color: white;
-  padding: 8px 18px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
-  flex-shrink: 0;
-}
-
-.logout-btn:hover {
-  background: #dc2626;
-  transform: translateY(-1px);
+  /* Animate Hamburger to X */
+  .menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  .menu-toggle.active span:nth-child(2) { opacity: 0; }
+  .menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 }
