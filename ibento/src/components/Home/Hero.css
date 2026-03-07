@@ -1,6 +1,6 @@
 .hero {
   position: relative;
-  height: 90vh; /* Leave room for marquee overlap */
+  height: 91vh; /* Leave room for marquee overlap */
   width: 100%;
   overflow: hidden;
   background: #070415;
