@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc } from "firebase/firestore"; // Added doc and getDoc
 import { db } from "../firebase";
 import Footer from "../components/Footer/Footer";
 import "./ForumDetail.css";
@@ -12,52 +12,41 @@ function ForumDetail() {
   const [activeTab, setActiveTab] = useState("info");
   const [forumEvents, setForumEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [liveDesc, setLiveDesc] = useState(""); // State for dynamic About text
 
   const fixedForumId = forumId?.toLowerCase() === "mlearn" ? "mulearn" : forumId?.toLowerCase();
 
- const forumDataMap = {
-  ieee: { 
-    name: "IEEE SB CEC", 
-    desc: `The IEEE Student Branch of CEC is a premier technical society dedicated to advancing technology for humanity. We organize international conferences, technical workshops, and humanitarian projects to foster engineering excellence and professional growth.`, 
-    icon: "/IEEE-logo-WHITE.png" 
-  },
-    
-  iedc: { 
-    name: "IEDC BOOTCAMP CEC", 
-    desc: `The Innovation and Entrepreneurship Development Centre (IEDC) is the campus hub for startups and creative ideas. We provide mentorship, resources, and a platform for students to transform their innovative concepts into successful business ventures.`, 
-    icon: "/IEDC WhiteSVG 1.png" 
-  },
-    
-  foces: { 
-    name: "FOCES CEC", 
-    desc: `The Forum of Computer Engineering Students (FOCES) represents the technical heartbeat of the CSE department. We focus on bridging the gap between curriculum and industry through coding contests, tech talks, and specialized workshops on emerging stacks.`, 
-    icon: "/FOCES White 1.png" 
-  },
-    
-  mulearn: { 
-    name: "MuLearn CHN", 
-    desc: `µLearn CHN is a vibrant regional chapter of the GTech µLearn ecosystem, dedicated to peer-to-peer learning and industry-readiness. We empower students through Interest Groups (IGs), micro-skilling, and direct mentorship from industry experts.`, 
-    icon: "/Mulearn Logo.png" 
-  },
-    
-  tinkerhub: { 
-    name: "TinkerHub CEC", 
-    desc: `TinkerHub is a community of makers and innovators who believe in "learning by doing." We promote open-source culture and help students master modern technology stacks through hands-on hackathons and collaborative project building.`, 
-    icon: "/tinkerhub.png" 
-  },
-    
-  proddec: { 
-    name: "Proddec CEC", 
-    desc: `The Product Design and Development Centre (PRODDEC) focuses on the intersection of engineering and product management. We guide students through the entire lifecycle of a product, from initial design and prototyping to final manufacturing.`, 
-    icon: "/Group 13.png" 
-  },
-    
-  gdg: { 
-    name: "GDG On Campus", 
-    desc: `Google Developer Groups (GDG) provide a space for students to explore Google's developer tools and technologies. We host Study Jams, Cloud campaigns, and DevFests to connect our students with the global developer community.`, 
-    icon: "/gdg.png" 
-  },
-};
+  const forumDataMap = {
+    ieee: { name: "IEEE SB CEC", icon: "/IEEE-logo-WHITE.png" },
+    iedc: { name: "IEDC BOOTCAMP CEC", icon: "/IEDC WhiteSVG 1.png" },
+    foces: { name: "FOCES CEC", icon: "/FOCES White 1.png" },
+    mulearn: { name: "MuLearn CHN", icon: "/Mulearn Logo.png" },
+    tinkerhub: { name: "TinkerHub CEC", icon: "/tinkerhub.png" },
+    proddec: { name: "Proddec CEC", icon: "/Group 13.png" },
+    gdg: { name: "GDG On Campus", icon: "/gdg.png" },
+  };
+
+  // 1. Fetch Dynamic "About" Description from Firestore
+  useEffect(() => {
+    const fetchAboutData = async () => {
+      if (!fixedForumId) return;
+      try {
+        const docRef = doc(db, "clubs", fixedForumId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setLiveDesc(docSnap.data().description);
+        } else {
+          // Fallback if no admin entry exists yet
+          setLiveDesc("Community Details");
+        }
+      } catch (err) {
+        console.error("Error fetching club about:", err);
+      }
+    };
+    fetchAboutData();
+  }, [fixedForumId]);
+
+  // 2. Fetch Events (Your existing logic)
   useEffect(() => {
     const fetchForumEvents = async () => {
       if (!forumId) return;
@@ -75,7 +64,7 @@ function ForumDetail() {
     fetchForumEvents();
   }, [forumId, fixedForumId]);
 
-  const currentClub = forumDataMap[fixedForumId] || { name: fixedForumId?.toUpperCase(), desc: "Community Details" };
+  const currentClub = forumDataMap[fixedForumId] || { name: fixedForumId?.toUpperCase() };
 
   return (
     <div className="forum-detail-page">
@@ -100,7 +89,8 @@ function ForumDetail() {
         {activeTab === "info" ? (
           <div className="info-glass-card">
             <h3>About {currentClub.name}</h3>
-            <p>{currentClub.desc}</p>
+            {/* DISPLAY THE DYNAMIC LIVE DESCRIPTION HERE */}
+            <p>{liveDesc}</p>
           </div>
         ) : (
           <div className="forum-events-grid">
