@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../firebase";
 
 const Login = () => {
@@ -12,11 +12,36 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const triggerToast = (msg) => {
+    setToastMsg(msg);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  };
+
+  const handleForgotPassword = async () => {
+    if (!formData.email) {
+      setError("Please enter your email first to reset password.");
+      return;
+    }
+    try {
+      setLoading(true);
+      await sendPasswordResetEmail(auth, formData.email);
+      triggerToast("Reset link sent! Check your inbox.");
+      setError("");
+    } catch (err) {
+      setError("Failed to send reset email. Check if email is correct.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -39,8 +64,12 @@ const Login = () => {
         return;
       }
 
+      triggerToast("Login successful! Welcome back.");
       localStorage.setItem("role", "student");
-      navigate("/home");
+      
+      // Delay navigation slightly so they see the success toast
+      setTimeout(() => navigate("/home"), 1500);
+      
     } catch (err) {
       setError("Invalid email or password");
       setLoading(false);
@@ -70,6 +99,30 @@ const Login = () => {
           border: 1px solid rgba(168, 85, 247, 0.2);
           box-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
           text-align: center;
+          position: relative;
+        }
+
+        /* --- TOAST STYLES --- */
+        .custom-toast-glass {
+          position: fixed;
+          top: 30px;
+          right: 30px;
+          background: rgba(16, 185, 129, 0.2);
+          backdrop-filter: blur(10px);
+          border: 1px solid #10b981;
+          padding: 12px 20px;
+          border-radius: 10px;
+          z-index: 10000;
+          box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+          animation: slideIn 0.4s ease-out forwards;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        @keyframes slideIn {
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
         }
 
         .auth-card h2 {
@@ -103,11 +156,8 @@ const Login = () => {
           box-sizing: border-box;
         }
 
-        .password-field {
-          padding-right: 45px !important;
-        }
+        .password-field { padding-right: 45px !important; }
 
-        /* --- THE TOGGLE BUTTON --- */
         .toggle-password-btn {
           position: absolute;
           right: 15px;
@@ -116,26 +166,25 @@ const Login = () => {
           background: none;
           border: none;
           cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 0;
-          z-index: 10;
+          opacity: 0.5;
         }
 
-        .eye-icon {
-          font-size: 18px;
-          transition: all 0.3s ease;
-          /* DEFAULT: DARK/SUBTLE (Matches the input background better) */
-          filter: brightness(0); 
-          opacity: 0.4;
+        .toggle-password-btn.active { opacity: 1; color: #a855f7; }
+
+        .forgot-link {
+          display: block;
+          text-align: right;
+          font-size: 12px;
+          color: #a1a1aa;
+          margin-top: -10px;
+          margin-bottom: 20px;
+          cursor: pointer;
+          background: none;
+          border: none;
+          width: 100%;
         }
 
-        /* ACTIVE: BRIGHT WHITE when viewing */
-        .toggle-password-btn.active .eye-icon {
-          filter: brightness(0) invert(1); /* Makes it pure white */
-          opacity: 1;
-        }
+        .forgot-link:hover { color: #c4b5fd; text-decoration: underline; }
 
         .auth-card button[type="submit"] {
           width: 100%;
@@ -147,27 +196,26 @@ const Login = () => {
           font-weight: 600;
           cursor: pointer;
           transition: 0.3s;
-          margin-top: 10px;
         }
 
-        .auth-footer {
-          margin-top: 20px;
-          font-size: 14px;
-          color: #a1a1aa;
-        }
-
-        .auth-footer a {
-          color: #a855f7;
-          text-decoration: none;
-        }
+        .auth-footer { margin-top: 20px; font-size: 14px; color: #a1a1aa; }
+        .auth-footer a { color: #a855f7; text-decoration: none; }
       `}</style>
+
+      {/* TOAST NOTIFICATION */}
+      {showToast && (
+        <div className="custom-toast-glass">
+          <span style={{color: '#10b981', fontWeight: 'bold'}}></span>
+          <span style={{color: 'white', fontSize: '14px'}}>{toastMsg}</span>
+        </div>
+      )}
 
       <div className="auth-container">
         <div className="auth-card">
           <h2>Welcome Back</h2>
           <p className="auth-subtitle">Sign in to continue</p>
 
-          {error && <div className="auth-error" style={{color: '#f87171', marginBottom: '15px'}}>{error}</div>}
+          {error && <div className="auth-error" style={{color: '#f87171', fontSize: '13px', marginBottom: '15px'}}>{error}</div>}
 
           <form onSubmit={handleSubmit}>
             <div className="input-group">
@@ -196,12 +244,16 @@ const Login = () => {
                 className={`toggle-password-btn ${showPassword ? "active" : ""}`}
                 onClick={() => setShowPassword(!showPassword)}
               >
-                <span className="eye-icon">👁</span>
+                👁
               </button>
             </div>
 
+            <button type="button" className="forgot-link" onClick={handleForgotPassword}>
+              Forgot Password?
+            </button>
+
             <button type="submit" disabled={loading}>
-              {loading ? "Logging in..." : "Login"}
+              {loading ? "Processing..." : "Login"}
             </button>
           </form>
 

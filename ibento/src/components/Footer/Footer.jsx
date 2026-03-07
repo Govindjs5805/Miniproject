@@ -56,22 +56,22 @@ const Footer = () => {
           <div className="link-group">
             <h3>My Account</h3>
             <ul>
-              <li>My Profile</li>
-              <li>Settings</li>
+              <li><Link to="/profile">Profile</Link></li>
+              <li><Link to="/settings">Settings</Link></li>
             </ul>
           </div>
           <div className="link-group">
             <h3>Resources</h3>
             <ul>
-              <li>Help Center</li>
-              <li>Suggestions</li>
+              <li><Link to="/help">Help Center</Link></li>
+              <li><Link to="/suggestions">Suggestions</Link></li>
             </ul>
           </div>
           <div className="link-group">
             <h3>Company</h3>
             <ul>
-              <li>About</li>
-              <li>Contact</li>
+              <li><Link to="/about">About</Link></li>
+              <li><Link to="/contact">Contact</Link></li>
             </ul>
           </div>
         </div>
@@ -80,8 +80,8 @@ const Footer = () => {
       <div className="footer-bottom">
         <p>© 2026 IBENTO. All rights reserved.</p>
         <div className="bottom-policy">
-          <span>Privacy Policy</span>
-          <span>Terms of Service</span>
+          <span><Link to="/privacy">Privacy Policy</Link></span>
+          <span><Link to="/terms">Terms of Service</Link></span>
         </div>
       </div>
     </footer>
