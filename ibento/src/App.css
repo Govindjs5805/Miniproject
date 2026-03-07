@@ -1,12 +1,22 @@
 .App {
   text-align: center;
+  min-height: 100vh;
+  background-color: black;
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
-
+* {
+  box-sizing: border-box; /* Crucial: ensures padding doesn't increase width */
+  margin: 0;
+  padding: 0;
+}
+body {
+  overflow-x: hidden; /* Prevents horizontal scrolling on mobile */
+  width: 100%;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

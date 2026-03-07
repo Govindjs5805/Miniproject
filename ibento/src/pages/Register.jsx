@@ -232,7 +232,7 @@ const Register = () => {
       <div className="auth-container">
         <div className="auth-card">
           <h2>Create Account</h2>
-          <p className="auth-subtitle">Join the experience ✨</p>
+          <p className="auth-subtitle">Join the experience</p>
 
           {error && <div className="auth-error">{error}</div>}
           {success && <div className="auth-success">{success}</div>}

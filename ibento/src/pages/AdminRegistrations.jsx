@@ -3,7 +3,9 @@ import {
   collection,
   query,
   where,
-  getDocs
+  getDocs,
+  doc,
+  getDoc
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
@@ -48,13 +50,31 @@ function AdminRegistrations() {
       );
 
       const snap = await getDocs(q);
+      const regData = snap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
 
-      setRegistrations(
-        snap.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }))
-      );
+      // Fetch real names from 'users' collection for each registration
+      const enrichedRegs = await Promise.all(regData.map(async (reg) => {
+        // If name is generic "Student" or missing, fetch from user profile
+        if (!reg.userName || reg.userName === "Student") {
+          try {
+            const userDoc = await getDoc(doc(db, "users", reg.userId));
+            if (userDoc.exists()) {
+              return { 
+                ...reg, 
+                userName: userDoc.data().fullName || userDoc.data().name || "Student" 
+              };
+            }
+          } catch (err) {
+            console.error("Error fetching user name:", err);
+          }
+        }
+        return reg;
+      }));
+
+      setRegistrations(enrichedRegs);
     };
 
     fetchRegistrations();

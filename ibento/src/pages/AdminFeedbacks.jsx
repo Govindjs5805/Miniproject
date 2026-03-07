@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import AdminLayout from "../components/Admin/AdminLayout";
@@ -11,10 +11,8 @@ function AdminFeedbacks() {
   const [feedbacks, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // 1. Fetch events organized by this club
   useEffect(() => {
     const fetchEvents = async () => {
-      // Assuming events have a clubId field
       const q = query(collection(db, "events"), where("clubId", "==", clubId));
       const snap = await getDocs(q);
       setEvents(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
@@ -22,7 +20,6 @@ function AdminFeedbacks() {
     if (clubId) fetchEvents();
   }, [clubId]);
 
-  // 2. Fetch feedbacks when an event is selected
   useEffect(() => {
     const fetchFeedbacks = async () => {
       if (!selectedEvent) {
@@ -31,7 +28,6 @@ function AdminFeedbacks() {
       }
       setLoading(true);
       try {
-        // Correct collection name: "feedbacks"
         const q = query(
           collection(db, "feedbacks"), 
           where("eventId", "==", selectedEvent)
@@ -49,32 +45,18 @@ function AdminFeedbacks() {
 
   return (
     <AdminLayout>
-      <div style={{ 
-        padding: "40px", 
-        background: "#0a0a0c", 
-        minHeight: "100vh", 
-        color: "#fff",
-        fontFamily: "Inter, sans-serif" 
-      }}>
+      <div style={{ padding: "40px", background: "#0a0a0c", minHeight: "100vh", color: "#fff", fontFamily: "Inter, sans-serif" }}>
         <h2 style={{ fontSize: "2.5rem", fontWeight: "800", marginBottom: "10px", color: "#a78bfa" }}>
           Event Feedbacks
         </h2>
-        <p style={{ color: "#94a3b8", marginBottom: "30px" }}>Select an event to see what students are saying.</p>
+        <p style={{ color: "#94a3b8", marginBottom: "30px" }}>Detailed responses from participants.</p>
 
         <select 
           onChange={(e) => setSelectedEvent(e.target.value)} 
           style={{ 
-            padding: "15px", 
-            width: "100%", 
-            maxWidth: "450px", 
-            borderRadius: "12px", 
-            background: "rgba(255,255,255,0.05)", 
-            color: "#fff", 
-            border: "1px solid rgba(255,255,255,0.1)",
-            backdropFilter: "blur(10px)",
-            fontSize: "1rem",
-            marginBottom: "40px",
-            outline: "none"
+            padding: "15px", width: "100%", maxWidth: "450px", borderRadius: "12px", 
+            background: "rgba(255,255,255,0.05)", color: "#fff", 
+            border: "1px solid rgba(255,255,255,0.1)", marginBottom: "40px", outline: "none"
           }}
         >
           <option value="" style={{background: "#111"}}>-- Choose an Event --</option>
@@ -83,55 +65,41 @@ function AdminFeedbacks() {
           ))}
         </select>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))", gap: "25px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr))", gap: "25px" }}>
           {loading ? (
             <p style={{ color: "#a78bfa" }}>Loading feedbacks...</p>
           ) : feedbacks.length > 0 ? (
             feedbacks.map((f, i) => (
-              <div key={i} style={{ 
-                background: "rgba(255,255,255,0.03)", 
-                padding: "25px", 
-                borderRadius: "20px", 
-                backdropFilter: "blur(15px)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                transition: "0.3s",
-                position: "relative",
-                overflow: "hidden"
-              }}>
-                <div style={{ 
-                    position: "absolute", 
-                    top: 0, left: 0, width: "4px", height: "100%", 
-                    background: f.rating >= 4 ? "#10b981" : "#f59e0b" 
-                }}></div>
-
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
-                  <strong style={{ fontSize: "1.1rem", color: "#f8fafc" }}>{f.userName}</strong>
-                  <span style={{ 
-                    background: "rgba(167, 139, 250, 0.1)", 
-                    padding: "4px 10px", 
-                    borderRadius: "50px", 
-                    color: "#a78bfa", 
-                    fontSize: "0.8rem",
-                    fontWeight: "bold"
-                  }}>
-                    {"⭐".repeat(f.rating)}
-                  </span>
+              <div key={i} style={{ background: "rgba(255,255,255,0.03)", padding: "25px", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.08)" }}>
+                <div style={{ marginBottom: "15px" }}>
+                  <strong style={{ fontSize: "1.2rem", color: "#a78bfa" }}>{f.userName || "Student"}</strong>
+                  <br />
                 </div>
 
-                <p style={{ color: "#cbd5e1", lineHeight: "1.6", fontStyle: "italic", marginBottom: "20px" }}>
-                  "{f.comment}"
-                </p>
+                <div style={{ background: "rgba(0,0,0,0.3)", padding: "15px", borderRadius: "12px" }}>
+                  {f.responses && Object.keys(f.responses).length > 0 ? (
+                    Object.entries(f.responses).map(([question, answer]) => (
+                      <div key={question} style={{ marginBottom: "12px", borderBottom: "1px solid rgba(255,255,255,0.05)", paddingBottom: "8px" }}>
+                        <p style={{ fontSize: "0.8rem", color: "#94a3b8", margin: "0 0 4px 0" }}>{question}</p>
+                        <p style={{ fontSize: "1rem", color: "#f8fafc", margin: 0, fontWeight: "500" }}>
+                          {typeof answer === 'number' ? "⭐".repeat(answer) : (answer || "N/A")}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <p style={{ color: "#64748b", margin: 0, fontSize: "0.9rem" }}>No response content found.</p>
+                  )}
+                </div>
 
-                <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "15px" }}>
-                    <small style={{ color: "#64748b", display: "block" }}>
-                      Submitted: {f.submittedAt?.toDate().toLocaleDateString()}
-                    </small>
-                    <small style={{ color: "#475569" }}>{f.userEmail}</small>
+                <div style={{ marginTop: "15px" }}>
+                  <small style={{ color: "#475569" }}>
+                    Submitted: {f.submittedAt?.toDate ? f.submittedAt.toDate().toLocaleString() : "Recently"}
+                  </small>
                 </div>
               </div>
             ))
           ) : (
-            selectedEvent && <p style={{ color: "#64748b", gridColumn: "1/-1" }}>No feedback submitted for this event yet.</p>
+            selectedEvent && <p style={{ color: "#64748b" }}>No feedback submitted for this event yet.</p>
           )}
         </div>
       </div>

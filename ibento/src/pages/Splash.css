@@ -1,50 +1,183 @@
-.splash {
-  position: fixed; /* Ensures it stays on top of everything */
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: radial-gradient(circle at top left, #1e1b4b, #0f0c29);
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+.hyper-splash {
+  position: fixed;
+  inset: 0;
+  background: #010103;
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10000; /* Higher than any Navbar */
-}
-
-.splash-inner {
-  text-align: center;
-  color: #ffffff;
-}
-
-.logo {
-  font-size: 4rem;
-  font-weight: 900;
-  letter-spacing: 15px;
-  /* Added a neon text shadow */
-  text-shadow: 0 0 20px rgba(168, 85, 247, 0.6), 0 0 40px rgba(168, 85, 247, 0.4);
-  animation: pop 1.5s ease forwards;
-  margin: 0;
-}
-
-.loading-bar {
-  width: 250px;
-  height: 4px; /* Thinner looks more modern */
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  margin: 40px auto 0;
+  z-index: 10000;
   overflow: hidden;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  font-family: 'JetBrains Mono', monospace;
 }
 
-.loading-fill {
+/* 1. Background Environment */
+.space-grid {
+  position: absolute;
+  inset: -100%;
+  background-image: 
+    linear-gradient(rgba(124, 58, 237, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 58, 237, 0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  transform: perspective(500px) rotateX(60deg) translateY(0);
+  animation: gridTravel 15s linear infinite;
+}
+
+.vignette-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 30%, #000 100%);
+  z-index: 2;
+}
+
+/* 2. Corner UI Brackets */
+.corner {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 10;
+  transition: 0.3s;
+}
+.corner::before {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border: 2px solid #7c3aed;
+}
+
+.top-left { top: 40px; left: 40px; }
+.top-left::before { top: -2px; left: -2px; border-right: 0; border-bottom: 0; }
+
+.top-right { top: 40px; right: 40px; }
+.top-right::before { top: -2px; right: -2px; border-left: 0; border-bottom: 0; }
+
+.bottom-left { bottom: 40px; left: 40px; }
+.bottom-left::before { bottom: -2px; left: -2px; border-right: 0; border-top: 0; }
+
+.bottom-right { bottom: 40px; right: 40px; }
+.bottom-right::before { bottom: -2px; right: -2px; border-left: 0; border-top: 0; }
+
+/* 3. Side Data Reads */
+.ui-meta {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.left { left: 60px; }
+.right { right: 60px; text-align: right; }
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.3);
+}
+.val { color: #7c3aed; font-weight: bold; margin-top: 4px; }
+
+/* 4. Central Hub */
+.logo-box {
+  position: relative;
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.glitch-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 6.5rem;
+  letter-spacing: 30px;
+  margin: 0;
+  padding-left: 30px;
+  color: #fff;
+  text-shadow: 0 0 30px rgba(124, 58, 237, 0.4);
+  animation: logoAppear 1.2s ease-out forwards;
+}
+
+.reflection {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 6.5rem;
+  letter-spacing: 30px;
+  margin-top: -45px;
+  opacity: 0.05;
+  transform: scaleY(-1);
+  filter: blur(8px);
+  mask-image: linear-gradient(to bottom, black, transparent);
+}
+
+/* 5. Loading Bar */
+.load-container {
+  width: 480px;
+  margin: 0 auto;
+}
+
+.bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  margin-bottom: 12px;
+  color: #7c3aed;
+  font-weight: bold;
+}
+
+.power-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.03);
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+}
+
+.power-fill {
   height: 100%;
-  /* Gradient fill for the bar */
-  background: linear-gradient(90deg, #7c3aed, #a855f7); 
-  box-shadow: 0 0 15px #a855f7;
-  transition: width 0.1s linear;
+  background: #fff;
+  box-shadow: 0 0 25px rgba(124, 58, 237, 0.8);
+  position: relative;
+  transition: width 0.4s cubic-bezier(0.1, 1, 0.1, 1);
 }
 
-@keyframes pop {
-  0% { opacity: 0; transform: scale(0.8) translateY(20px); filter: blur(10px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+.glow-tip {
+  position: absolute;
+  right: 0;
+  width: 20px;
+  height: 100%;
+  background: #fff;
+  filter: blur(5px);
+}
+
+.ticks {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5px;
+  pointer-events: none;
+}
+.ticks span { width: 1px; height: 100%; background: rgba(255,255,255,0.1); }
+
+.system-msg {
+  font-size: 0.55rem;
+  color: rgba(255,255,255,0.2);
+  margin-top: 15px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* 6. Animations */
+@keyframes gridTravel {
+  from { background-position: 0 0; }
+  to { background-position: 0 120px; }
+}
+
+@keyframes logoAppear {
+  0% { opacity: 0; transform: scale(0.8); filter: blur(20px); letter-spacing: 50px; }
+  100% { opacity: 1; transform: scale(1); filter: blur(0); letter-spacing: 30px; }
 }

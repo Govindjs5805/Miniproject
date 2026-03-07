@@ -1,4 +1,4 @@
-/* --- LAYOUT & THEME --- */
+/* --- YOUR ORIGINAL CODE --- */
 .home-page-layout {
   background: #000;
   color: white;
@@ -25,7 +25,6 @@
   position: relative;
 }
 
-/* --- THE FORCED GRADIENT FIX --- */
 .massive-title, .welcome-text {
   display: block !important;
   font-size: 4.5rem !important;
@@ -34,20 +33,14 @@
   letter-spacing: -2px !important;
   margin-top: 50px !important;
   margin-bottom: 30px !important;
-  
-  /* Force the top-to-bottom white gradient */
   background: linear-gradient(180deg, #ffffff 0%, rgba(151, 102, 231, 0.4) 100%) !important;
-  
-  /* Force clipping to text to remove the purple/blue color */
   -webkit-background-clip: text !important;
   background-clip: text !important; 
   -webkit-text-fill-color: transparent !important;
   color: transparent !important;
-  
   text-transform: uppercase !important;
 }
 
-/* --- HORIZONTAL GRID --- */
 .events-grid {
   display: flex;
   overflow-x: auto;
@@ -57,7 +50,6 @@
 }
 .events-grid::-webkit-scrollbar { display: none; }
 
-/* --- MODERN EVENT CARD --- */
 .modern-event-card {
   flex: 0 0 350px;
   background: rgba(255, 255, 255, 0.03);
@@ -93,7 +85,6 @@
   transition: transform 0.8s ease;
 }
 
-/* Float Badges */
 .modern-date-badge {
   position: absolute;
   top: 15px;
@@ -126,11 +117,10 @@
   transition: 0.3s;
 }
 
-/* --- COMMUNITIES --- */
 .organizers-section { 
-  padding: 50px 120px; 
+  padding: 30px 120px; 
   background: radial-gradient(circle at top, #1a1a2e 0%, #050505 60%);
-  padding-bottom: 200px; 
+  padding-bottom: 170px; 
 }
 
 .organizers-row {
@@ -167,3 +157,25 @@
 }
 
 .community-circle-card:hover img { filter: grayscale(0) brightness(0); }
+
+/* --- NEW RESPONSIVE OVERRIDES (ADDED) --- */
+@media (max-width: 768px) {
+  .massive-title, .welcome-text {
+    font-size: 2.5rem !important; /* Shrinks the text so it doesn't cut off */
+    letter-spacing: -1px !important;
+  }
+  
+  .organizers-section {
+    padding: 30px 20px; /* Fixes the squashed community icons */
+    padding-bottom: 100px;
+  }
+
+  .modern-event-card {
+    flex: 0 0 300px; /* Makes card slightly smaller on phone */
+  }
+
+  .community-avatar {
+    width: 90px;
+    height: 90px;
+  }
+}
