@@ -27,13 +27,14 @@ function Navbar() {
       </div>
 
       <div className="nav-links">
-
         <NavLink to="/home">Home</NavLink>
         <NavLink to="/events">Events</NavLink>
 
         {user && role === "student" && (
           <>
             <NavLink to="/dashboard">My Events</NavLink>
+            {/* ADDED PROFILE LINK FOR STUDENTS */}
+            <NavLink to="/profile">Profile</NavLink> 
           </>
         )}
 

@@ -1,0 +1,196 @@
+:root {
+  --glass-accent: #8b5cf6; /* Vibrant IBENTO Purple */
+  --glass-bg: rgba(255, 255, 255, 0.04); /* Frosted Glass Base */
+  --glass-glow: 0 8px 32px rgba(139, 92, 246, 0.2); /* Subtle Purple Glow */
+  --ibento-bg: #0a0a1a;
+  --text-dim: #94a3b8; /* Dimmed Gray/Blue */
+  --glass-border: rgba(255, 255, 255, 0.08); /* Faint Glass Edge */
+  --student-name: #22d3ee; /* VISIBILITY FIX: Brilliant Cyan for Name */
+}
+
+/* Page Wrapper */
+.profile-wrapper-glass {
+  max-width: 900px;
+  margin: 50px auto;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  color: #fff;
+}
+
+/* === CLASSY GLASS SUMMARY SECTION === */
+.summary-section-glass {
+  display: flex;
+  gap: 30px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px); /* Crucial for glass effect */
+  -webkit-backdrop-filter: blur(12px);
+  padding: 35px;
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-glow);
+  margin-bottom: 30px;
+}
+
+.avatar-wrapper-glass {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar-circle-glass {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--glass-accent), #7c3aed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.8rem;
+  font-weight: 800;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+}
+
+.summary-info-glass {
+  flex: 1;
+}
+
+.student-label {
+  font-size: 0.7rem;
+  color: var(--glass-accent);
+  letter-spacing: 2px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+/* VISIBILITY FIX: Brilliant Cyan Name */
+.student-name-glass {
+  font-size: 1.8rem;
+  margin: 0;
+  color: var(--student-name);
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.2); /* Soft Cyan Glow */
+}
+
+.student-meta {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  margin: 5px 0 20px 0;
+}
+
+.contact-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.contact-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-block .info-label {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.contact-block .info-value {
+  font-size: 1rem;
+  color: #fff;
+  margin-top: 3px;
+}
+
+.divider-glass {
+  border: 0;
+  border-top: 1px solid var(--glass-border);
+  margin: 30px 0;
+}
+
+/* === GLASS EDIT SECTION === */
+.edit-section-glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 35px;
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-glow);
+}
+
+.edit-section-title {
+  font-size: 1.3rem;
+  color: #fff;
+  margin-bottom: 25px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+/* Glass Inputs */
+.input-group input {
+  width: 100%;
+  padding: 14px;
+  background: rgba(0, 0, 0, 0.2); /* Deep input focus */
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+  border-color: var(--glass-accent);
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.profile-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 25px;
+}
+
+.save-btn-glass {
+  padding: 14px 35px;
+  background-color: var(--glass-accent);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.save-btn-glass:hover {
+  background-color: var(--ibento-purple-dark);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+  transform: translateY(-2px);
+}
+
+.loading-glass {
+  color: var(--glass-accent);
+  text-align: center;
+  padding: 50px;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .summary-section-glass { flex-direction: column; align-items: center; text-align: center; }
+  .form-row { grid-template-columns: 1fr; }
+  .profile-wrapper-glass { padding: 0 15px; }
+}
