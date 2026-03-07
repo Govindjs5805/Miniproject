@@ -17,51 +17,62 @@ function Navbar() {
     navigate("/login");
   };
 
+  const closeMenu = () => setIsMobileMenuOpen(false);
+
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        {/* Logo Section */}
-        <div className="nav-logo" onClick={() => { navigate("/"); setIsMobileMenuOpen(false); }}>
-          IBENTO
+    <>
+      <nav className="navbar">
+        <div className="navbar-container">
+          {/* LOGO */}
+          <div className="nav-logo" onClick={() => { navigate("/"); closeMenu(); }}>
+            IBENTO
+          </div>
+
+          {/* LINKS SECTION */}
+          <div className={`nav-links ${isMobileMenuOpen ? "mobile-active" : ""}`}>
+            <NavLink to="/home" onClick={closeMenu}>Home</NavLink>
+            <NavLink to="/events" onClick={closeMenu}>Events</NavLink>
+
+            {user && role === "student" && (
+              <NavLink to="/dashboard" onClick={closeMenu}>My Events</NavLink>
+            )}
+
+            {user && role === "clubLead" && (
+              <>
+                <NavLink to="/admin" onClick={closeMenu}>Dashboard</NavLink>
+                <NavLink to="/admin/create-event" onClick={closeMenu}>Create Event</NavLink>
+              </>
+            )}
+             {user && role === "superAdmin" && (
+              <>
+                <NavLink to="/superadmin" onClick={closeMenu}>Dashboard</NavLink>
+              </>
+            )}
+
+            {user && (
+              <button className="logout-btn" onClick={handleLogout}>
+                Logout
+              </button>
+            )}
+          </div>
+
+          {/* HAMBURGER ICON */}
+          <div 
+            className={`menu-toggle ${isMobileMenuOpen ? "active" : ""}`} 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
         </div>
+      </nav>
 
-        {/* The Spacer - This is the secret to Laptop alignment */}
-        <div className="nav-spacer"></div>
-
-        {/* Links Section */}
-        <div className={`nav-links ${isMobileMenuOpen ? "mobile-active" : ""}`}>
-          <NavLink to="/home" onClick={() => setIsMobileMenuOpen(false)}>Home</NavLink>
-          <NavLink to="/events" onClick={() => setIsMobileMenuOpen(false)}>Events</NavLink>
-
-          {user && role === "student" && (
-            <NavLink to="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>My Events</NavLink>
-          )}
-
-          {user && role === "clubLead" && (
-            <>
-              <NavLink to="/admin" onClick={() => setIsMobileMenuOpen(false)}>Dashboard</NavLink>
-              <NavLink to="/admin/create-event" onClick={() => setIsMobileMenuOpen(false)}>Create Event</NavLink>
-            </>
-          )}
-
-          {user && (
-            <button className="logout-btn" onClick={handleLogout}>
-              Logout
-            </button>
-          )}
-        </div>
-
-        {/* Hamburger Icon (Visible only on mobile) */}
-        <div 
-          className={`menu-toggle ${isMobileMenuOpen ? "active" : ""}`} 
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </div>
-    </nav>
+      {/* CLICK OUTSIDE TO CLOSE - Only shows when menu is open */}
+      {isMobileMenuOpen && (
+        <div className="nav-overlay" onClick={closeMenu}></div>
+      )}
+    </>
   );
 }
 

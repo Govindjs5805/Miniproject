@@ -15,11 +15,12 @@
 
 .navbar-container {
   display: flex;
+  justify-content: space-between; 
   align-items: center;
   width: 100%;
-  max-width: 1400px; /* Gives laptop screens breathing room */
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 30px;
+  padding: 0 40px;
 }
 
 .nav-logo {
@@ -29,11 +30,6 @@
   letter-spacing: 2px;
   cursor: pointer;
   flex-shrink: 0;
-}
-
-/* THE FIX: This pushes everything after it to the right */
-.nav-spacer {
-  flex-grow: 1;
 }
 
 .nav-links {
@@ -47,7 +43,7 @@
   color: #ffffff;
   font-weight: 500;
   font-size: 16px;
-  transition: 0.3s ease;
+  transition: 0.3s;
   white-space: nowrap;
 }
 
@@ -66,13 +62,21 @@
   transition: 0.3s;
 }
 
-/* MOBILE TOGGLE STYLING */
+.nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1500;
+}
+
 .menu-toggle {
   display: none;
   flex-direction: column;
   gap: 5px;
   cursor: pointer;
-  margin-left: 20px;
 }
 
 .menu-toggle span {
@@ -83,36 +87,32 @@
   transition: 0.3s;
 }
 
-/* --- RESPONSIVE MEDIA QUERY --- */
 @media (max-width: 950px) {
-  .nav-spacer {
-    display: none; /* Spacer not needed on mobile */
-  }
-
   .menu-toggle {
     display: flex;
+    z-index: 2001;
   }
 
   .nav-links {
     position: fixed;
     top: 0;
-    right: -100%; /* Hidden */
+    right: -100%; 
     height: 100vh;
     width: 280px;
     background: #0f0c29;
     flex-direction: column;
     justify-content: center;
     gap: 30px;
-    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: right 0.4s ease-in-out;
     box-shadow: -10px 0 30px rgba(0,0,0,0.5);
     padding: 2rem;
+    z-index: 2000;
   }
 
   .nav-links.mobile-active {
-    right: 0; /* Slide In */
+    right: 0;
   }
 
-  /* Animate Hamburger to X */
   .menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
   .menu-toggle.active span:nth-child(2) { opacity: 0; }
   .menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
