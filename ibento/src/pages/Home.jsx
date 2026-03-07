@@ -48,7 +48,7 @@ function Home() {
 
       {/* 2. Logo Strip */}
       <div className="branding-strip">
-        <CurvedLoop logos={forumLogos} speed={0.03 } curveAmount={0} logoSize={90} />
+        <CurvedLoop logos={forumLogos} speed={0.04} curveAmount={0} logoSize={90} />
       </div>
 
       {/* 3. Events Section */}
