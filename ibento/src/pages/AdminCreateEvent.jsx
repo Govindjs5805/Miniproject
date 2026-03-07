@@ -32,11 +32,26 @@ function AdminCreateEvent() {
   // Helpers
   const addField = () => setRegistrationFields([...registrationFields, { id: Date.now(), label: "", type: "text", required: true, options: [] }]);
   const removeField = (id) => setRegistrationFields(registrationFields.filter(f => f.id !== id));
-  const updateField = (id, key, value) => setRegistrationFields(registrationFields.map(f => f.id === id ? { ...f, [key]: value } : f));
-  
+  const updateField = (id, key, value) => {
+    // If updating options via comma-string, convert to array
+    if (key === "options") {
+      const optionsArray = value.split(",").map(opt => opt.trim());
+      setRegistrationFields(registrationFields.map(f => f.id === id ? { ...f, [key]: optionsArray } : f));
+    } else {
+      setRegistrationFields(registrationFields.map(f => f.id === id ? { ...f, [key]: value } : f));
+    }
+  };
+
   const addFeedbackField = () => setFeedbackFields([...feedbackFields, { id: Date.now(), label: "", type: "text", required: true, options: [] }]);
   const removeFeedbackField = (id) => setFeedbackFields(feedbackFields.filter(f => f.id !== id));
-  const updateFeedbackField = (id, key, value) => setFeedbackFields(feedbackFields.map(f => f.id === id ? { ...f, [key]: value } : f));
+  const updateFeedbackField = (id, key, value) => {
+    if (key === "options") {
+      const optionsArray = value.split(",").map(opt => opt.trim());
+      setFeedbackFields(feedbackFields.map(f => f.id === id ? { ...f, [key]: optionsArray } : f));
+    } else {
+      setFeedbackFields(feedbackFields.map(f => f.id === id ? { ...f, [key]: value } : f));
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,10 +85,10 @@ function AdminCreateEvent() {
 
       // Show Toast instead of Alert
       setShowSuccess(true);
-      
+
       // Redirect or Reset after 2 seconds
       setTimeout(() => {
-        window.location.href = "/admin/dashboard"; 
+        window.location.href = "/admin/dashboard";
       }, 2000);
 
     } catch (error) {
@@ -86,7 +101,7 @@ function AdminCreateEvent() {
   return (
     <AdminLayout>
       <div className="create-event-wrapper">
-        
+
         {/* SUCCESS TOAST */}
         {showSuccess && (
           <div className="success-toast-container">
@@ -114,7 +129,7 @@ function AdminCreateEvent() {
               <input type="text" placeholder="Venue" value={venue} onChange={(e) => setVenue(e.target.value)} required />
               <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} rows="4" />
               <input type="number" placeholder="Seat Limit" value={seatLimit} onChange={(e) => setSeatLimit(e.target.value)} required />
-              
+
               <div className="file-input-group">
                 <label className="ticket-type-label">Event Poster:</label>
                 <input type="file" accept="image/*" onChange={(e) => setPosterFile(e.target.files[0])} />
@@ -142,12 +157,25 @@ function AdminCreateEvent() {
                     <span>Question #{index + 1}</span>
                     {index !== 0 && <button type="button" className="remove-btn" onClick={() => removeField(field.id)}>✕</button>}
                   </div>
-                  <input type="text" placeholder="Question Label" value={field.label} onChange={(e) => updateField(field.id, "label", e.target.value)} required />
+                  <input type="text" placeholder="Question Label (e.g. Gender)" value={field.label} onChange={(e) => updateField(field.id, "label", e.target.value)} required />
                   <select className="field-select" value={field.type} onChange={(e) => updateField(field.id, "type", e.target.value)}>
                     <option value="text">Short Answer</option>
                     <option value="number">Number</option>
                     <option value="select">Dropdown</option>
                   </select>
+
+                  {/* Options input for Dropdown type */}
+                  {field.type === "select" && (
+                    <div className="options-input-area animate-in">
+                      <input 
+                        type="text" 
+                        placeholder="Options (comma separated: Male, Female, Other)" 
+                        value={field.options.join(", ")} 
+                        onChange={(e) => updateField(field.id, "options", e.target.value)}
+                        required
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
               <button type="button" className="add-field-btn" onClick={addField}>+ Add Field</button>
@@ -173,6 +201,19 @@ function AdminCreateEvent() {
                     <option value="text">Detailed Comment</option>
                     <option value="select">Multiple Choice</option>
                   </select>
+
+                  {/* Options input for Multiple Choice type */}
+                  {field.type === "select" && (
+                    <div className="options-input-area animate-in">
+                      <input 
+                        type="text" 
+                        placeholder="Options (comma separated: Good, Average, Poor)" 
+                        value={field.options.join(", ")} 
+                        onChange={(e) => updateFeedbackField(field.id, "options", e.target.value)}
+                        required
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
               <button type="button" className="add-field-btn" onClick={addFeedbackField}>+ Add Question</button>
