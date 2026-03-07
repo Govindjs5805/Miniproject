@@ -12,9 +12,10 @@ function FeedbackForm() {
   
   const [eventData, setEventData] = useState(null);
   const [responses, setResponses] = useState({});
-  const [activeSchema, setActiveSchema] = useState([]); // Stores the schema to render
+  const [activeSchema, setActiveSchema] = useState([]); 
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
+  const [showSuccess, setShowSuccess] = useState(false); // Success Toast State
 
   useEffect(() => {
     const fetchEventSchema = async () => {
@@ -24,7 +25,6 @@ function FeedbackForm() {
           const data = eventDoc.data();
           setEventData(data);
           
-          // FALLBACK: If database schema is missing, use these two fields
           const schema = data.feedbackSchema && data.feedbackSchema.length > 0 
             ? data.feedbackSchema 
             : [
@@ -69,8 +69,14 @@ function FeedbackForm() {
         submittedAt: serverTimestamp(),
       });
 
-      alert("Feedback received! Redirecting...");
-      navigate("/dashboard");
+      // Show the Green Toast
+      setShowSuccess(true);
+
+      // Redirect after 2 seconds
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 2000);
+
     } catch (err) {
       alert("Error submitting feedback: " + err.message);
     } finally {
@@ -82,6 +88,17 @@ function FeedbackForm() {
 
   return (
     <div className="feedback-outer-container">
+      
+      {/* GREEN TOP-RIGHT SUCCESS TOAST */}
+      {showSuccess && (
+        <div className="success-toast-container">
+          <div className="success-toast-content">
+            <span className="toast-icon">✓</span>
+            <p>Feedback Received Successfully!</p>
+          </div>
+        </div>
+      )}
+
       <div className="glass-feedback-card">
         <div className="brand-logo-small">IBENTO</div>
         <h2 className="main-title">Share Your Thoughts</h2>
@@ -106,7 +123,6 @@ function FeedbackForm() {
                       ★
                     </button>
                   ))}
-                  <span className="rating-text">{responses[field.label]}/5 Stars</span>
                 </div>
               ) : field.type === "select" ? (
                 <select 

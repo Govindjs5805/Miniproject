@@ -9,6 +9,7 @@ function Navbar() {
   const { user, role } = useAuth();
   const navigate = useNavigate();
   const [dark, setDark] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // New state for mobile toggle
 
   useEffect(() => {
     document.body.classList.toggle("dark", dark);
@@ -17,49 +18,65 @@ function Navbar() {
   const handleLogout = async () => {
     await signOut(auth);
     localStorage.removeItem("role");
+    setIsMobileMenuOpen(false); // Close menu on logout
     navigate("/login");
+  };
+
+  const toggleMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMobileMenuOpen(false);
   };
 
   return (
     <nav className="navbar">
-      <div className="nav-logo" onClick={() => navigate("/")}>
-        IBENTO
-      </div>
+      <div className="navbar-container">
+        <div className="nav-logo" onClick={() => { navigate("/"); closeMenu(); }}>
+          IBENTO
+        </div>
 
-      <div className="nav-links">
+        {/* Hamburger Menu Icon */}
+        <div className={`menu-toggle ${isMobileMenuOpen ? "active" : ""}`} onClick={toggleMenu}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
 
-        <NavLink to="/home">Home</NavLink>
-        <NavLink to="/events">Events</NavLink>
+        {/* Links Section */}
+        <div className={`nav-links ${isMobileMenuOpen ? "mobile-active" : ""}`}>
+          <NavLink to="/home" onClick={closeMenu}>Home</NavLink>
+          <NavLink to="/events" onClick={closeMenu}>Events</NavLink>
 
-        {user && role === "student" && (
-          <>
-            <NavLink to="/dashboard">My Events</NavLink>
-          </>
-        )}
+          {user && role === "student" && (
+            <NavLink to="/dashboard" onClick={closeMenu}>My Events</NavLink>
+          )}
 
-        {user && role === "clubLead" && (
-          <>
-            <NavLink to="/admin">Dashboard</NavLink>
-            <NavLink to="/admin/create-event">Create Event</NavLink>
-          </>
-        )}
+          {user && role === "clubLead" && (
+            <>
+              <NavLink to="/admin" onClick={closeMenu}>Dashboard</NavLink>
+              <NavLink to="/admin/create-event" onClick={closeMenu}>Create Event</NavLink>
+            </>
+          )}
 
-        {user && role === "superAdmin" && (
-          <NavLink to="/superadmin">Dashboard</NavLink>
-        )}
+          {user && role === "superAdmin" && (
+            <NavLink to="/superadmin" onClick={closeMenu}>Dashboard</NavLink>
+          )}
 
-        {!user && (
-          <>
-            <NavLink to="/login">Login</NavLink>
-            <NavLink to="/register">Register</NavLink>
-          </>
-        )}
+          {!user && (
+            <>
+              <NavLink to="/login" onClick={closeMenu}>Login</NavLink>
+              <NavLink to="/register" onClick={closeMenu}>Register</NavLink>
+            </>
+          )}
 
-        {user && (
-          <button className="logout-btn" onClick={handleLogout}>
-            Logout
-          </button>
-        )}
+          {user && (
+            <button className="logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          )}
+        </div>
       </div>
     </nav>
   );

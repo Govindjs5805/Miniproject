@@ -8,7 +8,7 @@
   display: flex;
   align-items: center;
   z-index: 1000;
-  background: rgba(15, 12, 41, 0.7);
+  background: rgba(15, 12, 41, 0.85); /* Slightly more opaque for better readability */
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -19,7 +19,7 @@
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
-  justify-content: space-between; /* Fixes alignment automatically */
+  justify-content: space-between; /* This pushes logo to left and links to right */
   align-items: center;
   padding: 0 1.5rem;
 }
@@ -30,12 +30,13 @@
   color: rgb(224, 191, 242);
   letter-spacing: 2px;
   text-decoration: none;
+  cursor: pointer;
   flex-shrink: 0;
 }
 
 .nav-links {
   display: flex;
-  gap: 25px;
+  gap: 30px; /* Reduced gap for desktop to fit better */
   align-items: center;
 }
 
@@ -53,7 +54,7 @@
   color: #cd93ed;
 }
 
-/* Mobile Menu Toggle */
+/* Mobile Menu Toggle (Hamburger) */
 .menu-toggle {
   display: none;
   flex-direction: column;
@@ -71,6 +72,17 @@
   transition: 0.3s;
 }
 
+/* Transform Hamburger to X when active */
+.menu-toggle.active span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+.menu-toggle.active span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
 /* --- Responsive Layout --- */
 @media (max-width: 950px) {
   .menu-toggle {
@@ -82,12 +94,11 @@
     top: 0;
     right: -100%; /* Hidden off-screen */
     height: 100vh;
-    width: 280px;
-    background: rgba(15, 12, 41, 0.98);
-    backdrop-filter: blur(20px);
+    width: 260px; /* Slightly narrower for mobile */
+    background: #0f0c29; /* Solid background for mobile drawer */
     flex-direction: column;
     justify-content: center;
-    gap: 35px;
+    gap: 30px;
     transition: right 0.4s ease-in-out;
     box-shadow: -10px 0 30px rgba(0,0,0,0.5);
     padding: 2rem;
@@ -98,7 +109,7 @@
   }
 
   .nav-links a {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     width: 100%;
     text-align: center;
   }

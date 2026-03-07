@@ -74,7 +74,6 @@ function AdminFeedbacks() {
                 <div style={{ marginBottom: "15px" }}>
                   <strong style={{ fontSize: "1.2rem", color: "#a78bfa" }}>{f.userName || "Student"}</strong>
                   <br />
-                  <small style={{ color: "#64748b" }}>{f.userEmail}</small>
                 </div>
 
                 <div style={{ background: "rgba(0,0,0,0.3)", padding: "15px", borderRadius: "12px" }}>
