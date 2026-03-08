@@ -1,49 +1,50 @@
 # Miniproject
-# IBENTO
+# IBENTO 
 
-## Triple-Tier Event Management Ecosystem
+## Triple-Tiered Event Management & Governance Ecosystem
 
-IBENTO is a centralized web ecosystem designed to bridge the gap between Student Clubs, College Administration, and the Student Body by replacing fragmented social media announcements with a structured governance model.
+IBENTO is a centralized web-based platform designed to bridge the communication gap between Student Clubs, College Administration, and the Student Body. It replaces fragmented social media announcements with a structured, logic-driven governance model.
 
-### Problem & Solution
+### Features
 
-The Problem: Fragmented event info, manual registration tracking, unauthorized "fake" listings, and a lack of secure document sharing.
+Triple-Tier Access: Dedicated dashboards for SuperAdmins (Moderation), Club Leads (Orchestration), and Students (Participation).
 
-The Solution: A Serverless 3-Tier System featuring Role-Based Access Control (RBAC), real-time seat synchronization, and a secure "Document Vault" for official resources.
+Dynamic Form Engine: Custom registration schemas that adapt to specific event requirements (e.g., T-shirt size, Roll No).
 
-### Core Modules
+The Document Vault: A secure, authenticated repository for official event rulebooks, NOCs, and itineraries.
 
-Identity & Access: Secure Google/Email OAuth with SuperAdmin, Club Lead, and Student roles.
+Real-Time Sync: Instant seat-count updates and event status tracking using WebSocket-based listeners.
 
-Event Orchestration: Full CRUD tools for Club Leads to manage event lifecycles and custom forms.
-
-Skip-Logic Registration: Automated routing that adapts based on "Free vs. Paid" event status.
-
-Document Vault: Secure Firebase Storage for authenticated PDF rulebook and poster downloads.
-
-Governance Panel: SuperAdmin interface for club verification and platform-wide moderation.
+Skip-Logic Pipeline: Automated registration routing that differentiates between "Free" and "Paid" events.
 
 ### Tech Stack
 
-Frontend: React.js (Glass-morphism UI) | Vercel Hosting
+Frontend: React.js (Glass-morphism UI)
 
-Backend-as-a-Service and Database: Firebase (Auth, Firestore, Storage)
+Backend-as-a-Service: Firebase (Auth, Firestore, Storage)
 
-Logic: React Context API | Firestore Security Rules
+Hosting: Vercel Edge Network
 
-### Key Requirements
+Security: JWT Custom Claims & Firestore Declarative Rules
 
-Functional: Triple-tier auth, dynamic form generation, real-time seat management, and CSV data export.
+### Software & Hardware Requirements
 
-Non-Functional: <2s latency for sync, 99.9% uptime, and serverless auto-scaling.
+OS: Windows / Linux / macOS
 
-Hardware: Intel i3+, 4GB RAM, and high-speed internet for real-time WebSockets.
+Browser: Chrome, Firefox, or Edge (Modern standards)
+
+Processor: Intel i3 or above
+
+RAM: Minimum 4 GB
+
+Network: High-speed internet for real-time data syncing
 
 ### Conclusion
 
-IBENTO streamlines campus governance into a secure, scalable ecosystem. By integrating Dynamic Form Logic and a Real-Time Sync Engine, it reduces administrative overhead while significantly increasing student engagement.
+IBENTO successfully centralizes campus event governance into a single, secure ecosystem. By utilizing a Serverless 3-Tier Architecture, the platform provides a scalable solution that reduces administrative overhead while significantly increasing student engagement and data integrity.
 
-### Authors: 
+### Authors
+
 Govind J.S
 
 Ahlada A Adrija
