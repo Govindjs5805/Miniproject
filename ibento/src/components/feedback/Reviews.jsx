@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { db } from "../../firebase";
-import { collection, getDocs, query, limit } from "firebase/firestore";
+import { collection, query, onSnapshot, limit } from "firebase/firestore"; 
 import { FaStar, FaQuoteRight } from 'react-icons/fa';
 import './Reviews.css';
 
@@ -8,38 +8,42 @@ const Reviews = () => {
   const [realReviews, setRealReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // The hook must be at the top level of the component
   useEffect(() => {
-  const fetchTopFeedbacks = async () => {
-    try {
-      const feedbackCollection = collection(db, "feedbacks"); 
-      const querySnapshot = await getDocs(feedbackCollection);
-      
-      const allFeedback = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
+    // 1. Establish persistent WebSocket connection
+    const feedbackCollection = collection(db, "feedbacks");
+    const q = query(feedbackCollection, limit(20)); // Get more to find valid text
 
-      // Sort by text length (descending) and take the top 3
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const allFeedback = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        
+        // LOGIC FIX: In your Admin Dashboard (image_2dec16.png), 
+        // the text is stored under specific question keys. 
+        // We look for 'responses' or common keys like 'How was the event?'
+        const mainComment = data.responses?.["How was the event?"] || 
+                           data.comment || 
+                           data.feedback || 
+                           data.feedbackText || 
+                           "Excellent event!"; // Fallback
+
+        return {
+          id: doc.id,
+          ...data,
+          displayContent: mainComment
+        };
+      });
+
+      // 2. Sort by length to show the most detailed student responses
       const topThree = allFeedback
-        .sort((a, b) => {
-          const textA = (a.feedback || a.comment || "").length;
-          const textB = (b.feedback || b.comment || "").length;
-          return textB - textA; // Largest first
-        })
-        .slice(0, 3); // Get only the first 3 results
+        .sort((a, b) => b.displayContent.length - a.displayContent.length)
+        .slice(0, 3);
 
-      console.log("Top 3 Longest Reviews:", topThree);
       setRealReviews(topThree);
-    } catch (error) {
-      console.error("Firebase Error:", error);
-    } finally {
       setLoading(false);
-    }
-  };
+    });
 
-  fetchTopFeedbacks();
-}, []);
+    return () => unsubscribe(); // Cleanup WebSocket
+  }, []);
 
   if (loading) return <div className="reviews-loader">Loading...</div>;
 
@@ -52,7 +56,7 @@ const Reviews = () => {
 
       <div className="reviews-container">
         {realReviews.length === 0 ? (
-          <p className="no-reviews">No reviews yet. Be the first to share your experience!</p>
+          <p className="no-reviews">No detailed reviews available yet.</p>
         ) : (
           realReviews.map((review) => (
             <div className="review-card" key={review.id}>
@@ -67,18 +71,18 @@ const Reviews = () => {
                 ))}
               </div>
 
-              {/* This line checks for different possible database field names */}
+              {/* FIX: Use the 'displayContent' we extracted above */}
               <p className="review-text">
-                "{review.feedback || review.comment || review.feedbackText || "Great event!"}"
+                "{review.displayContent}"
               </p>
               
               <div className="reviewer-info">
                 <div className="reviewer-avatar">
-                  {(review.name || review.userName || review.fullName || "S").charAt(0)}
+                  {(review.name || review.userName || "S").charAt(0)}
                 </div>
                 <div>
-                  <h4>{review.name || review.userName || review.fullName || "Student"}</h4>
-                  <span>{review.eventTitle || "Attendee"}</span>
+                  <h4>{review.name || review.userName || "Student"}</h4>
+                  <span>{review.eventTitle || "NAVIRA 2.0 Attendee"}</span>
                 </div>
               </div>
             </div>
