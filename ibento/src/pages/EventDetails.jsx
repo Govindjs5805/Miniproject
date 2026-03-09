@@ -54,6 +54,7 @@ function EventDetails() {
   };
 
   const handleFinalSubmit = async () => {
+    if (issubmitting) return;
     setIsSubmitting(true);
     try {
       await addDoc(collection(db, "registrations"), {
@@ -63,7 +64,9 @@ function EventDetails() {
         userName: userData?.fullName || user.displayName || "Student",
         userEmail: user.email,
         answers: formAnswers, 
-        paymentId: `PAY_${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+        paymentId: event.isPaid 
+          ? `PAY_${Math.random().toString(36).substr(2, 9).toUpperCase()}`
+          : `FREE_${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
         status: event.isPaid ? "Paid" : "Confirmed",
         checkInStatus: false,
         registeredAt: new Date(),
@@ -87,7 +90,7 @@ function EventDetails() {
       }, 1000);
 
     } catch (error) {
-      alert("Registration failed.");
+      alert("Registration failed: " + error.message);
       setIsSubmitting(false);
     }
   };
@@ -96,7 +99,18 @@ function EventDetails() {
     switch (paymentStep) {
       case "form":
         return (
-          <form className="modal-form" onSubmit={(e) => { e.preventDefault(); setPaymentStep(event.isPaid ? "selection" : "submitting"); if(!event.isPaid) handleFinalSubmit(); }}>
+          <form 
+            className="modal-form" 
+            onSubmit={(e) => { 
+              e.preventDefault(); 
+              // Logic Check: If paid, go to selection. If free, submit immediately.
+              if (event.isPaid) {
+                setPaymentStep("selection");
+              } else {
+                handleFinalSubmit();
+              }
+            }}
+          >
             <div className="form-fields-container">
               {event.registrationSchema?.map((field) => (
                 <div key={field.id} className="form-group">
@@ -124,7 +138,9 @@ function EventDetails() {
             </div>
             <div className="modal-footer">
               <button type="button" onClick={() => setShowFormModal(false)} className="cancel-btn">Cancel</button>
-              <button type="submit" className="confirm-btn">{event.isPaid ? "Next: Payment" : "Register Now"}</button>
+              <button type="submit" className="confirm-btn" disabled={issubmitting}>
+                {issubmitting ? "Processing..." : (event.isPaid ? "Next: Payment" : "Register Now")}
+              </button>
             </div>
           </form>
         );
@@ -138,11 +154,11 @@ function EventDetails() {
             </div>
             <div className="pay-options">
               <div className="pay-method-card" onClick={() => setPaymentStep("qr")}>
-                <div className="pay-icon"></div>
+                <div className="pay-icon">QR</div>
                 <span>UPI QR Code</span>
               </div>
               <div className="pay-method-card" onClick={() => setPaymentStep("upi")}>
-                <div className="pay-icon"></div>
+                <div className="pay-icon">ID</div>
                 <span>UPI ID</span>
               </div>
             </div>
@@ -190,10 +206,10 @@ function EventDetails() {
         return (
           <div className="payment-success-screen">
             <div className="success-check-wrapper">
-              <div className="success-check">L</div>
+              <div className="success-check"></div>
             </div>
-            <h2>Payment Successful</h2>
-            <p>Registration for <strong>{event.title}</strong> is confirmed.</p>
+            <h2>Registration Successful</h2>
+            <p>You are confirmed for <strong>{event.title}</strong>.</p>
             <div className="redirect-timer">Redirecting in {countdown}s...</div>
             <button className="confirm-btn" onClick={() => navigate("/dashboard")} style={{marginTop: '20px'}}>Go to Dashboard Now</button>
           </div>
@@ -278,7 +294,13 @@ function EventDetails() {
         <div className="modal-overlay">
           <div className="modal-content animate-pop">
             <div className="modal-header">
-              <h2>{paymentStep === 'success' ? 'Confirmed' : paymentStep === 'form' ? 'Registration' : 'Payment'}</h2>
+              <h2>
+                {paymentStep === 'success' 
+                  ? 'Confirmed' 
+                  : paymentStep === 'form' 
+                    ? 'Registration' 
+                    : 'Payment'}
+              </h2>
             </div>
             {renderModalContent()}
           </div>

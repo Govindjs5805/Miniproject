@@ -85,7 +85,7 @@ function AdminReport() {
       <div className="report-page-container">
         {/* DASHBOARD CONTROLS */}
         <div className="report-controls no-print">
-          <h2 className="dash-welcome">Report Configuration</h2>
+          <h2 className="dash-welcome" style={{ background: "linear-gradient(90deg, #ae8beb, #ffffff)", fontSize: "2.3rem", margin: "20px 0px", fontWeight: "bold", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Report Configuration</h2>
           
           <div className="config-section">
             <label className="config-step-label">1. Select Event</label>

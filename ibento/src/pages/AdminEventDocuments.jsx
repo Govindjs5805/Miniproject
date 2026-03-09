@@ -3,6 +3,7 @@ import { collection, query, where, getDocs, doc, updateDoc, arrayUnion, arrayRem
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import AdminLayout from "../components/Admin/AdminLayout";
+import { color } from "chart.js/helpers";
 
 function AdminEventDocuments() {
   const { clubId } = useAuth();
@@ -136,7 +137,7 @@ function AdminEventDocuments() {
           </div>
         )}
 
-        <h2 className="welcome-text">Event Document Vault</h2>
+        <h2 className="welcome-text-2">Event Document Vault</h2>
         
         <select 
           className="vault-main-select"

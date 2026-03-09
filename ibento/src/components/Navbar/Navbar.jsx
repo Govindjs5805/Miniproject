@@ -51,6 +51,12 @@ function Navbar() {
                 <NavLink to="/superadmin" onClick={closeMenu}>Dashboard</NavLink>
               </>
             )}
+            {!user && (
+              <>
+                <NavLink  className="nav-link-login" to="/login" onClick={closeMenu}>Login</NavLink>
+                <NavLink className="nav-link-register" to="/register" onClick={closeMenu}>Register</NavLink>
+              </>
+            )}
 
             {user && (
               <button className="logout-btn" onClick={handleLogout}>

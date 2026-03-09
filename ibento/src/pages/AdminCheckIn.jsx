@@ -112,7 +112,7 @@ function AdminCheckIn() {
   return (
     <AdminLayout>
       <div style={{ padding: "20px", textAlign: "center", color: "#fff", background : "#080909", minHeight: "80vh" }}>
-        <h2 style={{ color: "#a883ff" }}>Laptop Attendance Scanner</h2>
+        <h2 style={{ background: "linear-gradient(90deg, #783be2, #ffffff)", fontSize: "2.5rem", margin: "20px 40px", fontWeight: "bold", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Laptop Attendance Scanner</h2>
         
         <select 
           value={selectedEvent} 

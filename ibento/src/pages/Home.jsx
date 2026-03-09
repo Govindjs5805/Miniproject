@@ -12,7 +12,7 @@ function Home() {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
 
-  const forumLogos = ["/FOCES White 1.png", "/IEDC WhiteSVG 1.png", "/IEEE-logo-WHITE.png", "/Mulearn Logo.png", "/tinkerhub.png", "/FOCES White 1.png","/Group 13.png","/gdg.png","/IEEE-logo-WHITE.png", "/Mulearn Logo.png", "/tinkerhub.png", "/Group 13.png"];
+  const forumLogos = ["/FOCES White 1.png", "/IEDC WhiteSVG 1.png", "/IEEE-logo-WHITE.png","/gdg.png", "/Mulearn Logo.png", "/tinkerhub.png", "/FOCES White 1.png","/Group 13.png","/gdg.png","/IEEE-logo-WHITE.png", "/Mulearn Logo.png", "/tinkerhub.png", "/Group 13.png"];
   const forums = [
     { name: "FOCES", img: "/FOCES White 1.png" },
     { name: "IEDC", img: "/IEDC WhiteSVG 1.png" },
@@ -48,7 +48,7 @@ function Home() {
 
       {/* 2. Logo Strip */}
       <div className="branding-strip">
-        <CurvedLoop logos={forumLogos} speed={0.05} curveAmount={0} logoSize={90} />
+        <CurvedLoop logos={forumLogos} speed={0.04} curveAmount={0} logoSize={90} />
       </div>
 
       {/* 3. Events Section */}

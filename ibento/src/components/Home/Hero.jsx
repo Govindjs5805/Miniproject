@@ -13,10 +13,10 @@ function Hero() {
           raysColor="#8B5CF6"
           raysSpeed={0.8}
           lightSpread={1.4}
-          rayLength={4}
+          rayLength={4.5}
           followMouse={true}
-          mouseInfluence={0.08}
-          noiseAmount={0.05}
+          mouseInfluence={0.05}
+          noiseAmount={0.1}
           distortion={0.15}
           pulsating={true}
           fadeDistance={1.2}

@@ -1,6 +1,6 @@
 .hero {
   position: relative;
-  height: 90vh; /* Leave room for marquee overlap */
+  height: 91vh; /* Leave room for marquee overlap */
   width: 100%;
   overflow: hidden;
   background: #070415;
@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: center;
   z-index: 1;
-  padding-bottom: 50px;
+  padding-bottom: 70px;
 }
 
 .hero-bg {

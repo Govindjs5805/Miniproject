@@ -46,7 +46,7 @@ function AdminFeedbacks() {
   return (
     <AdminLayout>
       <div style={{ padding: "40px", background: "#0a0a0c", minHeight: "100vh", color: "#fff", fontFamily: "Inter, sans-serif" }}>
-        <h2 style={{ fontSize: "2.5rem", fontWeight: "800", marginBottom: "10px", color: "#a78bfa" }}>
+        <h2 style={{ fontSize: "2.5rem", fontWeight: "800", marginBottom: "10px", background: "linear-gradient(90deg, #a78bfa, #f8fafc)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
           Event Feedbacks
         </h2>
         <p style={{ color: "#94a3b8", marginBottom: "30px" }}>Detailed responses from participants.</p>

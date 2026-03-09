@@ -61,7 +61,7 @@ function SuperAdminDashboard() {
       <aside className="admin-sidebar">
         <div className="sidebar-header">
           <div className="sidebar-logo-box">
-             <span className="logo-m">M</span>
+             <span className="logo-m">S</span>
           </div>
           <h3>SUPER ADMIN</h3>
         </div>
